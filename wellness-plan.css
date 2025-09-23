@@ -1,0 +1,1099 @@
+/* ============================
+   GLOBAL STYLES: WELLNESS PLAN
+   ============================ */
+
+/* Base container */
+.wellness-plan {
+  font-family: var(--font-base);
+  font-size: var(--size-body);
+  font-weight: var(--weight-body);
+  color: var(--color-text);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px 20px;
+  line-height: 1.45;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Universal box sizing */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Printable viewport shim above logo */
+.printable-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* ============================
+   LOGO
+   ============================ */
+.wellness-logo {
+  display: block;
+  width: 400px;            /* adjust as needed */
+  height: 200px;
+  margin: 0 auto 16px auto;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 600px) {
+  .wellness-logo {
+    width: 100%;
+    max-width: 375px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 16px;
+    margin-top: 0 !important; /* keep top flush on mobile */
+    display: block;
+  }
+
+  .printable-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
+}
+
+/* ============================
+   TOP BUTTONS UNDER LOGO
+   ============================ */
+.top-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 10px;
+  margin-bottom: 90px;
+  padding: 0 16px;
+  flex-wrap: nowrap;
+}
+
+.wellness-plan .top-link-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to bottom, #fdfdfd, #f0f0f0);
+  color: var(--color-button-text) !important;
+  padding: 8px 20px;
+  width: 200px;
+  height: 35px;
+  text-align: center;
+  border: 1px solid #aaa;
+  border-radius: 7px;
+  font-size: var(--size-button);
+  font-weight: var(--weight-button);
+  letter-spacing: 0.3px;
+  font-family: var(--font-button);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0, 0, 0, 0.05);
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.wellness-plan .top-link-btn:hover {
+  background: linear-gradient(to bottom, #eaeaea, #dcdcdc);
+  border-color: #888;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Desktop alignment tweak */
+@media (min-width: 769px) {
+  .top-buttons {
+    justify-content: center;
+    transform: translateX(0); /* reset any previous transform */
+  }
+}
+
+/* Mobile sizing of top buttons */
+@media (max-width: 600px) {
+  .wellness-plan .top-link-btn {
+    width: 160px;
+    height: 35px;
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
+
+/* ============================
+   SECTION WRAPPERS & HEADINGS
+   ============================ */
+.wellness-plan .section-wrapper {
+  position: relative;
+  margin-bottom: 70px; /* spacing between full sections */
+}
+
+.wellness-plan .section-title {
+  position: absolute;
+  top: -22px;
+  left: 24px;
+  background: #f1f3f5;
+  color: var(--color-text);
+  padding: 6px 20px;
+  font-size: var(--size-heading);   /* 17px previously */
+  font-weight: var(--weight-heading);
+  border-radius: 999px;
+  border: 1.5px solid #c7cbd1;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  letter-spacing: 0.25px;
+  z-index: 2;
+}
+
+/* Restore spacing before Treatment Summary bubble on mobile */
+@media screen and (max-width: 768px) {
+  .wellness-plan .treatment-summary-section .wellness-bubble {
+    margin-top: 66px !important; /* match default spacing in other sections */
+  }
+}
+
+/* ============================
+   SECTION SUBTITLE: "SUPPLEMENTS"
+   ============================ */
+.med-subtitle {
+  list-style: none;
+  margin: 50px 0 12px;
+}
+
+.med-subtitle span {
+  display: block;                 /* full width */
+  background-color: #e6f0fa;      /* soft blue */
+  color: #004a73;                 /* deep blue */
+  padding: 0.6em 1.2em;
+  border-radius: 8px;             /* softer than pill */
+  font-weight: 700;
+  font-size: 0.95em;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 1em;
+}
+
+/* Remove dashed divider under the subtitle line item */
+.wellness-plan .medication-list li.med-subtitle {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 4px; /* tight before next item */
+}
+
+/* ============================
+   MED LINK GROUP (Testosterone links)
+   ============================ */
+.med-link-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  color: #666; /* slightly darker for visibility */
+  margin-top: 22px;
+  line-height: 1.6;
+}
+
+.wellness-plan .med-link-group a {
+  color: var(--color-link) !important; /* calm medium blue */
+  text-decoration: underline;
+  text-decoration-color: #a3c2e3;      /* soft underline */
+  white-space: nowrap;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.wellness-plan .med-link-group a:hover {
+  color: var(--color-link-hover) !important; /* darker on hover */
+  text-decoration-color: var(--color-link-hover);
+}
+
+.med-link-group .divider {
+  color: #bbb;
+  user-select: none;
+}
+
+/* ============================
+   LEARN MORE DROPDOWNS
+   ============================ */
+.learn-more-toggle {
+  cursor: pointer;
+  font-size: var(--size-learn-more); /* 12.5px */
+  color: var(--color-learn-more);    /* lighter gray */
+  font-weight: var(--weight-learn-more);
+  margin-top: 8px;
+  display: inline-block;
+  user-select: none;
+  letter-spacing: 0.1px;
+  transition: color 0.2s ease;
+}
+
+.learn-more-toggle:hover { color: #666; }
+
+.learn-more-toggle::before {
+  content: '+ ';
+  font-weight: 300;
+  margin-right: 3px;
+}
+
+.learn-more-toggle.expanded::before { content: '- '; }
+
+.learn-more-content {
+  display: none;
+  margin-top: 4px;
+  font-size: var(--size-learn-more);
+  line-height: 1.45;
+  color: #666;
+  padding: 4px 0;
+}
+.learn-more-content.expanded { display: block; }
+
+/* ============================
+   SECTION BUBBLES
+   ============================ */
+.wellness-plan .wellness-bubble {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  margin-top: 36px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+.wellness-plan .wellness-bubble > ul { margin-top: 20px; }
+
+/* Remove extra spacing below last details section in last bubble */
+.wellness-plan .wellness-bubble > .callout.clean:last-of-type details {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* ============================
+   "TO CONSIDER" BLOCK (override)
+   ============================ */
+.wellness-plan .med-time-block.to-consider-block {
+  background: #f3f3f3 !important;     /* override generic white */
+  border-left: 6px solid #6b93ff !important;
+  padding: 1rem;
+  margin-top: 2rem;
+  border-radius: 8px;
+}
+
+.wellness-plan .med-time-block.to-consider-block .med-time-label {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: var(--color-text);
+}
+
+.wellness-plan .med-time-block.to-consider-block .medication-list {
+  list-style: none;
+  padding-left: 1rem;
+  margin-top: 0.5rem;
+}
+
+.wellness-plan .med-time-block.to-consider-block .medication-list li {
+  margin-bottom: 1rem;
+  border-bottom: none; /* no dashed line here */
+}
+
+.wellness-plan .med-time-block.to-consider-block .medication-list li strong {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #2c2c2c;
+}
+
+.wellness-plan .med-time-block.to-consider-block .medication-list li p {
+  margin-top: 0.5rem;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: #444;
+}
+
+/* ============================
+   LIFESTYLE SECTION
+   ============================ */
+.wellness-plan .lifestyle-section .wellness-bubble > ul { margin-bottom: 35px; }
+
+.wellness-plan .lifestyle-tips-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Only top-level tips */
+.wellness-plan .lifestyle-tips-list > li {
+  padding: 12px;
+  margin-bottom: 16px;
+  border-left: 4px solid transparent;
+  border-radius: 6px;
+}
+
+/* Links inside lifestyle tips inherit color/underline */
+.wellness-plan .lifestyle-tips-list > li a {
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 400;
+  color: inherit;
+  transition: none;
+}
+.wellness-plan .lifestyle-tips-list > li a:hover {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Tip color themes */
+.wellness-plan .lifestyle-tips-list > li:nth-child(1) { background-color: #f0f8ff; border-left-color: #007acc; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(1) strong { color: #007acc; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(2) { background-color: #fffbe6; border-left-color: #ffb347; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(2) strong { color: #d48806; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(3) { background-color: #e9f7ef; border-left-color: #28b463; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(3) strong { color: #239b56; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(4) { background-color: #fceefb; border-left-color: #af7ac5; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(4) strong { color: #884ea0; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(5) { background-color: #e0f7fa; border-left-color: #26c6da; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(5) strong { color: #008b94; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(6) { background-color: #fff0f0; border-left-color: #ff6f61; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(6) strong { color: #e84a5f; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(7) { background-color: #e6f7ff; border-left-color: #42a5f5; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(7) strong { color: #1e88e5; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(8) { background-color: #fff7e6; border-left-color: #f5a623; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(8) strong { color: #c97b00; }
+
+/* ============================
+   GOALS + FOLLOW-UP
+   ============================ */
+.wellness-plan .goals-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.wellness-plan .goals-list li {
+  padding: 12px;
+  margin-bottom: 10px;
+  border-left: 4px solid transparent;
+  border-radius: 8px;
+}
+
+/* Generic subheader */
+.wellness-plan .goals-subheader {
+  font-size: var(--size-subheading);
+  font-weight: var(--weight-heading);
+  margin: 1.5rem 0 0.5rem;
+  color: var(--color-subheading);
+}
+
+/* Nth-section color themes */
+.wellness-plan .goals-subheader:nth-of-type(1),
+.wellness-plan .goals-list:nth-of-type(1) li strong { color: #6b93ff; }
+.wellness-plan .goals-list:nth-of-type(1) li { background-color: #eef1f8; border-left-color: #6b93ff; }
+
+.wellness-plan .goals-subheader:nth-of-type(2),
+.wellness-plan .goals-list:nth-of-type(2) li strong { color: #00a5b5; }
+.wellness-plan .goals-list:nth-of-type(2) li { background-color: #e7fafa; border-left-color: #00a5b5; }
+
+.wellness-plan .goals-subheader:nth-of-type(3),
+.wellness-plan .goals-list:nth-of-type(3) li strong { color: #b86bff; }
+.wellness-plan .goals-list:nth-of-type(3) li { background-color: #f4efff; border-left-color: #b86bff; }
+
+.wellness-plan .goals-subheader:nth-of-type(4),
+.wellness-plan .goals-list:nth-of-type(4) li strong { color: #28b463; }
+.wellness-plan .goals-list:nth-of-type(4) li { background-color: #e9f7ef; border-left-color: #28b463; }
+
+.wellness-plan .goals-subheader:nth-of-type(5),
+.wellness-plan .goals-list:nth-of-type(5) li strong { color: #ff6f61; }
+.wellness-plan .goals-list:nth-of-type(5) li { background-color: #fff0f0; border-left-color: #ff6f61; }
+
+.wellness-plan .goals-subheader:nth-of-type(6),
+.wellness-plan .goals-list:nth-of-type(6) li strong { color: #d48806; }
+.wellness-plan .goals-list:nth-of-type(6) li { background-color: #fffbe6; border-left-color: #ffb347; }
+
+/* Links inside goals */
+.wellness-plan .goals-list li a {
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 400;
+  color: inherit;
+  transition: none;
+}
+.wellness-plan .goals-list li a:hover {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Nested bullets inside a goals item */
+.wellness-plan .goals-list li ul {
+  list-style: disc;
+  margin: 8px 0 0 20px;  /* normal bullet indent */
+  padding-left: 0;
+}
+.wellness-plan .goals-list li ul li {
+  background: none !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 6px 0 !important;
+  color: inherit !important;
+  font-size: inherit !important;
+  line-height: inherit !important;
+}
+
+/* ============================
+   MED-TIME BLOCKS (Daily/Evening/Weekly/PRN)
+   ============================ */
+
+/* Per-type borders */
+.med-time-block.daily-block   { border: 4px solid #FFD54F; border-radius: 16px; padding: 20px; }
+.med-time-block.evening-block { border: 4px solid #b39ddb; border-radius: 16px; padding: 20px; }
+.med-time-block.weekly-block  { border: 4px solid #81C784; border-radius: 16px; padding: 20px; }
+.med-time-block.as-needed-block { border: 4px solid #9E9E9E; border-radius: 16px; padding: 20px 20px 24px; }
+
+/* Last PRN block can be borderless */
+.wellness-plan .med-time-block.as-needed {
+  border: none;
+  box-shadow: none; /* optional */
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+/* Layout container for blocks */
+.wellness-plan .med-time-block {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.015);
+  background: #fff;
+  padding: 0 20px 20px; /* top 0 to tuck label under bubble title */
+  border-radius: 16px;
+  margin-bottom: 50px;
+}
+
+/* Adds space inside the top of the Treatment Summary bubble */
+.wellness-plan .treatment-summary-section .wellness-bubble { padding-top: 48px; }
+@media screen and (max-width: 768px) {
+  .wellness-plan .treatment-summary-section .wellness-bubble { padding-top: 48px !important; }
+}
+
+/* Block labels */
+.wellness-plan .med-time-label {
+  display: block;
+  font-size: 19px;                /* previously 20 then 19 later; keep 19 */
+  font-weight: 800;
+  color: #1f2d3d;
+  padding: 10px 14px;
+  margin: 4px 0 24px;             /* anchor near top and add separation */
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px 8px 0 0;
+
+  /* Frosted look */
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(6px);
+  box-shadow:
+    inset 0 -3px 4px rgba(0, 0, 0, 0.15),
+    inset 0 3px 4px rgba(255, 255, 255, 0.35),
+    0 2px 5px rgba(0, 0, 0, 0.06);
+}
+
+/* Theme-matched label backgrounds per block */
+.daily-block .med-time-label   { background: #fff8e1; }
+.evening-block .med-time-label { background: #f3eaff; }
+.weekly-block .med-time-label  { background: #e8f5e9; }
+.as-needed-block .med-time-label { background: #f5f5f5; }
+
+/* Mobile spacing for whole AS NEEDED block cluster */
+@media screen and (max-width: 768px) {
+  .wellness-plan .section-wrapper:has(.med-time-block.as-needed) {
+    margin-top: 15px !important;
+    margin-bottom: 24px !important;
+  }
+  .wellness-plan .med-time-block.as-needed {
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    margin: 0 !important;
+  }
+}
+
+/* ============================
+   MEDICATION LIST + ROWS
+   ============================ */
+.wellness-plan .medication-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 8px 0;
+}
+
+/* Each medication row */
+.wellness-plan .medication-list li {
+  padding: 8px 0 12px;
+  font-size: 15px;
+  line-height: 1.45;
+  border-bottom: 1px dashed #ccc;
+  color: #444;
+}
+
+/* Remove border from last item */
+.wellness-plan .medication-list li:last-child {
+  border-bottom: none;
+  padding-bottom: 6px;
+  margin-bottom: 0;
+}
+
+/* Medication name */
+.wellness-plan .medication-list li strong {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #1a1a1a;
+  letter-spacing: 0.4px;
+}
+
+/* Dose “pill” within list */
+.wellness-plan .medication-list li .dose {
+  background: #f8f9fb;
+  color: #444;
+  font-style: italic;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  margin-top: 4px;
+  display: inline-block;
+  text-align: left;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  letter-spacing: 0.25px;
+  white-space: normal;
+}
+
+/* Wrap name + dose layout */
+.wellness-plan .med-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+}
+
+/* ============================
+   MISC LINKS / WEIGHT LOSS TIPS
+   ============================ */
+.weight-loss-link {
+  margin: 20px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+}
+.weight-loss-link a {
+  color: #444 !important;
+  text-decoration: none;
+}
+.weight-loss-link a:hover { text-decoration: underline; }
+
+/* ============================
+   TABLES & CALLOUTS
+   ============================ */
+.wellness-plan table.treatment-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 15px;
+  margin-top: 10px;
+}
+.wellness-plan table.treatment-table th,
+.wellness-plan table.treatment-table td {
+  width: 50%;
+  padding: 10px 6px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid #eee;
+}
+.wellness-plan table.treatment-table th {
+  font-weight: 600;
+  color: #666;
+  background: transparent;
+}
+
+.wellness-plan .callout {
+  background: #f9f9f9;
+  border-left: 5px solid #bd243f;
+  padding: 18px 20px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+/* “Clean” callout variant */
+.wellness-plan .callout.clean {
+  background: #fafafa;              /* lighter than white */
+  border: 1px solid #e0e0e0;
+  border-left: 3px solid #ccc;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.6;
+  box-shadow: none;
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+.wellness-plan .callout.clean a {
+  color: #bd243f;
+  font-weight: 600;
+  text-decoration: none;
+}
+.wellness-plan .callout.clean a:hover { text-decoration: underline; }
+
+/* ============================
+   LISTS & TEXT UTILITIES
+   ============================ */
+.wellness-plan ul { padding-left: 20px; margin: 0; }
+
+/* BULLETS IN GOALS SECTION */
+.wellness-plan ul li {
+  list-style-position: outside;
+  margin-left: 0;
+  padding-left: 1px;    /* room for bullet */
+  margin-bottom: 25px;
+  font-size: 16px;
+  text-indent: 0;
+}
+
+@media (max-width: 600px) {
+  .wellness-plan ul { padding-left: 16px; }
+  .wellness-plan ul li { margin-left: 0; }
+}
+
+/* Notes text */
+.wellness-plan .notes {
+  font-size: 13px;
+  color: #777;
+  margin-top: 14px;
+}
+
+/* Global links (tiny links under med names, etc.) */
+.wellness-plan a {
+  color: var(--color-link);
+  text-decoration: none;
+  font-weight: 600;
+}
+.wellness-plan a:hover { text-decoration: underline; }
+
+/* Spacing between consecutive sections */
+.wellness-plan .section-wrapper + .section-wrapper { margin-top: 80px; }
+
+/* Center/stretch layout containers */
+.video-section,
+.accordion,
+.accordion-item,
+.accordion-button,
+.accordion-content {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 12px;
+}
+
+/* Generic “dose” utility (outside medication-list too) */
+.wellness-plan .dose {
+  background: #f9f9fa;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px; /* matches second block */
+  font-style: italic;
+  color: #2a2a2a;
+  display: inline-block;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  line-height: 1.5;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+  font-family: var(--font-base);
+}
+
+/* “Editable” text blocks */
+.wellness-plan .editable {
+  background: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: block;
+  color: #333;
+  line-height: 1.5;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+}
+
+/* ============================
+   RESOURCE LINKS (bottom of bubbles)
+   ============================ */
+.resource-link {
+  margin-top: 35px;          /* same gap above divider everywhere */
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+  display: flow-root;
+}
+
+/* Remove any bottom margin from element directly before */
+.wellness-bubble > *:last-child { margin-bottom: 0 !important; }
+
+/* Link styling */
+.resource-link a {
+  color: #bd243f;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+}
+.resource-link a:hover { text-decoration: underline; }
+
+/* Extra spacing for buttons so they match text link spacing */
+.resource-link .schedule-followup-btn { margin-top: 10px; }
+
+/* Note text */
+.wellness-plan .resource-note {
+  font-size: 14px;
+  color: #777;
+  font-style: italic;
+  margin-left: 8px;
+  display: inline-block;
+}
+
+/* Testosterone links container variant */
+.resource-link.med {
+  margin-top: 4px;   /* or even 0 */
+  margin-bottom: 0;
+}
+
+/* ============================
+   BUTTONS: SCHEDULE + PRINT
+   ============================ */
+.schedule-followup-btn {
+  background: #f3f3f3;
+  color: var(--color-button-text);
+  padding: 8px 22px;
+  border: 1.5px solid #999;
+  border-radius: 10px;
+  font-size: var(--size-button);
+  font-weight: var(--weight-button);
+  font-family: var(--font-button);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: none;
+  letter-spacing: 0.3px;
+}
+.schedule-followup-btn:hover {
+  background: #e6e6e6;
+  border-color: #bcbcbc;
+}
+
+.print-plan-wrapper {
+  text-align: center;
+  margin: 60px 0 40px;
+}
+.print-plan-btn {
+  background: #f4f4f4;
+  color: #2a2a2a;
+  padding: 10px 24px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font-button);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.05);
+}
+.print-plan-btn:hover {
+  background: #e8e8e8;
+  border-color: #888;
+  transform: translateY(-1px);
+}
+
+/* ============================
+   ACCORDION (To Consider section)
+   ============================ */
+.accordion-item { margin-bottom: 12px; }
+
+.accordion-button {
+  background: #f7f7f7;
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+.accordion-button:hover {
+  background: #f0f0f0;
+  border-color: #bbb;
+  transform: translateY(-1px);
+}
+
+.accordion-content {
+  background: #fafafa;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  margin-top: 6px;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #444;
+}
+
+/* Only applies to the "To Consider" section */
+.wellness-plan .to-consider-section .wellness-bubble > *:first-child { margin-top: 30px; }
+
+/* Accordion mobile tweaks */
+@media screen and (max-width: 768px) {
+  .wellness-plan .accordion-content {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+  .wellness-plan .accordion-item { margin-bottom: 10px; }
+  .wellness-plan .accordion-button { margin-bottom: 4px !important; }
+}
+
+/* ============================
+   RESOURCE URL VARIABLES
+   (If you already define these in a global :root, keep them there and
+    remove this duplicate block. Keeping here to preserve behavior.)
+   ============================ */
+:root {
+  --hormone-resource-url: "https://www.mtnhlth.com/hormone-rx-resources";
+  --treatment-addons-url: "https://www.mtnhlth.com/treatment-add-ons";
+  --basic-standards-url: "https://www.mtnhlth.com/basic-hlth-standards";
+  --health-coaching-url: "https://www.mtnhlth.com/health-coaching";
+  --lifestyle-tips-url: "https://www.mtnhlth.com/lifestyle-tips";
+  --followup-url: "https://www.mtnhlth.com/follow-up-visit";
+  --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
+  /* NEW RESOURCES */
+  --needle27g-url: "https://www.amazon.com/dp/B084ZBY221?ref=cm_sw_r_cso_cp_apin_dp_VSZ0KWD3YANMCVE8GC8N";
+  --subq-video-url: "https://youtu.be/fMEZdNodGM0?si=zrkKpmLsN8N_eB8A";
+  --alcohol-pads-url: "https://www.amazon.com/s?k=alcohol+pads&crid=1JALMM5EAHOVG&sprefix=alcohol+pads%2Caps%2C127&ref=nb_sb_noss_1";
+}
+
+/* ============================
+   RESPONSIVE: MOBILE LAYOUT
+   ============================ */
+@media screen and (max-width: 768px) {
+  html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .wellness-plan {
+    padding: 24px 12px;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    box-sizing: border-box;
+  }
+
+  .video-section,
+  .callout.clean,
+  .accordion,
+  .accordion-item,
+  .accordion-button,
+  .accordion-content {
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+    padding-left: 12px;
+    padding-right: 12px;
+    box-sizing: border-box;
+  }
+
+  /* Tighter internal padding on bubbles and blocks */
+  .wellness-plan .wellness-bubble { padding: 22px 16px !important; }
+  .wellness-plan .med-time-block { padding: 12px 18px 20px !important; }
+  .wellness-plan .callout.clean  { padding: 16px 18px !important; margin-bottom: 12px !important; }
+
+  .wellness-plan .med-header {
+    display: block;
+    font-size: 16px;
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .wellness-plan .med-header strong {
+    display: block;
+    margin-bottom: 0;
+    font-size: 17px;
+    font-weight: 600;
+  }
+  .wellness-plan .med-header .dose,
+  .wellness-plan .med-header .editable {
+    display: block;
+    margin-top: 2px;
+    margin-bottom: 0;
+  }
+
+  .accordion-button {
+    padding: 14px 16px !important;
+    border-radius: 8px !important;
+    width: 100% !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #ddd !important;
+    margin-bottom: 16px !important;
+    position: relative;
+    white-space: normal !important;
+    overflow-wrap: break-word !important;
+    word-break: break-word !important;
+    line-height: 1.4 !important;
+    color: var(--color-text) !important;
+    text-decoration: none !important;
+  }
+  .accordion-button a {
+    color: inherit !important;
+    text-decoration: none !important;
+    pointer-events: none;
+  }
+  .accordion-content { padding: 16px 0 20px !important; }
+  .accordion-content .callout.clean { padding: 18px 12px; margin: 12px 0; }
+
+  .subsection-label { padding-left: 8px; padding-right: 8px; }
+
+  .header-nav-item a {
+    font-size: 17px;
+    padding: 12px 0;
+    display: block;
+    text-align: center;
+  }
+  .header-nav-list { padding: 20px 0; gap: 10px; }
+  .mobile-menu { padding: 10px 0; }
+
+  .wellness-plan .section-wrapper:nth-of-type(3) { margin-bottom: 40px !important; }
+
+  .wellness-plan .med-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    width: 100%;
+  }
+
+  /* Space above “learn more” on mobile */
+  .wellness-plan .medication-list.enhanced li details { margin-top: 6px; }
+
+  /* Space under floating lifestyle title */
+  .wellness-plan .section-wrapper.lifestyle-section .wellness-bubble { padding-top: 48px; }
+
+  /* Space above first text in lifestyle section */
+  .wellness-plan .lifestyle-section .wellness-bubble > *:first-child { margin-top: 45px; }
+}
+
+/* ============================
+   PRINT STYLES: fix cutoffs/missing
+   ============================ */
+@media print {
+  /* Hide site chrome */
+  header, footer, nav,
+  .site-header, .site-footer,
+  .sqs-announcement-bar-dropzone,
+  .mobile-menu, #mobile-menu,
+  .mtn-header { display: none !important; }
+
+  /* Prevent missing content from overflow */
+  * { overflow: visible !important; }
+
+  /* Eliminate sticky/fixed issues */
+  * { position: static !important; }
+
+  /* Remove excess top spacing */
+  body > *,
+  .wellness-plan > *:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+  .wellness-plan { margin-top: 0 !important; }
+
+  /* Hide UI buttons/links */
+  .top-buttons,
+  button,
+  a[href*="mtnhlth.com"] { display: none !important; }
+
+  /* Force all links visible (and print their URLs) */
+  .accordion .content,
+  .accordion .inner,
+  .learn-more-section,
+  .resource-link,
+  .resource-link a,
+  a {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+  a::after {
+    content: " (" attr(href) ")";
+    font-size: 85%;
+    color: #555;
+  }
+
+  /* Ensure Medical Weight Loss Tips link prints */
+  a[href*="medical-weight-loss-tips"] {
+    color: #000 !important;
+    text-decoration: underline !important;
+    display: inline !important;
+  }
+  a[href*="medical-weight-loss-tips"]::after {
+    content: " (" attr(href) ")";
+    font-size: 85%;
+    color: #555;
+  }
+
+  /* Avoid content cutoff at page breaks */
+  .section-wrapper,
+  .wellness-bubble,
+  .med-time-block,
+  .callout,
+  .resource-link,
+  ul.medication-list,
+  ul li,
+  .cta-button,
+  .print-plan-btn {
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  /* Page padding & color */
+  .wellness-plan {
+    padding-top: 40px !important;
+    padding-bottom: 40px !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Ensure logo prints */
+  .wellness-logo {
+    display: block !important;
+    width: 240px !important;
+    height: 120px !important;
+    background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/e769010e-5479-43db-89d0-9d3eabfa652a/MTN_HLTH_Trademark_Color_K.png?format=2500w') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    margin: 0 auto 24px auto !important;
+  }
+
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  @page { margin: 0.75in; }
+}
