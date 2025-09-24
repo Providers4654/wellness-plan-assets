@@ -625,31 +625,32 @@
 
 
 /* ============================
-   DOSE PILL TOGGLE (arrow on left, fixed spacing)
+   DOSE PILL TOGGLE (arrow + text with flexbox)
    ============================ */
 .wellness-plan .dose.toggle-dose {
-  position: relative;
+  display: inline-flex;       /* align arrow + text side by side */
+  align-items: center;        /* vertical centering */
+  gap: 6px;                   /* spacing between arrow and text */
   cursor: pointer;
-  padding-left: 32px;      /* more padding so text never overlaps arrow */
+  position: relative;
 }
 
+/* Arrow before text */
 .wellness-plan .dose.toggle-dose::before {
-  content: "▸";            /* right-pointing arrow */
+  content: "▸";               /* right-pointing arrow */
   font-size: 14px;
   font-weight: bold;
-  position: absolute;
-  left: 10px;              /* arrow sits inside the pill but away from text */
-  top: 50%;
-  transform: translateY(-50%);
-  color: #333;             /* dark, noticeable */
-  opacity: 0.85;
+  color: #333;
+  opacity: 0.8;
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
+/* Expanded state shows down arrow */
 .wellness-plan .dose.toggle-dose.expanded::before {
-  content: "▾";            /* down arrow when expanded */
+  content: "▾";
   opacity: 1;
 }
+
 
 
 
