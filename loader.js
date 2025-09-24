@@ -13,16 +13,16 @@ const daily =
 // Final version string
 const version = daily + (manualBump ? "-" + manualBump : "");
 
-// Load CSS
+// === Load CSS ===
 const cssLink = document.createElement("link");
 cssLink.rel = "stylesheet";
 cssLink.href =
-  "https://providers4654.github.io/wellness-assets/wellness-plan.css?v=" + version;
+  "https://providers4654.github.io/wellness-plan-assets/wellness-plan.css?v=" + version;
 document.head.appendChild(cssLink);
 
-// Load JS (accordion/toggle + dynamic links)
+// === Load JS (dropdowns + dynamic links) ===
 const jsScript = document.createElement("script");
 jsScript.src =
-  "https://providers4654.github.io/wellness-assets/wellness-plan.js?v=" + version;
+  "https://providers4654.github.io/wellness-plan-assets/wellness-plan.js?v=" + version;
 jsScript.defer = true;
 document.head.appendChild(jsScript);
