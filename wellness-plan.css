@@ -660,22 +660,23 @@
 
 
 /* ============================
-   INFO ICON (inline with med name)
+   INFO ICON (tight + subtle)
    ============================ */
 .wellness-plan .info-icon {
-  font-size: 13px;         /* smaller than med name */
-  margin-left: 3px;        /* space between text and icon */
-  color: #666;             /* softer gray so it doesn’t overpower */
+  font-size: 11px;         /* smaller, understated */
+  margin-left: 1px;        /* minimal space from word */
+  color: #999;             /* lighter gray */
   cursor: pointer;
-  vertical-align: middle;  /* aligns nicely with the text */
-  opacity: 0.8;            /* a bit subtle */
+  vertical-align: super;   /* nudged slightly up like a footnote */
+  opacity: 0.7;            /* subtle by default */
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  color: #000;             /* darken on hover for clarity */
+  color: #555;             /* soft darken on hover */
   opacity: 1;
 }
+
 
 
 
