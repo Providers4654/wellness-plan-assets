@@ -27,7 +27,7 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => {
   a.removeAttribute('target');
 });
 
-// 3. Info Icon Toggles (one dropdown open at a time)
+// 3. Info Icon Toggles (only one open at a time)
 document.querySelectorAll(".info-icon").forEach(icon => {
   icon.addEventListener("click", () => {
     const row = icon.closest(".med-row");
@@ -35,7 +35,7 @@ document.querySelectorAll(".info-icon").forEach(icon => {
 
     if (!content) return;
 
-    // Close all other expanded dropdowns
+    // Close all other open dropdowns
     document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
       if (openContent !== content) {
         openContent.classList.remove("expanded");
