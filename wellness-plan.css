@@ -41,12 +41,14 @@
 
 @media (max-width: 600px) {
   .wellness-plan {
-    width: 95% !important;      /* fill most of the screen */
+    width: 95% !important;     /* make it a little narrower than 100% */
     max-width: none !important;
-    margin: 0 auto;             /* center it */
-    padding: 16px 10px;         /* tighter side padding */
+    margin: 0 auto;            /* center horizontally */
+    padding: 12px;             /* ✅ tighter padding so content isn’t squeezed */
+    box-sizing: border-box;
   }
 }
+
 
 
 /* Universal box sizing */
@@ -82,8 +84,11 @@
     width: 95%;               /* fill most of the mobile screen */
     max-width: none;           /* remove artificial cap */
     height: auto;              /* let the aspect ratio scale naturally */
-    margin: 20px auto 16px;    /* push down from top, center, add bottom gap */
-    display: block;            /* standard block element */
+    margin: 30px auto 16px;    /* ✅ push down from top to avoid cut-off */
+    display: block;            /* keep it block */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 
