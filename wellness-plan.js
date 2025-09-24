@@ -1,7 +1,10 @@
-// === Wellness Plan Dynamic JS ===
+// ============================
+// WELLNESS PLAN DYNAMIC JS
+// ============================
+
+// 1. Apply CSS variable URLs to dynamic links
 const root = getComputedStyle(document.documentElement);
 
-// Apply CSS var URLs to links
 [
   ['dynamicFollowUpLink','--followup-url'],
   ['dynamicHormoneLink','--hormone-resource-url'],
@@ -13,33 +16,33 @@ const root = getComputedStyle(document.documentElement);
   ['dynamicNeedle27gLink','--needle27g-url'],
   ['dynamicAlcoholPadsLink','--alcohol-pads-url'],
   ['dynamicSubqVideoLink','--subq-video-url']
-].forEach(([id, v]) => {
-  const el = document.getElementById(id),
-        url = root.getPropertyValue(v).replace(/["']/g,'').trim();
+].forEach(([id, varName]) => {
+  const el = document.getElementById(id);
+  const url = root.getPropertyValue(varName).replace(/["']/g, '').trim();
   if (el && url) el.href = url;
 });
 
-// Remove all target="_blank"
-document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute('target'));
+// 2. Remove all target="_blank" (force same-tab navigation)
+document.querySelectorAll('a[target="_blank"]').forEach(a => {
+  a.removeAttribute('target');
+});
 
-// === Dose Pill Dropdown Toggles (single open at a time) ===
-document.querySelectorAll(".dose.toggle-dose").forEach(dose => {
-  dose.addEventListener("click", () => {
-    // Close all other open dropdowns
-    document.querySelectorAll(".dose.toggle-dose.expanded").forEach(openDose => {
-      if (openDose !== dose) {
-        openDose.classList.remove("expanded");
-        const openContent = openDose.closest(".med-row").querySelector(".learn-more-content");
-        if (openContent) openContent.classList.remove("expanded");
+// 3. Info Icon Toggles (one dropdown open at a time)
+document.querySelectorAll(".info-icon").forEach(icon => {
+  icon.addEventListener("click", () => {
+    const row = icon.closest(".med-row");
+    const content = row?.querySelector(".learn-more-content");
+
+    if (!content) return;
+
+    // Close all other expanded dropdowns
+    document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
+      if (openContent !== content) {
+        openContent.classList.remove("expanded");
       }
     });
 
     // Toggle this one
-    dose.classList.toggle("expanded");
-    const content = dose.closest(".med-row").querySelector(".learn-more-content");
-    if (content) {
-      content.classList.toggle("expanded");
-    }
+    content.classList.toggle("expanded");
   });
 });
-
