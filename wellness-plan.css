@@ -589,12 +589,12 @@
    ============================ */
 .wellness-plan .medication-list li .dose {
   background: #f8f9fb;
-  color: #444;           /* darker than #444 */
+  color: #444;       
   font-style: italic;
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 14px;       /* slightly bigger for legibility */
-  font-weight: 600;      /* bold enough to “pop” */
+  font-weight: 500;      /* bold enough to “pop” */
   line-height: 1.5;
   margin-top: 4px;
   display: inline-block;
