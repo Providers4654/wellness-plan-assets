@@ -632,7 +632,7 @@
   align-items: center;        /* vertically centered */
   cursor: pointer;
   position: relative;
-  padding-left: 6px;          /* optional, extra breathing room inside pill */
+  padding-left: 4px;          /* optional, extra breathing room inside pill */
 }
 
 /* Arrow before text */
@@ -645,7 +645,7 @@
   font-weight: bold;
   color: #222;                /* darker for contrast */
   opacity: 0.9;
-  margin-right: 6px;          /* extra gap */
+  margin-right: 4px;          /* extra gap */
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
