@@ -22,9 +22,19 @@ const root = getComputedStyle(document.documentElement);
 // Remove all target="_blank"
 document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute('target'));
 
-// === Dose Pill Dropdown Toggles ===
+// === Dose Pill Dropdown Toggles (single open at a time) ===
 document.querySelectorAll(".dose.toggle-dose").forEach(dose => {
   dose.addEventListener("click", () => {
+    // Close all other open dropdowns
+    document.querySelectorAll(".dose.toggle-dose.expanded").forEach(openDose => {
+      if (openDose !== dose) {
+        openDose.classList.remove("expanded");
+        const openContent = openDose.closest(".med-row").querySelector(".learn-more-content");
+        if (openContent) openContent.classList.remove("expanded");
+      }
+    });
+
+    // Toggle this one
     dose.classList.toggle("expanded");
     const content = dose.closest(".med-row").querySelector(".learn-more-content");
     if (content) {
@@ -32,3 +42,4 @@ document.querySelectorAll(".dose.toggle-dose").forEach(dose => {
     }
   });
 });
+
