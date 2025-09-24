@@ -1,15 +1,3 @@
-  // === Accordion Toggle Logic ===
-  window.toggleAccordion = function (button) {
-    const all = document.querySelectorAll('.accordion-content');
-    const current = button.nextElementSibling;
-
-    all.forEach(item => {
-      if (item !== current) item.style.display = 'none';
-    });
-
-    current.style.display = (current.style.display === 'block') ? 'none' : 'block';
-  };
-
   // === Dynamic Resource Links via CSS Variables ===
   const setDynamicLink = (id, cssVar) => {
     const el = document.getElementById(id);
