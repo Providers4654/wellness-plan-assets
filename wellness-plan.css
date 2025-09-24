@@ -625,23 +625,27 @@
 
 
 /* ============================
-   DOSE PILL TOGGLE (arrow + text with more spacing)
+   DOSE PILL TOGGLE (arrow + spacing fix)
    ============================ */
 .wellness-plan .dose.toggle-dose {
-  display: inline-flex;       /* keep arrow + text aligned */
-  align-items: center;        /* vertical centering */
-  gap: 10px;                  /* increased spacing between arrow and text */
+  display: inline-flex;       /* arrow + text side by side */
+  align-items: center;        /* vertically centered */
   cursor: pointer;
   position: relative;
+  padding-left: 6px;          /* optional, extra breathing room inside pill */
 }
 
 /* Arrow before text */
 .wellness-plan .dose.toggle-dose::before {
   content: "▸";               /* right-pointing arrow */
-  font-size: 15px;            /* a little larger */
+  display: inline-block;      /* forces arrow to reserve its own space */
+  width: 18px;                /* ⬅️ controls spacing from text */
+  text-align: center;         /* centers arrow inside that space */
+  font-size: 16px;            /* larger, more visible */
   font-weight: bold;
-  color: #222;                /* darker so it stands out */
-  opacity: 0.85;
+  color: #222;                /* darker for contrast */
+  opacity: 0.9;
+  margin-right: 6px;          /* extra gap */
   transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
@@ -650,6 +654,7 @@
   content: "▾";
   opacity: 1;
 }
+
 
 
 
