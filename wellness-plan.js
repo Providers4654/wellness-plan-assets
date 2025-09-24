@@ -1,4 +1,3 @@
-<script>
   // === Accordion Toggle Logic ===
   window.toggleAccordion = function (button) {
     const all = document.querySelectorAll('.accordion-content');
@@ -51,4 +50,3 @@
       }
     });
   });
-</script>
