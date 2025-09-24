@@ -307,11 +307,6 @@
 }
 .wellness-plan .wellness-bubble > ul { margin-top: 20px; }
 
-/* Remove extra spacing below last details section in last bubble */
-.wellness-plan .wellness-bubble > .callout.clean:last-of-type details {
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
 
 /* ============================
    "TO CONSIDER" BLOCK (override)
@@ -630,77 +625,6 @@
 }
 
 /* ============================
-   MISC LINKS / WEIGHT LOSS TIPS
-   ============================ */
-.weight-loss-link {
-  margin: 20px 0 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: #666;
-}
-.weight-loss-link a {
-  color: #444 !important;
-  text-decoration: none;
-}
-.weight-loss-link a:hover { text-decoration: underline; }
-
-/* ============================
-   TABLES & CALLOUTS
-   ============================ */
-.wellness-plan table.treatment-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed;
-  font-size: 15px;
-  margin-top: 10px;
-}
-.wellness-plan table.treatment-table th,
-.wellness-plan table.treatment-table td {
-  width: 50%;
-  padding: 10px 6px;
-  text-align: left;
-  vertical-align: top;
-  border-bottom: 1px solid #eee;
-}
-.wellness-plan table.treatment-table th {
-  font-weight: 600;
-  color: #666;
-  background: transparent;
-}
-
-.wellness-plan .callout {
-  background: #f9f9f9;
-  border-left: 5px solid #bd243f;
-  padding: 18px 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  font-size: 15px;
-}
-
-/* “Clean” callout variant */
-.wellness-plan .callout.clean {
-  background: #fafafa;              /* lighter than white */
-  border: 1px solid #e0e0e0;
-  border-left: 3px solid #ccc;
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 20px;
-  font-size: 15px;
-  line-height: 1.6;
-  box-shadow: none;
-  box-sizing: border-box;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
-}
-.wellness-plan .callout.clean a {
-  color: #bd243f;
-  font-weight: 600;
-  text-decoration: none;
-}
-.wellness-plan .callout.clean a:hover { text-decoration: underline; }
-
-/* ============================
    LISTS & TEXT UTILITIES
    ============================ */
 .wellness-plan ul { padding-left: 20px; margin: 0; }
@@ -720,13 +644,6 @@
   .wellness-plan ul li { margin-left: 0; }
 }
 
-/* Notes text */
-.wellness-plan .notes {
-  font-size: 13px;
-  color: #777;
-  margin-top: 14px;
-}
-
 /* Global links inside wellness plan */
 .wellness-plan a {
   color: #0066cc;          /* clear, accessible blue */
@@ -742,18 +659,6 @@
 /* Spacing between consecutive sections */
 .wellness-plan .section-wrapper + .section-wrapper { margin-top: 80px; }
 
-/* Center/stretch layout containers */
-.video-section,
-.accordion,
-.accordion-item,
-.accordion-button,
-.accordion-content {
-  width: 100%;
-  margin: 0 auto;
-  padding-left: 8px;
-  padding-right: 8px;
-  border-radius: 12px;
-}
 
 /* Generic “dose” utility (outside medication-list too) */
 .wellness-plan .dose {
@@ -868,54 +773,6 @@
   transform: translateY(-1px);
 }
 
-/* ============================
-   ACCORDION (To Consider section)
-   ============================ */
-.accordion-item { margin-bottom: 12px; }
-
-.accordion-button {
-  background: #f7f7f7;
-  color: var(--color-text);
-  font-weight: 600;
-  font-size: 15px;
-  padding: 12px 18px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  text-align: left;
-  width: 100%;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.accordion-button:hover {
-  background: #f0f0f0;
-  border-color: #bbb;
-  transform: translateY(-1px);
-}
-
-.accordion-content {
-  background: #fafafa;
-  padding: 14px 18px;
-  border-radius: 10px;
-  border: 1px solid #e0e0e0;
-  margin-top: 6px;
-  font-size: 14.5px;
-  line-height: 1.6;
-  color: #444;
-}
-
-/* Only applies to the "To Consider" section */
-.wellness-plan .to-consider-section .wellness-bubble > *:first-child { margin-top: 30px; }
-
-/* Accordion mobile tweaks */
-@media screen and (max-width: 768px) {
-  .wellness-plan .accordion-content {
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-  }
-  .wellness-plan .accordion-item { margin-bottom: 10px; }
-  .wellness-plan .accordion-button { margin-bottom: 4px !important; }
-}
 
 
 /* ============================
@@ -936,77 +793,11 @@
     box-sizing: border-box;
   }
 
-  .video-section,
-  .callout.clean,
-  .accordion,
-  .accordion-item,
-  .accordion-button,
-  .accordion-content {
-    width: 100%;
-    max-width: 640px;
-    margin: 0 auto;
-    padding-left: 12px;
-    padding-right: 12px;
-    box-sizing: border-box;
-  }
 
   /* Tighter internal padding on bubbles and blocks */
   .wellness-plan .wellness-bubble { padding: 22px 16px !important; }
   .wellness-plan .med-time-block { padding: 12px 18px 20px !important; }
-  .wellness-plan .callout.clean  { padding: 16px 18px !important; margin-bottom: 12px !important; }
 
-  .wellness-plan .med-header {
-    display: block;
-    font-size: 16px;
-    line-height: 1;
-    margin-bottom: 2px;
-  }
-  .wellness-plan .med-header strong {
-    display: block;
-    margin-bottom: 0;
-    font-size: 17px;
-    font-weight: 600;
-  }
-  .wellness-plan .med-header .dose,
-  .wellness-plan .med-header .editable {
-    display: block;
-    margin-top: 2px;
-    margin-bottom: 0;
-  }
-
-  .accordion-button {
-    padding: 14px 16px !important;
-    border-radius: 8px !important;
-    width: 100% !important;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) !important;
-    border: 1px solid #ddd !important;
-    margin-bottom: 16px !important;
-    position: relative;
-    white-space: normal !important;
-    overflow-wrap: break-word !important;
-    word-break: break-word !important;
-    line-height: 1.4 !important;
-    color: var(--color-text) !important;
-    text-decoration: none !important;
-  }
-  .accordion-button a {
-    color: inherit !important;
-    text-decoration: none !important;
-    pointer-events: none;
-  }
-  .accordion-content { padding: 16px 0 20px !important; }
-  .accordion-content .callout.clean { padding: 18px 12px; margin: 12px 0; }
-
-  .subsection-label { padding-left: 8px; padding-right: 8px; }
-
-  .header-nav-item a {
-    font-size: 17px;
-    padding: 12px 0;
-    display: block;
-    text-align: center;
-  }
-  .header-nav-list { padding: 20px 0; gap: 10px; }
-  .mobile-menu { padding: 10px 0; }
 
   .wellness-plan .section-wrapper:nth-of-type(3) { margin-bottom: 40px !important; }
 
@@ -1059,8 +850,6 @@
   a[href*="mtnhlth.com"] { display: none !important; }
 
   /* Force all links visible (and print their URLs) */
-  .accordion .content,
-  .accordion .inner,
   .learn-more-section,
   .resource-link,
   .resource-link a,
@@ -1092,18 +881,17 @@
   }
 
   /* Avoid content cutoff at page breaks */
-  .section-wrapper,
-  .wellness-bubble,
-  .med-time-block,
-  .callout,
-  .resource-link,
-  ul.medication-list,
-  ul li,
-  .cta-button,
-  .print-plan-btn {
-    page-break-inside: auto !important;
-    break-inside: auto !important;
-  }
+.section-wrapper,
+.wellness-bubble,
+.med-time-block,
+.resource-link,
+ul.medication-list,
+ul li,
+.print-plan-btn {
+  page-break-inside: auto !important;
+  break-inside: auto !important;
+}
+
 
   /* Page padding & color */
   .wellness-plan {
