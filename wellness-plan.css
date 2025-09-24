@@ -199,19 +199,19 @@
   line-height: 1.6;
 }
 
+/* Force all med-link-group links to be blue */
 .wellness-plan .med-link-group a {
-  color: var(--color-link) !important; /* calm medium blue */
+  color: #0066cc !important;       /* blue links */
   text-decoration: underline;
-  text-decoration-color: #a3c2e3;      /* soft underline */
-  white-space: nowrap;
-  font-weight: 500;
-  transition: color 0.2s ease;
+  text-decoration-color: #99c2ff;  /* lighter blue underline */
+  font-weight: 600;                /* make them stand out more */
 }
 
 .wellness-plan .med-link-group a:hover {
-  color: var(--color-link-hover) !important; /* darker on hover */
-  text-decoration-color: var(--color-link-hover);
+  color: #004999 !important;       /* darker blue on hover */
+  text-decoration-color: #004999;
 }
+
 
 .med-link-group .divider {
   color: #bbb;
