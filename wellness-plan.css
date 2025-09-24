@@ -625,19 +625,30 @@
 
 
 /* ============================
-   INFO ICON (ℹ️) STYLING
+   DOSE PILL TOGGLE
    ============================ */
-.wellness-plan .info-icon {
-  font-size: 12px;       /* smaller than text */
-  margin-left: 6px;      /* space from dose text */
-  cursor: pointer;       /* show clickable hand */
-  opacity: 0.7;          /* subtle by default */
-  transition: opacity 0.2s ease;
+.wellness-plan .dose.toggle-dose {
+  position: relative;
+  cursor: pointer;             /* makes it feel clickable */
+  padding-right: 22px;         /* space for arrow */
 }
 
-.wellness-plan .info-icon:hover {
-  opacity: 1;            /* darker on hover */
+.wellness-plan .dose.toggle-dose::after {
+  content: "▸";                /* right-pointing arrow */
+  font-size: 12px;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.6;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
+
+.wellness-plan .dose.toggle-dose.expanded::after {
+  content: "▾";                /* down arrow when open */
+  opacity: 1;
+}
+
 
 
 
