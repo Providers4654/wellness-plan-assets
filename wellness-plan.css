@@ -659,6 +659,26 @@
 
 
 
+/* ============================
+   INFO ICON (inline with med name)
+   ============================ */
+.wellness-plan .info-icon {
+  font-size: 13px;         /* smaller than med name */
+  margin-left: 6px;        /* space between text and icon */
+  color: #666;             /* softer gray so it doesn’t overpower */
+  cursor: pointer;
+  vertical-align: middle;  /* aligns nicely with the text */
+  opacity: 0.8;            /* a bit subtle */
+  transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.wellness-plan .info-icon:hover {
+  color: #000;             /* darken on hover for clarity */
+  opacity: 1;
+}
+
+
+
 
 
 
