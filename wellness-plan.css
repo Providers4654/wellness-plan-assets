@@ -138,10 +138,10 @@
   top: -22px;
   left: 24px;
   background: #f1f3f5;
-  color: #333;                /* softer than pure black */
+  color: #111;              /* darker text */
   padding: 6px 20px;
-  font-size: 16px;            /* slightly smaller than before */
-  font-weight: 500;           /* lighter than bold */
+  font-size: 17px;          /* bump up slightly */
+  font-weight: 700;         /* stronger bold */
   border-radius: 999px;
   border: 1.5px solid #c7cbd1;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
