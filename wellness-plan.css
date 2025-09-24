@@ -1,3 +1,14 @@
+:root {
+  --title-plan: "📋 Personalized Wellness Plan";
+  --title-summary: "💊 Treatment Summary";
+  --title-supplements: "Supplements";
+  --title-lifestyle: "🏃 Lifestyle, Nutrition, Fitness & Sleep";
+  --title-goals: "🎯 Goals & Follow-Up";
+}
+
+
+
+
 /* ============================
    GLOBAL STYLES: WELLNESS PLAN
    ============================ */
@@ -149,6 +160,13 @@
   letter-spacing: 0.3px; /* touch more spacing */
   z-index: 2;
 }
+
+/* Inject section titles from CSS variables */
+.title-plan::before       { content: var(--title-plan); }
+.title-summary::before    { content: var(--title-summary); }
+.title-supplements::before{ content: var(--title-supplements); }
+.title-lifestyle::before  { content: var(--title-lifestyle); }
+.title-goals::before      { content: var(--title-goals); }
 
 
 /* Restore spacing before Treatment Summary bubble on mobile */
