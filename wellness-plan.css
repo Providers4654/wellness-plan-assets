@@ -80,16 +80,16 @@
   justify-content: center;
   background: linear-gradient(to bottom, #fdfdfd, #f0f0f0);
   color: var(--color-button-text) !important;
-  padding: 8px 20px;
-  width: 200px;
-  height: 35px;
+  padding: 10px 26px;         /* more padding */
+  width: 220px;               /* slightly wider for balance */
+  height: 40px;               /* taller button */
   text-align: center;
   border: 1px solid #aaa;
   border-radius: 7px;
-  font-size: var(--size-button);
-  font-weight: var(--weight-button);
-  letter-spacing: 0.3px;
-  font-family: var(--font-button);
+  font-size: 14px;            /* explicit size */
+  font-weight: 700;           /* bolder */
+  letter-spacing: 0.4px;      /* touch more emphasis */
+  font-family: "Helvetica Neue", Arial, sans-serif; /* safe fallback */
   text-decoration: none;
   transition: all 0.2s ease;
   box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -130,21 +130,25 @@
   margin-bottom: 70px; /* spacing between full sections */
 }
 
+/* ============================
+   SECTION TITLES
+   ============================ */
 .wellness-plan .section-title {
   position: absolute;
   top: -22px;
   left: 24px;
   background: #f1f3f5;
-  color: var(--color-text);
+  color: #333;                /* softer than pure black */
   padding: 6px 20px;
-  font-size: var(--size-heading);   /* 17px previously */
-  font-weight: var(--weight-heading);
+  font-size: 16px;            /* slightly smaller than before */
+  font-weight: 500;           /* lighter than bold */
   border-radius: 999px;
   border: 1.5px solid #c7cbd1;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   letter-spacing: 0.25px;
   z-index: 2;
 }
+
 
 /* Restore spacing before Treatment Summary bubble on mobile */
 @media screen and (max-width: 768px) {
@@ -218,9 +222,9 @@
    ============================ */
 .learn-more-toggle {
   cursor: pointer;
-  font-size: var(--size-learn-more); /* 12.5px */
-  color: var(--color-learn-more);    /* lighter gray */
-  font-weight: var(--weight-learn-more);
+  font-size: 12.5px;   /* explicit size */
+  color: #888;         /* softer gray */
+  font-weight: 300;    /* lighter text */
   margin-top: 8px;
   display: inline-block;
   user-select: none;
@@ -228,25 +232,33 @@
   transition: color 0.2s ease;
 }
 
-.learn-more-toggle:hover { color: #666; }
+.learn-more-toggle:hover { 
+  color: #666; 
+}
 
 .learn-more-toggle::before {
   content: '+ ';
-  font-weight: 300;
+  font-weight: 300;    /* light plus sign */
   margin-right: 3px;
 }
 
-.learn-more-toggle.expanded::before { content: '- '; }
+.learn-more-toggle.expanded::before { 
+  content: '- '; 
+}
 
 .learn-more-content {
   display: none;
   margin-top: 4px;
-  font-size: var(--size-learn-more);
+  font-size: 12.5px;   /* matches toggle size */
   line-height: 1.45;
   color: #666;
   padding: 4px 0;
 }
-.learn-more-content.expanded { display: block; }
+
+.learn-more-content.expanded { 
+  display: block; 
+}
+
 
 /* ============================
    SECTION BUBBLES
@@ -467,7 +479,7 @@
 .wellness-plan .med-time-block {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.015);
   background: #fff;
-  padding: 0 20px 20px; /* top 0 to tuck label under bubble title */
+  padding: 24px 20px 20px;   /* top padding restored */
   border-radius: 16px;
   margin-bottom: 50px;
 }
@@ -481,16 +493,16 @@
 /* Block labels */
 .wellness-plan .med-time-label {
   display: block;
-  font-size: 19px;                /* previously 20 then 19 later; keep 19 */
-  font-weight: 800;
+  font-size: 19px;           /* keep slightly under 20px */
+  font-weight: 800;          /* bold for emphasis */
   color: #1f2d3d;
   padding: 10px 14px;
-  margin: 4px 0 24px;             /* anchor near top and add separation */
+  margin: 6px 0 24px;        /* small top gap, consistent bottom */
   text-transform: uppercase;
   letter-spacing: 1px;
   border-radius: 8px 8px 0 0;
-
-  /* Frosted look */
+  
+  /* Frosted background look */
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(6px);
   box-shadow:
@@ -551,15 +563,17 @@
   letter-spacing: 0.4px;
 }
 
-/* Dose “pill” within list */
+/* ============================
+   DOSE PILLS
+   ============================ */
 .wellness-plan .medication-list li .dose {
   background: #f8f9fb;
   color: #444;
   font-style: italic;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 13.5px;   /* slightly smaller than before */
+  font-weight: 400;    /* lighter */
   line-height: 1.5;
   margin-top: 4px;
   display: inline-block;
@@ -568,6 +582,7 @@
   letter-spacing: 0.25px;
   white-space: normal;
 }
+
 
 /* Wrap name + dose layout */
 .wellness-plan .med-row {
