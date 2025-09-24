@@ -21,7 +21,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-}
+} 
 
 
 /* Printable viewport shim above logo */
