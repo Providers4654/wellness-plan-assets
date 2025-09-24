@@ -695,13 +695,17 @@
   margin-top: 14px;
 }
 
-/* Global links (tiny links under med names, etc.) */
+/* Global links inside wellness plan */
 .wellness-plan a {
-  color: var(--color-link);
+  color: #0066cc;          /* clear, accessible blue */
   text-decoration: none;
   font-weight: 600;
 }
-.wellness-plan a:hover { text-decoration: underline; }
+
+.wellness-plan a:hover {
+  color: #004999;          /* darker blue on hover */
+  text-decoration: underline;
+}
 
 /* Spacing between consecutive sections */
 .wellness-plan .section-wrapper + .section-wrapper { margin-top: 80px; }
