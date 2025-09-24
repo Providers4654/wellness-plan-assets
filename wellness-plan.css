@@ -138,14 +138,14 @@
   top: -22px;
   left: 24px;
   background: #f1f3f5;
-  color: #111;              /* darker text */
+  color: #1f2d3d;        /* richer dark gray (old look) */
   padding: 6px 20px;
-  font-size: 17px;          /* bump up slightly */
-  font-weight: 700;         /* stronger bold */
+  font-size: 18px;       /* slightly larger */
+  font-weight: 800;      /* heavier than 700 */
   border-radius: 999px;
   border: 1.5px solid #c7cbd1;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  letter-spacing: 0.25px;
+  letter-spacing: 0.3px; /* touch more spacing */
   z-index: 2;
 }
 
@@ -494,17 +494,16 @@
 /* Block labels */
 .wellness-plan .med-time-label {
   display: block;
-  font-size: 20px;      /* back to old size */
-  font-weight: 800;     /* stronger than 700, real glyph weight */
-  color: #1f2d3d;       /* old richer gray */
+  font-size: 20px;       /* back to old size */
+  font-weight: 800;      /* real extra-bold, not simulated 900 */
+  color: #1f2d3d;        /* old richer dark gray */
   padding: 12px 16px;
   margin: 6px 0 24px;
   text-transform: uppercase;
   letter-spacing: 1px;
   border-radius: 8px 8px 0 0;
-}
-  
-  /* Frosted background look */
+
+  /* Frosted look */
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(6px);
   box-shadow:
@@ -512,6 +511,7 @@
     inset 0 3px 4px rgba(255, 255, 255, 0.35),
     0 2px 5px rgba(0, 0, 0, 0.06);
 }
+
 
 /* Theme-matched label backgrounds per block */
 .daily-block .med-time-label   { background: #fff8e1; }
@@ -570,12 +570,12 @@
    ============================ */
 .wellness-plan .medication-list li .dose {
   background: #f8f9fb;
-  color: #444;
+  color: #222;           /* darker than #444 */
   font-style: italic;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 13.5px;   /* slightly smaller than before */
-  font-weight: 400;    /* lighter */
+  font-size: 14px;       /* slightly bigger for legibility */
+  font-weight: 600;      /* bold enough to “pop” */
   line-height: 1.5;
   margin-top: 4px;
   display: inline-block;
@@ -584,6 +584,7 @@
   letter-spacing: 0.25px;
   white-space: normal;
 }
+
 
 
 /* Wrap name + dose layout */
