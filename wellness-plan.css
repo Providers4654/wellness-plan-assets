@@ -249,11 +249,12 @@
 .learn-more-content {
   display: none;
   margin-top: 4px;
-  font-size: 12.5px;   /* matches toggle size */
-  line-height: 1.45;
-  color: #666;
+  font-size: 13.5px;   /* larger than 12.5px */
+  line-height: 1.55;   /* more comfortable spacing */
+  color: #444;         /* darker gray for readability */
   padding: 4px 0;
 }
+
 
 .learn-more-content.expanded { 
   display: block; 
@@ -492,15 +493,15 @@
 
 /* Block labels */
 .wellness-plan .med-time-label {
-  display: block;
-  font-size: 19px;           /* keep slightly under 20px */
-  font-weight: 800;          /* bold for emphasis */
-  color: #1f2d3d;
-  padding: 10px 14px;
-  margin: 6px 0 24px;        /* small top gap, consistent bottom */
+  font-size: 19px;
+  font-weight: 900;    /* max bold */
+  color: #111;         /* darker */
+  padding: 12px 16px;
+  margin: 6px 0 24px;
   text-transform: uppercase;
   letter-spacing: 1px;
   border-radius: 8px 8px 0 0;
+}
   
   /* Frosted background look */
   background: rgba(255, 255, 255, 0.7);
