@@ -21,8 +21,6 @@
 
 
 
-
-
 /* ============================
    GLOBAL STYLES: WELLNESS PLAN
    ============================ */
@@ -614,7 +612,6 @@
 }
 
 
-
 /* Wrap name + dose layout */
 .wellness-plan .med-row {
   display: flex;
@@ -623,6 +620,26 @@
   gap: 4px;
   width: 100%;
 }
+
+
+
+
+/* ============================
+   INFO ICON (ℹ️) STYLING
+   ============================ */
+.wellness-plan .info-icon {
+  font-size: 12px;       /* smaller than text */
+  margin-left: 6px;      /* space from dose text */
+  cursor: pointer;       /* show clickable hand */
+  opacity: 0.7;          /* subtle by default */
+  transition: opacity 0.2s ease;
+}
+
+.wellness-plan .info-icon:hover {
+  opacity: 1;            /* darker on hover */
+}
+
+
 
 /* ============================
    LISTS & TEXT UTILITIES
