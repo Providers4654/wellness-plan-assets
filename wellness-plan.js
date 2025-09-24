@@ -1,11 +1,10 @@
-
 // === Wellness Plan Dynamic JS ===
 const root = getComputedStyle(document.documentElement);
 
 // Apply CSS var URLs to links
 [
   ['dynamicFollowUpLink','--followup-url'],
-  ['dynamicHormoneLink','--hormone-rx-resources'],
+  ['dynamicHormoneLink','--hormone-resource-url'],
   ['dynamicAddOnsLink','--treatment-addons-url'],
   ['dynamicStandardsLink','--basic-standards-url'],
   ['dynamicCoachingLink','--health-coaching-url'],
@@ -27,7 +26,7 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute('
 document.querySelectorAll(".dose.toggle-dose").forEach(dose => {
   dose.addEventListener("click", () => {
     dose.classList.toggle("expanded");
-    const content = dose.parentElement.querySelector(".learn-more-content");
+    const content = dose.closest(".med-row").querySelector(".learn-more-content");
     if (content) {
       content.classList.toggle("expanded");
     }
