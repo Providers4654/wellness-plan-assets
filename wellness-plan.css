@@ -212,7 +212,7 @@
   flex-wrap: wrap;
   gap: 8px;
   font-size: 11px;
-  color: #666; /* slightly darker for visibility */
+  color: #666;
   margin-top: 22px;
   line-height: 1.6;
 }
@@ -222,7 +222,7 @@
   color: #0066cc !important;       /* blue links */
   text-decoration: underline;
   text-decoration-color: #99c2ff;  /* lighter blue underline */
-  font-weight: 600;                /* make them stand out more */
+  font-weight: 400;                /* make them stand out more */
 }
 
 .wellness-plan .med-link-group a:hover {
