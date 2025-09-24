@@ -4,10 +4,10 @@
 
 /* Base container */
 .wellness-plan {
-  font-family: var(--font-base);
-  font-size: var(--size-body);
-  font-weight: var(--weight-body);
-  color: var(--color-text);
+  font-family: "Helvetica Neue", Arial, sans-serif;  /* fixed */
+  font-size: 16px;   /* pick a solid base size */
+  font-weight: 400;  /* standard body weight */
+  color: #222;       /* clean dark text */
   max-width: 960px;
   margin: 0 auto;
   padding: 20px 20px;
@@ -22,6 +22,7 @@
 *::after {
   box-sizing: border-box;
 }
+
 
 /* Printable viewport shim above logo */
 .printable-content {
@@ -570,7 +571,7 @@
    ============================ */
 .wellness-plan .medication-list li .dose {
   background: #f8f9fb;
-  color: #222;           /* darker than #444 */
+  color: #444;           /* darker than #444 */
   font-style: italic;
   padding: 6px 10px;
   border-radius: 6px;
