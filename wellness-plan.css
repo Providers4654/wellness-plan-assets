@@ -46,6 +46,7 @@
     margin: 0 auto;            /* center horizontally */
     padding: 12px;             /* ✅ tighter padding so content isn’t squeezed */
     box-sizing: border-box;
+    padding-top: 80px;
   }
 }
 
@@ -862,14 +863,23 @@
     overflow-x: hidden;
   }
 
+  /* Force ALL parent containers to full width */
+  .site-wrapper,
+  .page-content,
+  .sqs-layout,
   .wellness-plan {
-    width: 95% !important;     /* make it a little narrower than 100% */
-    max-width: none !important;
-    margin: 0 auto;            /* center horizontally */
-    padding: 16px;             /* balanced padding */
+    width: 100% !important;       /* stretch full width */
+    max-width: 100% !important;   /* remove any cap */
+    margin: 0 auto !important;
     box-sizing: border-box;
   }
+
+  /* Add comfortable side padding only inside the plan */
+  .wellness-plan {
+    padding: 16px 12px;  /* left/right gutters for readability */
+  }
 }
+
 
 
 
