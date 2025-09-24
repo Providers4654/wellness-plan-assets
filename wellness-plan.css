@@ -668,7 +668,7 @@
   color: #999;             /* lighter gray */
   cursor: pointer;
   vertical-align: super;   /* nudged slightly up like a footnote */
-  opacity: 0.7;            /* subtle by default */
+  opacity: 0.8;            /* subtle by default */
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
