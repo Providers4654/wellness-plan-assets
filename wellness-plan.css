@@ -625,35 +625,38 @@
 
 
 /* ============================
-   DOSE PILL TOGGLE (arrow + spacing fix)
+   DOSE PILL DROPDOWN TOGGLE
    ============================ */
 .wellness-plan .dose.toggle-dose {
-  display: inline-flex;       /* arrow + text side by side */
-  align-items: center;        /* vertically centered */
-  cursor: pointer;
-  position: relative;
-  padding-left: 2px;          /* optional, extra breathing room inside pill */
+  display: inline-flex;       /* keep arrow + text inline */
+  align-items: center;        /* vertical centering */
+  cursor: pointer;            /* hand cursor on hover */
+  padding: 4px 10px 4px 8px;  /* balanced pill padding */
+  border-radius: 6px;         /* consistent pill shape */
+  background: #f8f9fb;        /* subtle gray pill */
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 500;
+  color: #444;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
-/* Arrow before text */
+/* Arrow before dose text */
 .wellness-plan .dose.toggle-dose::before {
   content: "▸";               /* right-pointing arrow */
-  display: inline-block;      /* forces arrow to reserve its own space */
-  width: 18px;                /* ⬅️ controls spacing from text */
-  text-align: center;         /* centers arrow inside that space */
-  font-size: 16px;            /* larger, more visible */
-  font-weight: bold;
-  color: #222;                /* darker for contrast */
-  opacity: 0.9;
-  margin-right: 4px;          /* extra gap */
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  margin-right: 6px;          /* clean spacing from text */
+  font-size: 15px;            /* slightly larger for visibility */
+  font-weight: 700;           /* bold for clarity */
+  color: #333;
+  transition: transform 0.2s ease;
 }
 
-/* Expanded state shows down arrow */
+/* Expanded state switches arrow */
 .wellness-plan .dose.toggle-dose.expanded::before {
-  content: "▾";
-  opacity: 1;
+  content: "▾";               /* down arrow */
+  transform: translateY(1px); /* subtle nudge for realism */
 }
+
 
 
 
