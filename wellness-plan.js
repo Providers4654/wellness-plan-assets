@@ -1,3 +1,4 @@
+<script>
 // === Wellness Plan Dynamic JS ===
 const root = getComputedStyle(document.documentElement);
 
@@ -6,7 +7,7 @@ const root = getComputedStyle(document.documentElement);
   ['dynamicFollowUpLink','--followup-url'],
   ['dynamicHormoneLink','--hormone-resource-url'],
   ['dynamicAddOnsLink','--treatment-addons-url'],
-  ['dynamicStandardsLink','--basic-standards-url'],
+  ['dynamicStandardsLink','--basic-hlth-standards'],
   ['dynamicCoachingLink','--health-coaching-url'],
   ['dynamicTipsLink','--lifestyle-tips-url'],
   ['dynamicFullscriptLink','--fullscript-url'],
@@ -29,3 +30,12 @@ document.querySelectorAll(".learn-more-toggle").forEach(btn =>
     btn.nextElementSibling?.classList.toggle("expanded");
   })
 );
+
+// === Info Icon Toggles ===
+document.querySelectorAll('.info-icon').forEach(icon => {
+  icon.addEventListener('click', () => {
+    const content = icon.closest('.med-row').querySelector('.learn-more-content');
+    content.classList.toggle('expanded');
+  });
+});
+</script>
