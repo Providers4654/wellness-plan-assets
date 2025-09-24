@@ -764,9 +764,9 @@
 /* Remove any bottom margin from element directly before */
 .wellness-bubble > *:last-child { margin-bottom: 0 !important; }
 
-/* Link styling */
+/* Link styling (resource links only) */
 .resource-link a {
-  color: #bd243f;
+  color: inherit !important;   /* don’t override buttons */
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
@@ -796,7 +796,7 @@
    ============================ */
 .schedule-followup-btn {
   background: #f3f3f3;
-  color: var(--color-button-text);
+  color: #2e2e2e;
   padding: 8px 22px;
   border: 1.5px solid #999;
   border-radius: 10px;
@@ -849,12 +849,14 @@
   }
 
   .wellness-plan {
-    padding: 24px 12px;
-    width: 100%;
-    max-width: none;
-    margin: 0;
+    width: 95% !important;     /* make it a little narrower than 100% */
+    max-width: none !important;
+    margin: 0 auto;            /* center horizontally */
+    padding: 16px;             /* balanced padding */
     box-sizing: border-box;
   }
+}
+
 
 
   /* Tighter internal padding on bubbles and blocks */
