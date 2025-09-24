@@ -632,7 +632,7 @@
   align-items: center;        /* vertically centered */
   cursor: pointer;
   position: relative;
-  padding-left: 4px;          /* optional, extra breathing room inside pill */
+  padding-left: 2px;          /* optional, extra breathing room inside pill */
 }
 
 /* Arrow before text */
