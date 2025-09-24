@@ -39,6 +39,16 @@
   box-sizing: border-box;
 }
 
+@media (max-width: 600px) {
+  .wellness-plan {
+    width: 95% !important;      /* fill most of the screen */
+    max-width: none !important;
+    margin: 0 auto;             /* center it */
+    padding: 16px 10px;         /* tighter side padding */
+  }
+}
+
+
 /* Universal box sizing */
 *,
 *::before,
@@ -69,15 +79,14 @@
 
 @media (max-width: 600px) {
   .wellness-logo {
-    width: 100%;
-    max-width: 375px;
-    height: 200px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 16px;
-    margin-top: 0 !important; /* keep top flush on mobile */
-    display: block;
+    width: 95%;               /* fill most of the mobile screen */
+    max-width: none;           /* remove artificial cap */
+    height: auto;              /* let the aspect ratio scale naturally */
+    margin: 20px auto 16px;    /* push down from top, center, add bottom gap */
+    display: block;            /* standard block element */
   }
+}
+
 
   .printable-content {
     padding-top: 0 !important;
@@ -766,7 +775,7 @@
 
 /* Link styling (resource links only) */
 .resource-link a {
-  color: inherit !important;   /* don’t override buttons */
+  color: #bd243f;   /* don’t override buttons */
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
