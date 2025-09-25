@@ -125,14 +125,15 @@ function injectPatientData(rows, lifestyleData) {
     const blurb = r["Blurb"] || "";
     if (!med) return;
 
-    const medHtml = `
-      <li class="med-row">
-        <strong>${med}</strong>
-        <span class="info-icon">ⓘ</span>
-        <div class="dose">${dose}</div>
-        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
-      </li>
-    `;
+const medHtml = `
+  <li class="med-row">
+    <strong>${med}</strong>
+    <span class="info-icon" title="More info">ℹ</span>
+    <div class="dose">${dose}</div>
+    <div class="learn-more-content">${r["Blurb"] || ""}</div>
+  </li>
+`;
+
 
     if (medsByCategory[cat]) medsByCategory[cat].push(medHtml);
   });
@@ -162,7 +163,7 @@ function injectPatientData(rows, lifestyleData) {
       return `
         <li>
           <strong>${tip}</strong>
-          ${lib && lib["Blurb"] ? `<div>${lib["Blurb"]}</div>` : ""}
+          ${lib && lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
         </li>
       `;
     }).join("");
