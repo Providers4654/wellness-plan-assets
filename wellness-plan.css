@@ -67,9 +67,32 @@
 } 
 
 
-/* Printable viewport shim above logo */
+/* === CONTAINER SPACING (keeps content below fixed header) === */
 .printable-content {
-  padding-top: var(--header-height, 100px) !important; /* push ALL content below header */
+  padding-top: 70px !important; /* default desktop/tablet */
+  margin-top: 0 !important;
+}
+
+/* Narrow desktop/tablet: extra clearance so logo never tucks under */
+@media (max-width: 1100px) and (min-width: 601px) {
+  .printable-content {
+    padding-top: 100px !important;
+  }
+}
+
+/* Very wide desktop: tighten spacing */
+@media (min-width: 1600px) {
+  .printable-content {
+    padding-top: 50px !important;
+  }
+}
+
+/* Mobile: clear header but keep it snug */
+@media (max-width: 600px) {
+  .printable-content {
+    padding-top: calc(var(--header-height, 100px) - 10px) !important;
+    margin-top: 0 !important;
+  }
 }
 
 /* === LOGO === */
@@ -86,45 +109,15 @@
   z-index: 5;
 }
 
+/* Mobile logo adjustments */
 @media (max-width: 600px) {
   .wellness-logo {
     width: 100%;
     max-width: 375px;
-    height: 200px; /* keep natural aspect height */
-    margin: 0 auto 16px auto; /* no extra margin-top — container handles spacing */
+    height: 200px; /* keep natural aspect ratio */
+    margin: 0 auto 16px auto; /* spacing handled by container */
   }
 }
-
-/* === CONTAINER SPACING === */
-
-/* Default desktop/tablet spacing */
-.printable-content {
-  padding-top: 70px !important; /* tweak between 60–80 depending on taste */
-  margin-top: 0 !important;
-}
-
-/* Narrow desktop/tablet: give a little more clearance so logo never tucks under */
-@media (max-width: 1100px) and (min-width: 601px) {
-  .printable-content {
-    padding-top: 100px !important;
-  }
-}
-
-/* Very wide desktop: tighten up so there’s not too much breathing room */
-@media (min-width: 1600px) {
-  .printable-content {
-    padding-top: 50px !important;
-  }
-}
-
-/* Mobile: reserve just enough to clear fixed header */
-@media (max-width: 600px) {
-  .printable-content {
-    padding-top: calc(var(--header-height, 100px) - 10px) !important;
-    margin-top: 0 !important;
-  }
-}
-
 
 
 
