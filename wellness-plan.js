@@ -207,18 +207,49 @@ const medHtml = `
 // 5. Fetch & Match Patient Rows
 // ============================
 function csvToJSON(csv) {
-  const rows = csv.split("\n").map((r) => r.split(","));
-  const headers = rows.shift();
-  return rows
-    .filter((r) => r.some((cell) => cell.trim() !== ""))
-    .map((row) => {
-      let obj = {};
-      row.forEach((val, i) => {
-        obj[headers[i]?.trim()] = val.trim();
-      });
-      return obj;
+  const rows = [];
+  const lines = csv.split("\n");
+  const headers = parseCSVLine(lines.shift());
+
+  lines.forEach(line => {
+    if (!line.trim()) return;
+    const values = parseCSVLine(line);
+    let obj = {};
+    headers.forEach((h, i) => {
+      obj[h.trim()] = (values[i] || "").trim();
     });
+    rows.push(obj);
+  });
+  return rows;
 }
+
+function parseCSVLine(line) {
+  const result = [];
+  let cur = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+
+    if (char === '"' && line[i + 1] === '"') {
+      // Handle escaped double quotes
+      cur += '"';
+      i++;
+    } else if (char === '"') {
+      // Toggle quoted state
+      inQuotes = !inQuotes;
+    } else if (char === "," && !inQuotes) {
+      // End of cell
+      result.push(cur);
+      cur = "";
+    } else {
+      cur += char;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
 
 function getPatientIdFromUrl() {
   const parts = window.location.pathname.split("/");
