@@ -4,6 +4,7 @@
 :root {
   /* Section titles */
   --title-plan: "📋 Personalized Wellness Plan";
+   
   --title-summary: "💊 Treatment Summary";
   --title-supplements: "Supplements";
   --title-lifestyle: "🏃 Lifestyle & Health Habits";
@@ -233,6 +234,30 @@
   position: relative;
   margin-bottom: 70px; /* spacing between full sections */
 }
+
+
+
+
+/* ============================
+   INTRO MESSAGE (Plan Header)
+   ============================ */
+
+.wellness-plan .intro-message::before {
+  content: var(--intro-message);
+  display: block;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  margin: 0; /* keeps spacing consistent */
+}
+
+
+
+
+
+
+
+
 
 /* ============================
    SECTION TITLES + UNIFIED SPACING
