@@ -69,8 +69,7 @@
 
 /* Printable viewport shim above logo */
 .printable-content {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
+  padding-top: var(--header-height, 100px) !important; /* push ALL content below header */
 }
 
 /* ============================
@@ -80,7 +79,7 @@
   display: block;
   width: 400px;     /* desktop width */
   height: 200px;
-  margin: calc(var(--header-height) + 20px) auto 16px auto; /* push logo below header */
+  margin: 20px auto 16px auto; /* just local spacing */
   background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
   background-size: contain;
   background-repeat: no-repeat;
@@ -88,22 +87,18 @@
 }
 
 /* ============================
-   MOBILE FIX
+   Mobile Fix
    ============================ */
 @media (max-width: 600px) {
   .printable-content {
-    padding-top: var(--header-height, 80px) !important; /* create space for fixed header */
+    padding-top: var(--header-height, 100px) !important;
   }
 
   .wellness-logo {
     width: 95%;
     max-width: none;
     height: auto;
-    margin: calc(var(--header-height) + 10px) auto 16px auto; /* push below header */
-    display: block;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    margin: 20px auto 16px auto; /* still uses the global offset from .printable-content */
   }
 }
 
