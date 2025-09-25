@@ -30,37 +30,41 @@ const SHEET_URL =
 
 
 // ============================
-// 2. Inject CSS-driven link text + notes
+// 1b. Apply CSS variable TEXT to placeholders
 // ============================
 
-// Supplements (Fullscript)
-const fullscriptLink = document.getElementById("dynamicFullscriptLink");
-if (fullscriptLink) {
-  fullscriptLink.textContent = root.getPropertyValue("--fullscript-text").replace(/["']/g,"").trim();
-  const note = document.querySelector("#dynamicFullscriptLink + small.resource-note");
-  if (note) note.textContent = root.getPropertyValue("--fullscript-note").replace(/["']/g,"").trim();
+// helper
+function cssVar(name) {
+  return root.getPropertyValue(name).replace(/["']/g, "").trim();
 }
+
+// Supplements (Fullscript)
+const fsText = document.getElementById("fullscriptText");
+if (fsText) fsText.textContent = cssVar("--fullscript-text");
+const fsNote = document.getElementById("fullscriptNote");
+if (fsNote) fsNote.textContent = cssVar("--fullscript-note");
 
 // Add-ons
-const addonsLink = document.getElementById("dynamicAddOnsLink");
-if (addonsLink) {
-  addonsLink.textContent = root.getPropertyValue("--addons-text").replace(/["']/g,"").trim();
-  const note = document.querySelector("#dynamicAddOnsLink + small.resource-note");
-  if (note) note.textContent = root.getPropertyValue("--addons-note").replace(/["']/g,"").trim();
-}
+const addonsText = document.getElementById("addonsText");
+if (addonsText) addonsText.textContent = cssVar("--addons-text");
+const addonsNote = document.getElementById("addonsNote");
+if (addonsNote) addonsNote.textContent = cssVar("--addons-note");
 
-// Basic Standards
-const standardsLink = document.getElementById("dynamicStandardsLink");
-if (standardsLink) {
-  standardsLink.textContent = root.getPropertyValue("--standards-text").replace(/["']/g,"").trim();
-}
+// Standards
+const standardsText = document.getElementById("standardsText");
+if (standardsText) standardsText.textContent = cssVar("--standards-text");
 
 // Follow-Up button text
-const followBtn = document.querySelector(".schedule-followup-btn");
-if (followBtn) {
-  followBtn.textContent = root.getPropertyValue("--followup-text").replace(/["']/g,"").trim();
-}
+const followBtn = document.getElementById("followupText");
+if (followBtn) followBtn.textContent = cssVar("--followup-text");
 
+// Section headings
+const visitTitle = document.getElementById("visitTimelineTitle");
+if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
+const bodyTitle = document.getElementById("bodyCompTitle");
+if (bodyTitle) bodyTitle.textContent = cssVar("--bodycomp-title");
+const targetTitle = document.getElementById("targetTitle");
+if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
 
 // ============================
@@ -81,12 +85,10 @@ document.querySelectorAll(".info-icon").forEach(icon => {
 
     if (!content) return;
 
-    // Close all other open dropdowns
     document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
       if (openContent !== content) openContent.classList.remove("expanded");
     });
 
-    // Toggle this one
     content.classList.toggle("expanded");
   });
 });
