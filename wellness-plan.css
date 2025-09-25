@@ -83,7 +83,7 @@
 /* Very wide desktop: tighten spacing */
 @media (min-width: 1600px) {
   .printable-content {
-    padding-top: 50px !important;
+    padding-top: 30px !important;
   }
 }
 
@@ -193,21 +193,21 @@
 }
 
 /* ============================
-   SECTION TITLES
+   SECTION TITLES + UNIFIED SPACING
    ============================ */
 .wellness-plan .section-title {
   position: absolute;
-  top: -22px;
+  top: -20px; /* adjust for perfect pill-to-bubble overlap */
   left: 24px;
   background: #f1f3f5;
-  color: #1f2d3d;        /* richer dark gray (old look) */
+  color: #1f2d3d;
   padding: 6px 20px;
-  font-size: 18px;       /* slightly larger */
-  font-weight: 800;      /* heavier than 700 */
+  font-size: 18px;
+  font-weight: 800;
   border-radius: 999px;
   border: 1.5px solid #c7cbd1;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
-  letter-spacing: 0.3px; /* touch more spacing */
+  letter-spacing: 0.3px;
   z-index: 2;
 }
 
@@ -218,13 +218,11 @@
 .title-lifestyle::before  { content: var(--title-lifestyle); }
 .title-goals::before      { content: var(--title-goals); }
 
-
-/* Restore spacing before Treatment Summary bubble on mobile */
-@media screen and (max-width: 768px) {
-  .wellness-plan .treatment-summary-section .wellness-bubble {
-    margin-top: 66px !important; /* match default spacing in other sections */
-  }
+/* Unified bubble spacing for ALL sections */
+.wellness-plan .wellness-bubble {
+  margin-top: 44px; /* exact same gap under every pill title */
 }
+
 
 /* ============================
    SECTION SUBTITLE: "SUPPLEMENTS"
@@ -338,12 +336,21 @@
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  margin-top: 48px; /* unified gap between title pill and bubble */
+  margin-top: 44px; /* unified gap between title pill and bubble */
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* normalize first element inside bubble */
+.wellness-plan .wellness-bubble > *:first-child {
+  margin-top: 0 !important;   /* kill inconsistent heading/paragraph margins */
+  padding-top: 4px;           /* tweak this (4–8px) for breathing room */
+}
+
 /* keep lists tidy inside bubbles */
-.wellness-plan .wellness-bubble > ul { margin-top: 20px; }
+.wellness-plan .wellness-bubble > ul {
+  margin-top: 20px;
+}
+
 
 
 /* ============================
@@ -391,7 +398,6 @@
 /* ============================
    LIFESTYLE SECTION
    ============================ */
-.wellness-plan .lifestyle-section .wellness-bubble > ul { margin-bottom: 35px; }
 
 .wellness-plan .lifestyle-tips-list {
   list-style-type: none;
