@@ -4,11 +4,14 @@
 :root {
   /* Section titles */
   --title-plan: "📋 Personalized Wellness Plan";
-   
   --title-summary: "💊 Treatment Summary";
   --title-supplements: "Supplements";
   --title-lifestyle: "🏃 Lifestyle & Health Habits";
   --title-goals: "🎯 Goals & Follow-Up";
+
+  /* Intro message */
+  --intro-message: "This personalized wellness plan reflects your latest treatment and goals.";
+
 
   /* Resource URLs */
   --hormone-resource-url: "https://www.mtnhlth.com/hormone-rx-resources";
@@ -250,9 +253,6 @@
   color: #333;
   margin: 0; /* keeps spacing consistent */
 }
-
-
-
 
 
 
