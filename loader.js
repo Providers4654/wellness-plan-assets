@@ -16,22 +16,25 @@
   // Final version string
   const version = daily + (manualBump ? "-" + manualBump : "");
 
+  // Extra timestamp (hard refresh fallback)
+  const ts = Date.now();
+
   // === Load CSS ===
   const cssLink = document.createElement("link");
   cssLink.rel = "stylesheet";
-  cssLink.href = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.css?v=${version}`;
+  cssLink.href = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.css?v=${version}&t=${ts}`;
   cssLink.crossOrigin = "anonymous";
   cssLink.referrerPolicy = "no-referrer";
   document.head.appendChild(cssLink);
 
   // === Load JS (dropdowns + dynamic links) ===
   const jsScript = document.createElement("script");
-  jsScript.src = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.js?v=${version}`;
+  jsScript.src = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.js?v=${version}&t=${ts}`;
   jsScript.defer = true;
   jsScript.crossOrigin = "anonymous";
   jsScript.referrerPolicy = "no-referrer";
   document.head.appendChild(jsScript);
 
   // Debug log
-  console.log(`[Wellness Plan Loader] version ${version} loaded`);
+  console.log(`[Wellness Plan Loader] version ${version}, ts=${ts}`);
 })();
