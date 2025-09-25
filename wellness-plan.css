@@ -94,12 +94,14 @@
     padding-top: var(--header-height, 100px) !important;
   }
 
-  .wellness-logo {
-    width: 95%;
-    max-width: none;
-    height: auto;
-    margin: 20px auto 16px auto; /* still uses the global offset from .printable-content */
-  }
+.wellness-logo {
+  width: 95%;
+  max-width: none;
+  height: auto;
+  margin: calc(var(--header-height) + 20px) auto 16px auto; /* pushes logo below header */
+  position: relative;  /* creates stacking context */
+  z-index: 5;          /* keeps logo above other content */
+}
 }
 
 
