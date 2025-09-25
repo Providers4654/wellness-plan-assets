@@ -16,11 +16,13 @@
   /* Resource URLs */
   --treatment-addons-url: "https://www.mtnhlth.com/treatment-add-ons";
    
-   --standards-text: "🔗 Basic HLTH Standards";
+  --standards-text: "🔗 Basic HLTH Standards";
   --basic-standards-url: "https://www.mtnhlth.com/basic-hlth-standards";
-   
-   --coaching-text: "Schedule a free consultation with our HLTH Coach";
+  --standards-note: "We update this page regularly.";
+
+  --coaching-text: "Schedule a free consultation with our HLTH Coach";
   --health-coaching-url: "https://www.mtnhlth.com/health-coaching";
+  --coaching-note: "Need help implementing these habits?";
    
   --followup-url: "https://www.mtnhlth.com/follow-up-visit";
   --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
