@@ -109,7 +109,7 @@ document.addEventListener("click", (e) => {
 });
 
 // ============================
-// 4. Build Section Content
+// 4. Build Section Content From Sheet
 // ============================
 function injectPatientData(rows, lifestyleData) {
   // --- Goals & Follow-Up section headers ---
@@ -130,24 +130,41 @@ function injectPatientData(rows, lifestyleData) {
     const dose = r["Dose"] || "";
     const cat = r["Category"] || "";
     const blurb = r["Blurb"] || "";
+
     if (!med) return;
 
-const medHtml = `
-  <li class="med-row">
-    <strong>${med}</strong>
-    <span class="info-icon" title="More info">ℹ</span>
-    <div class="dose">${dose}</div>
-    <div class="learn-more-content">${r["Blurb"] || ""}</div>
-  </li>
-`;
+    const medHtml = `
+      <li class="med-row">
+        <strong>${med}</strong>
+        <span class="info-icon" title="More info">ℹ</span>
+        <div class="dose">${dose}</div>
+        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
+      </li>
+    `;
 
-
-    if (medsByCategory[cat]) medsByCategory[cat].push(medHtml);
+    if (medsByCategory[cat]) {
+      medsByCategory[cat].push(medHtml);
+    }
   });
 
+  // --- Inject meds into DOM ---
   Object.keys(medsByCategory).forEach((cat) => {
-    const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds", "To Consider": "toConsider" }[cat];
-    const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock", "To Consider": "toConsiderBlock" }[cat];
+    const listId = {
+      Daily: "dailyMeds",
+      Evening: "eveningMeds",
+      Weekly: "weeklyMeds",
+      PRN: "prnMeds",
+      "To Consider": "toConsider",
+    }[cat];
+
+    const blockId = {
+      Daily: "dailyBlock",
+      Evening: "eveningBlock",
+      Weekly: "weeklyBlock",
+      PRN: "prnBlock",
+      "To Consider": "toConsiderBlock",
+    }[cat];
+
     const block = document.getElementById(blockId);
     const list = document.getElementById(listId);
 
@@ -179,29 +196,32 @@ const medHtml = `
   // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
-    const row = rows[0];
+    const firstRow = rows[0]; // use first row for patient-level metadata
     visitTimelineList.innerHTML = `
-      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${row["Previous Visit"] || ""}</span></li>
-      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${row["Next Visit"] || ""}</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${firstRow["Previous Visit"] || ""}</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${firstRow["Next Visit"] || ""}</span></li>
     `;
   }
 
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList) {
-    bodyCompList.innerHTML = rows[0]["Body Comp"]
-      ? `<li><span class="editable">${rows[0]["Body Comp"]}</span></li>`
+    const firstRow = rows[0];
+    bodyCompList.innerHTML = firstRow["Body Comp"]
+      ? `<li><span class="editable">${firstRow["Body Comp"]}</span></li>`
       : "";
   }
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList) {
-    targetGoalsList.innerHTML = rows[0]["Target Goals"]
-      ? `<li><span class="editable">${rows[0]["Target Goals"]}</span></li>`
+    const firstRow = rows[0];
+    targetGoalsList.innerHTML = firstRow["Target Goals"]
+      ? `<li><span class="editable">${firstRow["Target Goals"]}</span></li>`
       : "";
   }
 }
+
 
 // ============================
 // 5. Fetch & Match Patient Rows
