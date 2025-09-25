@@ -48,11 +48,18 @@ if (addonsText) addonsText.textContent = cssVar("--addons-text");
 const addonsNote = document.getElementById("addonsNote");
 if (addonsNote) addonsNote.textContent = cssVar("--addons-note");
 
+// Standards
 const standardsText = document.getElementById("standardsText");
 if (standardsText) standardsText.textContent = cssVar("--standards-text");
+const standardsNote = document.getElementById("standardsNote");
+if (standardsNote) standardsNote.textContent = cssVar("--standards-note");
 
+// Coaching
 const coachingLink = document.getElementById("dynamicCoachingLink");
 if (coachingLink) coachingLink.textContent = cssVar("--coaching-text");
+const coachingNote = document.getElementById("coachingNote");
+if (coachingNote) coachingNote.textContent = cssVar("--coaching-note");
+
 
 const followBtn = document.getElementById("followupText");
 if (followBtn) followBtn.textContent = cssVar("--followup-text");
