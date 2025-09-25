@@ -1,5 +1,5 @@
 // ============================
-// WELLNESS PLAN CSS/JS LOADER
+// WELLNESS PLAN LOADER (HTML + CSS + JS)
 // ============================
 
 (() => {
@@ -19,7 +19,15 @@
   // Extra timestamp (hard refresh fallback)
   const ts = Date.now();
 
-  // === Load CSS ===
+  // === 1. Load HTML shell ===
+  fetch(`https://providers4654.github.io/wellness-plan-assets/wellness-plan.html?v=${version}&t=${ts}`)
+    .then(res => res.text())
+    .then(html => {
+      document.body.innerHTML = html;
+    })
+    .catch(err => console.error("[Wellness Loader] Failed to load HTML", err));
+
+  // === 2. Load CSS ===
   const cssLink = document.createElement("link");
   cssLink.rel = "stylesheet";
   cssLink.href = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.css?v=${version}&t=${ts}`;
@@ -27,7 +35,7 @@
   cssLink.referrerPolicy = "no-referrer";
   document.head.appendChild(cssLink);
 
-  // === Load JS (dropdowns + dynamic links) ===
+  // === 3. Load JS logic (dynamic injection, interactivity) ===
   const jsScript = document.createElement("script");
   jsScript.src = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.js?v=${version}&t=${ts}`;
   jsScript.defer = true;
@@ -36,5 +44,5 @@
   document.head.appendChild(jsScript);
 
   // Debug log
-  console.log(`[Wellness Plan Loader] version ${version}, ts=${ts}`);
+  console.log(`[Wellness Plan Loader] version=${version}, ts=${ts}`);
 })();
