@@ -184,12 +184,22 @@ function injectPatientData(rows) {
     }
   });
 
-  // --- Lifestyle Tips ---
-  const lifestyleList = document.getElementById("lifestyleTips");
-  if (lifestyleList) {
-    const tips = rows.map((r) => r["Lifestyle Tips"]).filter(Boolean);
-    lifestyleList.innerHTML = tips.map((t) => `<li>${t}</li>`).join("");
-  }
+// --- Lifestyle Tips ---
+const lifestyleList = document.getElementById("lifestyleTips");
+if (lifestyleList) {
+  const tips = rows.map((r) => ({
+    tip: r["Lifestyle Tips"],
+    blurb: r["Blurb"],
+  })).filter(item => item.tip || item.blurb);
+
+  lifestyleList.innerHTML = tips.map(t => `
+    <li>
+      <strong>${t.tip || ""}</strong>
+      ${t.blurb ? `<div>${t.blurb}</div>` : ""}
+    </li>
+  `).join("");
+}
+
 
   // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
