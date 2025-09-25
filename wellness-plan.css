@@ -75,45 +75,56 @@
 /* === LOGO === */
 .wellness-logo {
   display: block;
-  width: 400px; /* adjust as needed */
+  width: 400px; /* desktop default */
   height: 200px;
   margin: 0 auto 16px auto;
   background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
+  position: relative;
+  z-index: 5;
 }
 
 @media (max-width: 600px) {
   .wellness-logo {
     width: 100%;
     max-width: 375px;
-    height: 200px; /* keep natural height */
-    margin: calc(var(--header-height) + 100px) auto 16px auto !important;
-    display: block;
-    position: relative;
-    z-index: 5;
+    height: 200px; /* keep natural aspect height */
+    margin: 0 auto 16px auto; /* no extra margin-top — container handles spacing */
   }
 }
 
-/* Desktop/tablet: tighter spacing above the logo */
+/* === CONTAINER SPACING === */
+
+/* Default desktop/tablet spacing */
 .printable-content {
-  padding-top: 60px !important; /* adjust down until it looks right */
+  padding-top: 70px !important; /* tweak between 60–80 depending on taste */
   margin-top: 0 !important;
 }
 
-/* Mobile: reserve just enough space to clear the header */
-@media (max-width: 600px) {
-  .wellness-logo {
-    margin-top: 0 !important; /* spacing comes from container */
-  }
-
+/* Narrow desktop/tablet: give a little more clearance so logo never tucks under */
+@media (max-width: 1100px) and (min-width: 601px) {
   .printable-content {
-    padding-top: calc(var(--header-height, 100px) - 20px) !important; 
-    /* header height minus a little, so not too much gap */
+    padding-top: 100px !important;
+  }
+}
+
+/* Very wide desktop: tighten up so there’s not too much breathing room */
+@media (min-width: 1600px) {
+  .printable-content {
+    padding-top: 50px !important;
+  }
+}
+
+/* Mobile: reserve just enough to clear fixed header */
+@media (max-width: 600px) {
+  .printable-content {
+    padding-top: calc(var(--header-height, 100px) - 10px) !important;
     margin-top: 0 !important;
   }
 }
+
 
 
 
