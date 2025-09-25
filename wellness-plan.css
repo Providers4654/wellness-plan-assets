@@ -82,6 +82,14 @@
    GLOBAL STYLES: WELLNESS PLAN
    ============================ */
 
+html, body {
+  background: #fff !important; /* ensures no black background */
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+
 /* Base container */
 .wellness-plan {
   font-family: "Helvetica Neue", Arial, sans-serif;  /* fixed */
@@ -290,15 +298,6 @@
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
   letter-spacing: 0.3px;
   z-index: 2;
-}
-
-/* Inject section titles from CSS variables */
-.title-plan::before       { content: var(--title-plan); }
-.title-summary::before    { content: var(--title-summary); }
-.title-supplements::before{ content: var(--title-supplements); }
-.title-lifestyle::before  { content: var(--title-lifestyle); }
-.title-goals::before      { content: var(--title-goals); }
-
 }
 
 
