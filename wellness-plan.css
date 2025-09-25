@@ -85,7 +85,7 @@
     width: 95%;               /* fill most of the mobile screen */
     max-width: none;           /* remove artificial cap */
     height: auto;              /* let the aspect ratio scale naturally */
-    margin: 60px auto 16px !important;    /* ✅ push down from top to avoid cut-off */
+    margin: 120px auto 16px !important;    /* ✅ push down from top to avoid cut-off */
     display: block;            /* keep it block */
     background-size: contain;
     background-repeat: no-repeat;
