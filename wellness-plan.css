@@ -1,3 +1,6 @@
+/* ============================
+   ROOT VARIABLES
+   ============================ */
 :root {
   /* Section titles */
   --title-plan: "📋 Personalized Wellness Plan";
@@ -17,7 +20,11 @@
   --needle27g-url: "https://www.amazon.com/dp/B084ZBY221?ref=cm_sw_r_cso_cp_apin_dp_VSZ0KWD3YANMCVE8GC8N";
   --subq-video-url: "https://youtu.be/fMEZdNodGM0?si=zrkKpmLsN8N_eB8A";
   --alcohol-pads-url: "https://www.amazon.com/s?k=alcohol+pads&crid=1JALMM5EAHOVG&sprefix=alcohol+pads%2Caps%2C127&ref=nb_sb_noss_1";
+
+  /* Layout spacing */
+  --header-height: 72px; /* height of custom header (adjust as needed) */
 }
+
 
 
 
@@ -71,7 +78,7 @@
    ============================ */
 .wellness-logo {
   display: block;
-  width: 400px;            /* adjust as needed */
+  width: 400px;  /* desktop */
   height: 200px;
   margin: 0 auto 16px auto;
   background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
@@ -80,25 +87,24 @@
   background-position: center;
 }
 
+/* MOBILE FIX */
 @media (max-width: 600px) {
+  .printable-content {
+    padding-top: var(--header-height, 80px) !important; /* create space for fixed header */
+  }
+
   .wellness-logo {
-    width: 95%;               /* fill most of the mobile screen */
-    max-width: none;           /* remove artificial cap */
-    height: auto;              /* let the aspect ratio scale naturally */
-    margin: 120px auto 16px !important;    /* ✅ push down from top to avoid cut-off */
-    display: block;            /* keep it block */
+    width: 95%;
+    max-width: none;
+    height: auto;
+    margin: 0 auto 16px !important; /* no manual top push */
+    display: block;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
   }
 }
 
-
-  .printable-content {
-    padding-top: 0 !important;
-    margin-top: 0 !important;
-  }
-}
 
 /* ============================
    TOP BUTTONS UNDER LOGO
