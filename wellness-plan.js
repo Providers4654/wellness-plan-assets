@@ -122,60 +122,81 @@ function injectPatientData(rows, lifestyleData) {
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  // --- Group meds by category ---
-  const medsByCategory = { Daily: [], Evening: [], Weekly: [], PRN: [], "To Consider": [] };
+ // --- Group meds & supplements by category ---
+const medsByCategory = {
+  Daily: { meds: [], supps: [] },
+  Evening: { meds: [], supps: [] },
+  Weekly: { meds: [], supps: [] },
+  PRN: { meds: [], supps: [] },
+  "To Consider": { meds: [], supps: [] }
+};
 
-  rows.forEach((r) => {
-    const med = r["Meds/Supp"];
-    const dose = r["Dose"] || "";
-    const cat = r["Category"] || "";
-    const blurb = r["Blurb"] || "";
+rows.forEach((r) => {
+  const med = r["Meds/Supp"];
+  const dose = r["Dose"] || "";
+  const cat = (r["Category"] || "").trim();
+  const blurb = r["Blurb"] || "";
 
-    if (!med) return;
+  if (!med) return;
 
-    const medHtml = `
-      <li class="med-row">
-        <strong>${med}</strong>
-        <span class="info-icon" title="More info">ℹ</span>
-        <div class="dose">${dose}</div>
-        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
-      </li>
-    `;
+  const medHtml = `
+    <li class="med-row">
+      <strong>${med}</strong>
+      <span class="info-icon" title="More info">ℹ</span>
+      <div class="dose">${dose}</div>
+      ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
+    </li>
+  `;
 
-    if (medsByCategory[cat]) {
-      medsByCategory[cat].push(medHtml);
-    }
-  });
+  // Check if category is Supplement or not
+  if (cat.includes("Supplement")) {
+    if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
+    else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
+    else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
+    else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
+  } else {
+    if (medsByCategory[cat]) medsByCategory[cat].meds.push(medHtml);
+  }
+});
 
-  // --- Inject meds into DOM ---
-  Object.keys(medsByCategory).forEach((cat) => {
-    const listId = {
-      Daily: "dailyMeds",
-      Evening: "eveningMeds",
-      Weekly: "weeklyMeds",
-      PRN: "prnMeds",
-      "To Consider": "toConsider",
-    }[cat];
+// --- Inject into DOM ---
+Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+  const listId = {
+    Daily: "dailyMeds",
+    Evening: "eveningMeds",
+    Weekly: "weeklyMeds",
+    PRN: "prnMeds",
+    "To Consider": "toConsider",
+  }[cat];
 
-    const blockId = {
-      Daily: "dailyBlock",
-      Evening: "eveningBlock",
-      Weekly: "weeklyBlock",
-      PRN: "prnBlock",
-      "To Consider": "toConsiderBlock",
-    }[cat];
+  const blockId = {
+    Daily: "dailyBlock",
+    Evening: "eveningBlock",
+    Weekly: "weeklyBlock",
+    PRN: "prnBlock",
+    "To Consider": "toConsiderBlock",
+  }[cat];
 
-    const block = document.getElementById(blockId);
-    const list = document.getElementById(listId);
+  const block = document.getElementById(blockId);
+  const list = document.getElementById(listId);
 
-    if (list && block) {
-      if (medsByCategory[cat].length > 0) {
-        list.innerHTML = medsByCategory[cat].join("");
-      } else {
-        block.remove();
+  if (list && block) {
+    if (meds.length > 0 || supps.length > 0) {
+      let html = "";
+      if (meds.length > 0) html += meds.join("");
+      if (supps.length > 0) {
+        html += `
+          <li class="med-subtitle"><span>SUPPLEMENTS</span></li>
+          ${supps.join("")}
+        `;
       }
+      list.innerHTML = html;
+    } else {
+      block.remove();
     }
-  });
+  }
+});
+
 
   // --- Lifestyle Tips ---
   const lifestyleList = document.getElementById("lifestyleTips");
