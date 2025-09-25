@@ -144,7 +144,7 @@ function injectPatientData(rows) {
 
         // Insert supplements subtitle if any "Supplement" meds exist
         if (rows.some(r => r["Category"] === `${cat} Supplement`)) {
-          const subtitle = `<li class="med-subtitle"><span>${root.getPropertyValue("--title-supplements").replace(/["']/g,"").trim()}</span></li>`;
+          const subtitle = `<li class="med-subtitle"><span>${cssVar("--title-supplements")}</span></li>`;
           list.insertAdjacentHTML("afterbegin", subtitle);
         }
       } else {
@@ -164,21 +164,21 @@ function injectPatientData(rows) {
   // --- Visit Timeline ---
   const visitTimelineTitle = document.getElementById("visitTimelineTitle");
   if (visitTimelineTitle) {
-    visitTimelineTitle.textContent = root.getPropertyValue("--visit-timeline-title").replace(/["']/g, "").trim();
+    visitTimelineTitle.textContent = cssVar("--visit-timeline-title");
   }
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
     const row = rows[0];
     visitTimelineList.innerHTML = `
-      <li><span class="editable"><strong>${root.getPropertyValue("--visit-prev-label").replace(/["']/g,"").trim()}</strong> ${row["Previous Visit"] || ""}</span></li>
-      <li><span class="editable"><strong>${root.getPropertyValue("--visit-next-label").replace(/["']/g,"").trim()}</strong> ${row["Next Visit"] || ""}</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${row["Previous Visit"] || ""}</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${row["Next Visit"] || ""}</span></li>
     `;
   }
 
   // --- Body Comp ---
   const bodyCompTitle = document.getElementById("bodyCompTitle");
   if (bodyCompTitle) {
-    bodyCompTitle.textContent = root.getPropertyValue("--bodycomp-title").replace(/["']/g,"").trim();
+    bodyCompTitle.textContent = cssVar("--bodycomp-title");
   }
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList) {
@@ -190,7 +190,7 @@ function injectPatientData(rows) {
   // --- Target Goals ---
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) {
-    targetTitle.textContent = root.getPropertyValue("--target-title").replace(/["']/g,"").trim();
+    targetTitle.textContent = cssVar("--target-title");
   }
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList) {
@@ -199,6 +199,7 @@ function injectPatientData(rows) {
       : "";
   }
 }
+
 
 
 // ============================
