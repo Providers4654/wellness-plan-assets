@@ -97,22 +97,23 @@
 }
 
 
-/* Reduce padding at the top of the container above the logo */
+/* Reserve space for the fixed header above the logo */
 .printable-content {
-  padding-top: 0 !important;
+  padding-top: calc(var(--header-height, 100px) + 20px) !important;
   margin-top: 0 !important;
 }
 
 @media (max-width: 600px) {
   .wellness-logo {
-    margin-top: 0 !important;
+    margin-top: 0 !important; /* let the container handle spacing */
   }
 
   .printable-content {
-    padding-top: 0 !important;
+    padding-top: calc(var(--header-height, 100px) + 20px) !important;
     margin-top: 0 !important;
   }
 }
+
 
 
 
