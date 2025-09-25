@@ -359,6 +359,24 @@
 
 
 
+/* ============================
+   SECTION BUBBLES (MOBILE SPACING FIX)
+   ============================ */
+@media (max-width: 600px) {
+  .wellness-plan .wellness-bubble {
+    /* Increase top padding so first text isn't scrunched under pill */
+    padding: 48px 20px 24px !important;
+    /* top   = 48px (extra breathing room under pill)
+       sides = 20px (comfortable mobile gutters)
+       bottom= 24px (matches rhythm with other spacing) */
+  }
+}
+
+
+
+
+
+
 
 /* ============================
    "TO CONSIDER" BLOCK (override)
