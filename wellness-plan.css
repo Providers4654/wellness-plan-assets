@@ -331,16 +331,18 @@
 
 
 /* ============================
-   SECTION BUBBLES
+   SECTION BUBBLES (normalized spacing)
    ============================ */
 .wellness-plan .wellness-bubble {
   background: #ffffff;
   border-radius: 20px;
   padding: 28px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  margin-top: 36px;
+  margin-top: 48px; /* unified gap between title pill and bubble */
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+/* keep lists tidy inside bubbles */
 .wellness-plan .wellness-bubble > ul { margin-top: 20px; }
 
 
@@ -549,11 +551,6 @@
   margin-bottom: 50px;
 }
 
-/* Adds space inside the top of the Treatment Summary bubble */
-.wellness-plan .treatment-summary-section .wellness-bubble { padding-top: 48px; }
-@media screen and (max-width: 768px) {
-  .wellness-plan .treatment-summary-section .wellness-bubble { padding-top: 48px !important; }
-}
 
 /* Block labels */
 .wellness-plan .med-time-label {
@@ -921,15 +918,6 @@
     width: 100%;
   }
 
-  /* Space above “learn more” on mobile */
-  .wellness-plan .medication-list.enhanced li details { margin-top: 6px; }
-
-  /* Space under floating lifestyle title */
-  .wellness-plan .section-wrapper.lifestyle-section .wellness-bubble { padding-top: 48px; }
-
-  /* Space above first text in lifestyle section */
-  .wellness-plan .lifestyle-section .wellness-bubble > *:first-child { margin-top: 45px; }
-}
 
 /* ============================
    PRINT STYLES: fix cutoffs/missing
