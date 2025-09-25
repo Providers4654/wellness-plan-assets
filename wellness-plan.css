@@ -56,6 +56,20 @@
   --addons-url: "https://www.mtnhlth.com/treatment-add-ons";
   --addons-note: "These can be added to support energy, metabolism, recovery, and more.";
 
+   
+  /* Visit Timeline labels */
+  --visit-timeline-title: "🗓️ Visit Timeline";
+  --visit-prev-label: "Previous visit:";
+  --visit-next-label: "Next visit:";
+
+  /* Body Composition section */
+  --bodycomp-title: "Body Composition Analysis";
+
+  /* Target Goals section */
+  --target-title: "Target Goals";
+
+
+   
   --followup-text: "📅 Schedule Follow-Up Visit";
   --followup-url: "https://www.mtnhlth.com/follow-up-visit";
 
