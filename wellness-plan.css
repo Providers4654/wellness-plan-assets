@@ -35,6 +35,26 @@
   --evening-bg:    #f3eaff;
   --weekly-bg:     #e8f5e9;
   --prn-bg:        #f5f5f5;
+
+
+  /* Top buttons */
+  --top-btn1-text: "MTN HLTH Website";
+  --top-btn1-url: "https://www.mtnhlth.com";
+  --top-btn2-text: "Patient Portal";
+  --top-btn2-url: "https://mtnhlthclient.md-hq.com";
+
+  /* Resource links */
+  --fullscript-text: "🔗 Order Supplements";
+  --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
+  --fullscript-note: "Personalized recommendations, shipped directly to you — at a discounted price.";
+
+  --addons-text: "🔗 Optional Add-On Therapies";
+  --addons-url: "https://www.mtnhlth.com/treatment-add-ons";
+  --addons-note: "These can be added to support energy, metabolism, recovery, and more.";
+
+  --followup-text: "📅 Schedule Follow-Up Visit";
+  --followup-url: "https://www.mtnhlth.com/follow-up-visit";
+
 }
 
 
