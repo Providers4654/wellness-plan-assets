@@ -683,7 +683,7 @@
   color: #999;             /* lighter gray */
   cursor: pointer;
   vertical-align: super;   /* nudged slightly up like a footnote */
-  opacity: 0.8;            /* subtle by default */
+  opacity: 0.9;            /* subtle by default */
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
@@ -876,7 +876,7 @@
 
   /* Add comfortable side padding only inside the plan */
   .wellness-plan {
-    padding: 16px 12px;  /* left/right gutters for readability */
+    padding: 12px 12px;  /* left/right gutters for readability */
   }
 }
 
