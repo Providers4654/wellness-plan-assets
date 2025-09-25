@@ -23,6 +23,18 @@
 
   /* Layout spacing */
   --header-height: 100px; /* height of custom header (adjust as needed) */
+
+
+   /* === Block Theme Colors === */
+  --daily-color:   #FFD54F;
+  --evening-color: #b39ddb;
+  --weekly-color:  #81C784;
+  --prn-color:     #9E9E9E;
+
+  --daily-bg:      #fff8e1;
+  --evening-bg:    #f3eaff;
+  --weekly-bg:     #e8f5e9;
+  --prn-bg:        #f5f5f5;
 }
 
 
@@ -605,12 +617,6 @@
 }
 
 
-/* Theme-matched label backgrounds per block */
-.daily-block .med-time-label   { background: #fff8e1; }
-.evening-block .med-time-label { background: #f3eaff; }
-.weekly-block .med-time-label  { background: #e8f5e9; }
-.as-needed-block .med-time-label { background: #f5f5f5; }
-
 
 /* ============================
    THEME COLORS PER MED BLOCK
@@ -618,45 +624,43 @@
 
 /* Daily */
 .daily-block {
-  border: 4px solid #FFD54F;
+  border: 4px solid var(--daily-color);
 }
-.daily-block .med-time-label { background: #fff8e1; }
+.daily-block .med-time-label { background: var(--daily-bg); }
 .daily-block .dose {
-  border-left: 4px solid inherit;   /* inherit border color */
-  padding-left: 10px;               /* room for color bar */
+  border-left: 4px solid var(--daily-color);
+  padding-left: 10px; /* space for accent strip */
 }
 
 /* Evening */
 .evening-block {
-  border: 4px solid #b39ddb;
+  border: 4px solid var(--evening-color);
 }
-.evening-block .med-time-label { background: #f3eaff; }
+.evening-block .med-time-label { background: var(--evening-bg); }
 .evening-block .dose {
-  border-left: 4px solid inherit;
+  border-left: 4px solid var(--evening-color);
   padding-left: 10px;
 }
 
 /* Weekly */
 .weekly-block {
-  border: 4px solid #81C784;
+  border: 4px solid var(--weekly-color);
 }
-.weekly-block .med-time-label { background: #e8f5e9; }
+.weekly-block .med-time-label { background: var(--weekly-bg); }
 .weekly-block .dose {
-  border-left: 4px solid inherit;
+  border-left: 4px solid var(--weekly-color);
   padding-left: 10px;
 }
 
 /* As Needed (PRN) */
 .as-needed-block {
-  border: 4px solid #9E9E9E;
+  border: 4px solid var(--prn-color);
 }
-.as-needed-block .med-time-label { background: #f5f5f5; }
+.as-needed-block .med-time-label { background: var(--prn-bg); }
 .as-needed-block .dose {
-  border-left: 4px solid inherit;
+  border-left: 4px solid var(--prn-color);
   padding-left: 10px;
 }
-
-
 
 
 
