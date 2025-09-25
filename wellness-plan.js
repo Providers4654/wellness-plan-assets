@@ -107,6 +107,18 @@ document.querySelectorAll(".info-icon").forEach((icon) => {
 // 4. Build Section Content From Sheet
 // ============================
 function injectPatientData(rows) {
+
+  // --- Goals & Follow-Up section headers ---
+  const visitTitle = document.getElementById("visitTimelineTitle");
+  if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
+
+  const bodyCompTitle = document.getElementById("bodyCompTitle");
+  if (bodyCompTitle) bodyCompTitle.textContent = cssVar("--bodycomp-title");
+
+  const targetTitle = document.getElementById("targetTitle");
+  if (targetTitle) targetTitle.textContent = cssVar("--target-title");
+
+  
   // --- Group meds by category ---
   const medsByCategory = {
     Daily: [],
