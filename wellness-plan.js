@@ -4,8 +4,11 @@
 
 const root = getComputedStyle(document.documentElement);
 
-const SHEET_URL =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv";
+const TABS = {
+  wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv",
+  meds: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
+  lifestyle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv"
+};
 
 // Helper
 function cssVar(name) {
@@ -35,36 +38,33 @@ function cssVar(name) {
 // ============================
 // 1b. Apply CSS variable TEXT to placeholders
 // ============================
-
-// Supplements (Fullscript)
 const fsText = document.getElementById("fullscriptText");
 if (fsText) fsText.textContent = cssVar("--fullscript-text");
 const fsNote = document.getElementById("fullscriptNote");
 if (fsNote) fsNote.textContent = cssVar("--fullscript-note");
 
-// Add-ons
 const addonsText = document.getElementById("addonsText");
 if (addonsText) addonsText.textContent = cssVar("--addons-text");
 const addonsNote = document.getElementById("addonsNote");
 if (addonsNote) addonsNote.textContent = cssVar("--addons-note");
 
-// Standards
 const standardsText = document.getElementById("standardsText");
 if (standardsText) standardsText.textContent = cssVar("--standards-text");
 
-// Follow-Up button text
+const coachingLink = document.getElementById("dynamicCoachingLink");
+if (coachingLink) coachingLink.textContent = cssVar("--coaching-text");
+
 const followBtn = document.getElementById("followupText");
 if (followBtn) followBtn.textContent = cssVar("--followup-text");
 
-// Section titles + intro
 document.querySelector(".title-plan").textContent = cssVar("--title-plan");
 document.querySelector(".title-summary").textContent = cssVar("--title-summary");
 document.querySelector(".title-lifestyle").textContent = cssVar("--title-lifestyle");
 document.querySelector(".title-goals").textContent = cssVar("--title-goals");
+
 const intro = document.querySelector(".intro-text");
 if (intro) intro.textContent = cssVar("--intro-message");
 
-// Top buttons
 const topBtn1 = document.getElementById("dynamicTopBtn1");
 if (topBtn1) {
   topBtn1.textContent = cssVar("--top-btn1-text");
@@ -77,37 +77,34 @@ if (topBtn2) {
 }
 
 // ============================
-// 2. Remove all target="_blank" (force same-tab navigation)
+// 2. Remove all target="_blank"
 // ============================
 document.querySelectorAll('a[target="_blank"]').forEach((a) => {
   a.removeAttribute("target");
 });
 
 // ============================
-// 3. Info Icon Toggles (only one open at a time)
+// 3. Info Icon Toggles
 // ============================
-document.querySelectorAll(".info-icon").forEach((icon) => {
-  icon.addEventListener("click", () => {
-    const row = icon.closest(".med-row");
-    const content = row?.querySelector(".learn-more-content");
+document.addEventListener("click", (e) => {
+  if (!e.target.classList.contains("info-icon")) return;
 
-    if (!content) return;
+  const row = e.target.closest(".med-row");
+  const content = row?.querySelector(".learn-more-content");
+  if (!content) return;
 
-    document
-      .querySelectorAll(".learn-more-content.expanded")
-      .forEach((openContent) => {
-        if (openContent !== content) openContent.classList.remove("expanded");
-      });
+  document.querySelectorAll(".learn-more-content.expanded")
+    .forEach((openContent) => {
+      if (openContent !== content) openContent.classList.remove("expanded");
+    });
 
-    content.classList.toggle("expanded");
-  });
+  content.classList.toggle("expanded");
 });
 
 // ============================
-// 4. Build Section Content From Sheet
+// 4. Build Section Content
 // ============================
-function injectPatientData(rows) {
-
+function injectPatientData(rows, lifestyleData) {
   // --- Goals & Follow-Up section headers ---
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
@@ -118,100 +115,66 @@ function injectPatientData(rows) {
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  
   // --- Group meds by category ---
-  const medsByCategory = {
-    Daily: [],
-    Evening: [],
-    Weekly: [],
-    PRN: [],
-    "To Consider": [],
-  };
+  const medsByCategory = { Daily: [], Evening: [], Weekly: [], PRN: [], "To Consider": [] };
 
   rows.forEach((r) => {
     const med = r["Meds/Supp"];
     const dose = r["Dose"] || "";
     const cat = r["Category"] || "";
+    const blurb = r["Blurb"] || "";
     if (!med) return;
 
     const medHtml = `
       <li class="med-row">
         <strong>${med}</strong>
+        <span class="info-icon">ⓘ</span>
         <div class="dose">${dose}</div>
+        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
       </li>
     `;
 
-    if (medsByCategory[cat]) {
-      medsByCategory[cat].push(medHtml);
-    }
+    if (medsByCategory[cat]) medsByCategory[cat].push(medHtml);
   });
 
-  // --- Inject into DOM ---
   Object.keys(medsByCategory).forEach((cat) => {
-    const listId = {
-      Daily: "dailyMeds",
-      Evening: "eveningMeds",
-      Weekly: "weeklyMeds",
-      PRN: "prnMeds",
-      "To Consider": "toConsider",
-    }[cat];
-
-    const blockId = {
-      Daily: "dailyBlock",
-      Evening: "eveningBlock",
-      Weekly: "weeklyBlock",
-      PRN: "prnBlock",
-      "To Consider": "toConsiderBlock",
-    }[cat];
-
+    const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds", "To Consider": "toConsider" }[cat];
+    const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock", "To Consider": "toConsiderBlock" }[cat];
     const block = document.getElementById(blockId);
     const list = document.getElementById(listId);
 
     if (list && block) {
       if (medsByCategory[cat].length > 0) {
         list.innerHTML = medsByCategory[cat].join("");
-
-        // Insert supplements subtitle if any "Supplement" meds exist
-        if (rows.some((r) => r["Category"] === `${cat} Supplement`)) {
-          const subtitle = `<li class="med-subtitle"><span>${cssVar(
-            "--title-supplements"
-          )}</span></li>`;
-          list.insertAdjacentHTML("afterbegin", subtitle);
-        }
       } else {
         block.remove();
       }
     }
   });
 
-// --- Lifestyle Tips ---
-const lifestyleList = document.getElementById("lifestyleTips");
-if (lifestyleList) {
-  const tips = rows.map((r) => ({
-    tip: r["Lifestyle Tips"],
-    blurb: r["Blurb"],
-  })).filter(item => item.tip || item.blurb);
+  // --- Lifestyle Tips ---
+  const lifestyleList = document.getElementById("lifestyleTips");
+  if (lifestyleList) {
+    const tips = rows.map(r => r["Lifestyle Tips"]).filter(Boolean);
 
-  lifestyleList.innerHTML = tips.map(t => `
-    <li>
-      <strong>${t.tip || ""}</strong>
-      ${t.blurb ? `<div>${t.blurb}</div>` : ""}
-    </li>
-  `).join("");
-}
-
+    lifestyleList.innerHTML = tips.map(tip => {
+      const lib = lifestyleData.find(l => l["Tip"] === tip);
+      return `
+        <li>
+          <strong>${tip}</strong>
+          ${lib && lib["Blurb"] ? `<div>${lib["Blurb"]}</div>` : ""}
+        </li>
+      `;
+    }).join("");
+  }
 
   // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
     const row = rows[0];
     visitTimelineList.innerHTML = `
-      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${
-      row["Previous Visit"] || ""
-    }</span></li>
-      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${
-      row["Next Visit"] || ""
-    }</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${row["Previous Visit"] || ""}</span></li>
+      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${row["Next Visit"] || ""}</span></li>
     `;
   }
 
@@ -251,20 +214,24 @@ function csvToJSON(csv) {
 
 function getPatientIdFromUrl() {
   const parts = window.location.pathname.split("/");
-  return parts.pop() || parts.pop(); // last segment
+  return parts.pop() || parts.pop();
 }
 
 async function loadPatientData() {
   try {
-    const response = await fetch(SHEET_URL);
-    const text = await response.text();
-    const data = csvToJSON(text);
+    const [wellnessRes, lifestyleRes] = await Promise.all([
+      fetch(TABS.wellness).then(r => r.text()),
+      fetch(TABS.lifestyle).then(r => r.text())
+    ]);
+
+    const wellnessData = csvToJSON(wellnessRes);
+    const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
-    const patientRows = data.filter((r) => r["Patient ID"] === patientId);
+    const patientRows = wellnessData.filter(r => r["Patient ID"] === patientId);
 
     if (patientRows.length > 0) {
-      injectPatientData(patientRows);
+      injectPatientData(patientRows, lifestyleData);
     } else {
       console.warn("No patient found for ID:", patientId);
     }
