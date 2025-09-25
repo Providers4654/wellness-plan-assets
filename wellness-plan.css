@@ -611,6 +611,56 @@
 .weekly-block .med-time-label  { background: #e8f5e9; }
 .as-needed-block .med-time-label { background: #f5f5f5; }
 
+
+/* ============================
+   THEME COLORS PER MED BLOCK
+   ============================ */
+
+/* Daily */
+.daily-block {
+  border: 4px solid #FFD54F;
+}
+.daily-block .med-time-label { background: #fff8e1; }
+.daily-block .dose {
+  border-left: 4px solid inherit;   /* inherit border color */
+  padding-left: 10px;               /* room for color bar */
+}
+
+/* Evening */
+.evening-block {
+  border: 4px solid #b39ddb;
+}
+.evening-block .med-time-label { background: #f3eaff; }
+.evening-block .dose {
+  border-left: 4px solid inherit;
+  padding-left: 10px;
+}
+
+/* Weekly */
+.weekly-block {
+  border: 4px solid #81C784;
+}
+.weekly-block .med-time-label { background: #e8f5e9; }
+.weekly-block .dose {
+  border-left: 4px solid inherit;
+  padding-left: 10px;
+}
+
+/* As Needed (PRN) */
+.as-needed-block {
+  border: 4px solid #9E9E9E;
+}
+.as-needed-block .med-time-label { background: #f5f5f5; }
+.as-needed-block .dose {
+  border-left: 4px solid inherit;
+  padding-left: 10px;
+}
+
+
+
+
+
+
 /* Mobile spacing for whole AS NEEDED block cluster */
 @media screen and (max-width: 768px) {
   .wellness-plan .section-wrapper:has(.med-time-block.as-needed) {
