@@ -89,7 +89,7 @@
     width: 100%;
     max-width: 375px;
     height: 200px; /* keep natural height */
-    margin: calc(var(--header-height) + 50px) auto 16px auto !important;
+    margin: calc(var(--header-height) + 100px) auto 16px auto !important;
     display: block;
     position: relative;
     z-index: 5;
