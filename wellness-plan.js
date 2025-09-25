@@ -2,10 +2,8 @@
 // WELLNESS PLAN DYNAMIC JS
 // ============================
 
-// --- Get root CSS variables ---
 const root = getComputedStyle(document.documentElement);
 
-// --- Google Sheet (published CSV) ---
 const SHEET_URL =
   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv";
 
@@ -29,6 +27,40 @@ const SHEET_URL =
   const url = root.getPropertyValue(varName).replace(/["']/g, '').trim();
   if (el && url) el.href = url;
 });
+
+
+// ============================
+// 2. Inject CSS-driven link text + notes
+// ============================
+
+// Supplements (Fullscript)
+const fullscriptLink = document.getElementById("dynamicFullscriptLink");
+if (fullscriptLink) {
+  fullscriptLink.textContent = root.getPropertyValue("--fullscript-text").replace(/["']/g,"").trim();
+  const note = document.querySelector("#dynamicFullscriptLink + small.resource-note");
+  if (note) note.textContent = root.getPropertyValue("--fullscript-note").replace(/["']/g,"").trim();
+}
+
+// Add-ons
+const addonsLink = document.getElementById("dynamicAddOnsLink");
+if (addonsLink) {
+  addonsLink.textContent = root.getPropertyValue("--addons-text").replace(/["']/g,"").trim();
+  const note = document.querySelector("#dynamicAddOnsLink + small.resource-note");
+  if (note) note.textContent = root.getPropertyValue("--addons-note").replace(/["']/g,"").trim();
+}
+
+// Basic Standards
+const standardsLink = document.getElementById("dynamicStandardsLink");
+if (standardsLink) {
+  standardsLink.textContent = root.getPropertyValue("--standards-text").replace(/["']/g,"").trim();
+}
+
+// Follow-Up button text
+const followBtn = document.querySelector(".schedule-followup-btn");
+if (followBtn) {
+  followBtn.textContent = root.getPropertyValue("--followup-text").replace(/["']/g,"").trim();
+}
+
 
 
 // ============================
