@@ -14,12 +14,14 @@
 
 
   /* Resource URLs */
-  --hormone-resource-url: "https://www.mtnhlth.com/hormone-rx-resources";
   --treatment-addons-url: "https://www.mtnhlth.com/treatment-add-ons";
+   
    --standards-text: "🔗 Basic HLTH Standards";
   --basic-standards-url: "https://www.mtnhlth.com/basic-hlth-standards";
+   
+   --coaching-text: "Schedule a free consultation with our HLTH Coach";
   --health-coaching-url: "https://www.mtnhlth.com/health-coaching";
-  --lifestyle-tips-url: "https://www.mtnhlth.com/lifestyle-tips";
+   
   --followup-url: "https://www.mtnhlth.com/follow-up-visit";
   --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
   --needle27g-url: "https://www.amazon.com/dp/B084ZBY221?ref=cm_sw_r_cso_cp_apin_dp_VSZ0KWD3YANMCVE8GC8N";
