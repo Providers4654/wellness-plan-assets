@@ -218,9 +218,6 @@
 .title-lifestyle::before  { content: var(--title-lifestyle); }
 .title-goals::before      { content: var(--title-goals); }
 
-/* Unified bubble spacing for ALL sections */
-.wellness-plan .wellness-bubble {
-  margin-top: 44px; /* exact same gap under every pill title */
 }
 
 
@@ -334,22 +331,22 @@
 .wellness-plan .wellness-bubble {
   background: #ffffff;
   border-radius: 20px;
-  padding: 28px;
+  padding: 36px 28px 28px; /* top padding creates breathing room under the pill */
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  margin-top: 44px; /* unified gap between title pill and bubble */
+  margin-top: 44px;        /* unified gap between pill and bubble border */
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 /* normalize first element inside bubble */
 .wellness-plan .wellness-bubble > *:first-child {
   margin-top: 0 !important;   /* kill inconsistent heading/paragraph margins */
-  padding-top: 4px;           /* tweak this (4–8px) for breathing room */
 }
 
 /* keep lists tidy inside bubbles */
 .wellness-plan .wellness-bubble > ul {
   margin-top: 20px;
 }
+
 
 
 
