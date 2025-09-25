@@ -22,7 +22,7 @@
   --alcohol-pads-url: "https://www.amazon.com/s?k=alcohol+pads&crid=1JALMM5EAHOVG&sprefix=alcohol+pads%2Caps%2C127&ref=nb_sb_noss_1";
 
   /* Layout spacing */
-  --header-height: 72px; /* height of custom header (adjust as needed) */
+  --header-height: 100px; /* height of custom header (adjust as needed) */
 }
 
 
@@ -78,16 +78,18 @@
    ============================ */
 .wellness-logo {
   display: block;
-  width: 400px;  /* desktop */
+  width: 400px;     /* desktop width */
   height: 200px;
-  margin: 0 auto 16px auto;
+  margin: calc(var(--header-height) + 20px) auto 16px auto; /* push logo below header */
   background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-/* MOBILE FIX */
+/* ============================
+   MOBILE FIX
+   ============================ */
 @media (max-width: 600px) {
   .printable-content {
     padding-top: var(--header-height, 80px) !important; /* create space for fixed header */
@@ -97,13 +99,14 @@
     width: 95%;
     max-width: none;
     height: auto;
-    margin: 0 auto 16px !important; /* no manual top push */
+    margin: calc(var(--header-height) + 10px) auto 16px auto; /* push below header */
     display: block;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
   }
 }
+
 
 
 /* ============================
