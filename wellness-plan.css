@@ -96,23 +96,25 @@
   }
 }
 
-
-/* Reserve space for the fixed header above the logo */
+/* Desktop/tablet: tighter spacing above the logo */
 .printable-content {
-  padding-top: calc(var(--header-height, 100px) + 20px) !important;
+  padding-top: 60px !important; /* adjust down until it looks right */
   margin-top: 0 !important;
 }
 
+/* Mobile: reserve just enough space to clear the header */
 @media (max-width: 600px) {
   .wellness-logo {
-    margin-top: 0 !important; /* let the container handle spacing */
+    margin-top: 0 !important; /* spacing comes from container */
   }
 
   .printable-content {
-    padding-top: calc(var(--header-height, 100px) + 20px) !important;
+    padding-top: calc(var(--header-height, 100px) - 20px) !important; 
+    /* header height minus a little, so not too much gap */
     margin-top: 0 !important;
   }
 }
+
 
 
 
