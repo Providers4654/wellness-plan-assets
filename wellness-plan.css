@@ -72,36 +72,46 @@
   padding-top: var(--header-height, 100px) !important; /* push ALL content below header */
 }
 
-/* ============================
-   LOGO
-   ============================ */
+/* === LOGO === */
 .wellness-logo {
   display: block;
-  width: 400px;     /* desktop width */
+  width: 400px; /* adjust as needed */
   height: 200px;
-  margin: 20px auto 16px auto; /* just local spacing */
+  margin: 0 auto 16px auto;
   background-image: url('https://images.squarespace-cdn.com/content/v1/63b5b1eb7c52ac4609c8543a/619357c3-9a34-4ccc-80d5-87d3bb6fc98c/MTN_HLTH_Trademark%2BTagline_color_K.png?format=500w');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-/* ============================
-   Mobile Fix
-   ============================ */
 @media (max-width: 600px) {
-  .printable-content {
-    padding-top: var(--header-height, 100px) !important;
+  .wellness-logo {
+    width: 100%;
+    max-width: 375px;
+    height: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 16px;
+    display: block;
+  }
+}
+
+
+/* Reduce padding at the top of the container above the logo */
+.printable-content {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+@media (max-width: 600px) {
+  .wellness-logo {
+    margin-top: 0 !important;
   }
 
-.wellness-logo {
-  width: 95%;
-  max-width: none;
-  height: auto;
-  margin: calc(var(--header-height) + 20px) auto 16px auto; /* pushes logo below header */
-  position: relative;  /* creates stacking context */
-  z-index: 5;          /* keeps logo above other content */
-}
+  .printable-content {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+  }
 }
 
 
