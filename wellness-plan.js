@@ -26,24 +26,29 @@ function cssVar(name) {
 
 
 // ============================
-// 1. Apply CSS variable URLs to dynamic links
+// RESOURCE LINKS (URLs + Text)
 // ============================
+
 [
-  ["dynamicFollowUpLink", "--followup-url"],
-  ["dynamicHormoneLink", "--hormone-resource-url"],
-  ["dynamicAddOnsLink", "--treatment-addons-url"],
-  ["dynamicStandardsLink", "--basic-standards-url"],
-  ["dynamicCoachingLink", "--health-coaching-url"],
-  ["dynamicTipsLink", "--lifestyle-tips-url"],
-  ["dynamicFullscriptLink", "--fullscript-url"],
-  ["dynamicNeedle27gLink", "--needle27g-url"],
-  ["dynamicAlcoholPadsLink", "--alcohol-pads-url"],
-  ["dynamicSubqVideoLink", "--subq-video-url"],
-].forEach(([id, varName]) => {
-  const el = document.getElementById(id);
-  const url = cssVar(varName);
-  if (el && url) el.href = url;
+  ["dynamicFullscriptLink", "--fullscript-url", "fullscriptText", "--fullscript-text", "fullscriptNote", "--fullscript-note"],
+  ["dynamicAddOnsLink", "--treatment-addons-url", "addonsText", "--addons-text", "addonsNote", "--addons-note"],
+  ["dynamicStandardsLink", "--basic-standards-url", "standardsText", "--standards-text", "standardsNote", "--standards-note"],
+  ["dynamicCoachingLink", "--health-coaching-url", "dynamicCoachingLink", "--coaching-text", "coachingNote", "--coaching-note"],
+  ["dynamicFollowUpLink", "--followup-url", "followupText", "--followup-text", null, null],
+].forEach(([aId, hrefVar, textId, textVar, noteId, noteVar]) => {
+  const link = document.getElementById(aId);
+  const textEl = document.getElementById(textId);
+  const noteEl = noteId ? document.getElementById(noteId) : null;
+
+  const href = cssVar(hrefVar);
+  const text = cssVar(textVar);
+  const note = noteVar ? cssVar(noteVar) : "";
+
+  if (link && href) link.href = href;
+  if (textEl && text) textEl.textContent = text;
+  if (noteEl && note) noteEl.textContent = note;
 });
+
 
 // ============================
 // 1b. Apply CSS variable TEXT to placeholders
