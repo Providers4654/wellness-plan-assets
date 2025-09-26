@@ -344,7 +344,7 @@ function getPatientIdFromUrl() {
 }
 
 // ============================
-// Overlay Helper
+// Overlay Helpers
 // ============================
 function setOverlayMessage(msg, color = "#444", bg = "#fff") {
   const msgBox = document.querySelector("#loadingOverlay .loading-message");
@@ -355,6 +355,15 @@ function setOverlayMessage(msg, color = "#444", bg = "#fff") {
     if (msgBox) msgBox.style.color = color;
   }
 }
+
+function hideOverlay() {
+  const overlay = document.getElementById("loadingOverlay");
+  if (!overlay) return;
+  overlay.style.transition = "opacity 0.4s";
+  overlay.style.opacity = "0";
+  setTimeout(() => (overlay.style.display = "none"), 400);
+}
+
 
 // ============================
 // Load Patient Data (with retry + overlay fixes)
@@ -369,9 +378,8 @@ async function loadPatientData(retryCount = 0) {
       console.error("⏱ Hard timeout reached — Google Sheets fetch too slow.");
 
       // 👇 Force-hide overlay if still stuck
-      overlay.style.transition = "opacity 0.4s";
-      overlay.style.opacity = "0";
-      setTimeout(() => (overlay.style.display = "none"), 400);
+hideOverlay();
+
     }
   }, 10000);
 
