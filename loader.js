@@ -5,7 +5,6 @@
 (() => {
   const manualBump = "1"; // set to "" for normal daily refresh
 
-  // Daily cache-buster (YYYYMMDD)
   const today = new Date();
   const daily =
     today.getFullYear().toString() +
@@ -32,9 +31,14 @@
       // === 3. Load JS logic after HTML ===
       const jsScript = document.createElement("script");
       jsScript.src = `https://providers4654.github.io/wellness-plan-assets/wellness-plan.js?v=${version}&t=${ts}`;
-      jsScript.defer = true;
       jsScript.crossOrigin = "anonymous";
       jsScript.referrerPolicy = "no-referrer";
+      jsScript.onload = () => {
+        console.log("[Loader] wellness-plan.js loaded");
+        if (typeof bootstrapWellnessPlan === "function") {
+          bootstrapWellnessPlan();
+        }
+      };
       document.body.appendChild(jsScript);
     })
     .catch(err => console.error("[Wellness Loader] Failed to load HTML", err));
