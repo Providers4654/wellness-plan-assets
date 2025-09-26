@@ -122,6 +122,22 @@ document.addEventListener("click", (e) => {
 // ============================
 // 4. Build Section Content From Sheet (with deep debug logging)
 // ============================
+
+  // --- Helper: convert newlines into <br>
+function normalizeCellText(text) {
+  if (!text) return "";
+  return text
+    // Google Sheets sometimes uses carriage return entities
+    .replace(/&#10;/g, "<br>")
+    // real line breaks
+    .replace(/(\r\n|\r|\n)/g, "<br>")
+    // already-typed <br> (don’t double escape)
+    .replace(/&lt;br&gt;/g, "<br>");
+}
+
+
+
+
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
   console.log("🔍 injectPatientData START", { rows, lifestyleData, medsData, bodyCompData });
 
@@ -266,7 +282,7 @@ if (lifestyleBlock) {
           <li>
             <span class="editable">
               <strong>${tipInfo["Tip"]}:</strong><br>
-              ${tipInfo["Blurb"]}
+              ${normalizeCellText(tipInfo["Blurb"])}
             </span>
           </li>
         `;
@@ -282,21 +298,6 @@ if (lifestyleBlock) {
 }
 
 
-
-
-  
-
-  // --- Helper: convert newlines into <br>
-function normalizeCellText(text) {
-  if (!text) return "";
-  return text
-    // Google Sheets sometimes uses carriage return entities
-    .replace(/&#10;/g, "<br>")
-    // real line breaks
-    .replace(/(\r\n|\r|\n)/g, "<br>")
-    // already-typed <br> (don’t double escape)
-    .replace(/&lt;br&gt;/g, "<br>");
-}
 
 
 
@@ -320,7 +321,7 @@ if (bodyCompList) {
     html = `
       <ul class="goals-list">
         <li>
-          <span class="editable">${key}</span>
+          <span class="editable">${normalizeCellText(key)}</span>
         </li>
       </ul>
     `;
@@ -329,6 +330,7 @@ if (bodyCompList) {
   bodyCompList.innerHTML = html;
   console.log("🚀 Injected Body Comp HTML (editable):", html);
 }
+
 
 
 
