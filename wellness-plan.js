@@ -48,18 +48,15 @@ if (addonsText) addonsText.textContent = cssVar("--addons-text");
 const addonsNote = document.getElementById("addonsNote");
 if (addonsNote) addonsNote.textContent = cssVar("--addons-note");
 
-// Standards
 const standardsText = document.getElementById("standardsText");
 if (standardsText) standardsText.textContent = cssVar("--standards-text");
 const standardsNote = document.getElementById("standardsNote");
 if (standardsNote) standardsNote.textContent = cssVar("--standards-note");
 
-// Coaching
 const coachingLink = document.getElementById("dynamicCoachingLink");
 if (coachingLink) coachingLink.textContent = cssVar("--coaching-text");
 const coachingNote = document.getElementById("coachingNote");
 if (coachingNote) coachingNote.textContent = cssVar("--coaching-note");
-
 
 const followBtn = document.getElementById("followupText");
 if (followBtn) followBtn.textContent = cssVar("--followup-text");
@@ -100,24 +97,19 @@ document.addEventListener("click", (e) => {
   const content = row?.querySelector(".learn-more-content");
   if (!content) return;
 
-  // Close any other open blurbs
-  document.querySelectorAll(".learn-more-content.expanded")
-    .forEach((openContent) => {
-      if (openContent !== content) {
-        openContent.classList.remove("expanded");
-      }
-    });
+  document.querySelectorAll(".learn-more-content.expanded").forEach((openContent) => {
+    if (openContent !== content) {
+      openContent.classList.remove("expanded");
+    }
+  });
 
-  // Toggle this one
   content.classList.toggle("expanded");
 });
-
 
 // ============================
 // 4. Build Section Content From Sheet
 // ============================
 function injectPatientData(rows, lifestyleData, medsData) {
-  // --- Goals & Follow-Up section headers ---
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
 
@@ -127,7 +119,6 @@ function injectPatientData(rows, lifestyleData, medsData) {
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  // --- Group meds & supplements by category ---
   const medsByCategory = {
     Daily: { meds: [], supps: [] },
     Evening: { meds: [], supps: [] },
@@ -141,7 +132,6 @@ function injectPatientData(rows, lifestyleData, medsData) {
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
 
-    // ✅ lookup blurb in Medication Info tab instead of current sheet
     let blurb = "";
     if (med) {
       const medInfo = medsData.find(m => m["Medication"] === med);
@@ -161,7 +151,6 @@ function injectPatientData(rows, lifestyleData, medsData) {
       </li>
     `;
 
-    // Check if category is Supplement or not
     if (cat.includes("Supplement")) {
       if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
       else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
@@ -172,7 +161,6 @@ function injectPatientData(rows, lifestyleData, medsData) {
     }
   });
 
-  // --- Inject into DOM ---
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     const listId = {
       Daily: "dailyMeds",
@@ -198,10 +186,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
         let html = "";
         if (meds.length > 0) html += meds.join("");
         if (supps.length > 0) {
-          html += `
-            <li class="med-subtitle"><span>SUPPLEMENTS</span></li>
-            ${supps.join("")}
-          `;
+          html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
         }
         list.innerHTML = html;
       } else {
@@ -210,66 +195,41 @@ function injectPatientData(rows, lifestyleData, medsData) {
     }
   });
 
-// --- Lifestyle Tips ---
-const lifestyleList = document.getElementById("lifestyleTips");
-if (lifestyleList) {
-  // Collect all selected tips across rows
-  let tips = rows
-    .map(r => r["Lifestyle Tips"])
-    .filter(Boolean)
-    .flatMap(t => t.split(",").map(x => x.trim()))
-    .filter(Boolean);
+  const lifestyleList = document.getElementById("lifestyleTips");
+  if (lifestyleList) {
+    let tips = rows
+      .map(r => r["Lifestyle Tips"])
+      .filter(Boolean)
+      .flatMap(t => t.split(",").map(x => x.trim()))
+      .filter(Boolean);
 
-  // Remove duplicates
-  tips = [...new Set(tips)];
+    tips = [...new Set(tips)];
 
-  // Sort by order in library tab
-  const orderedTips = lifestyleData
-    .map(l => l["Tip"]) // keep library order
-    .filter(t => tips.includes(t));
+    const orderedTips = lifestyleData.map(l => l["Tip"]).filter(t => tips.includes(t));
+    const customTips = tips.filter(t => !orderedTips.includes(t));
+    const finalTips = [...orderedTips, ...customTips];
 
-  // Keep custom (non-library) entries in the order they were typed
-  const customTips = tips.filter(t => !orderedTips.includes(t));
+    lifestyleList.innerHTML = finalTips.map(tip => {
+      const lib = lifestyleData.find(l => l["Tip"] === tip);
+      if (lib) {
+        return `<li><strong>${tip}</strong>${lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}</li>`;
+      } else if (/<[a-z][\s\S]*>/i.test(tip)) {
+        return `<li>${tip}</li>`;
+      } else {
+        return `<li><strong>${tip}</strong></li>`;
+      }
+    }).join("");
+  }
 
-  // Merge library-ordered tips + custom tips
-  const finalTips = [...orderedTips, ...customTips];
-
-  // Render tips
-  lifestyleList.innerHTML = finalTips.map(tip => {
-    const lib = lifestyleData.find(l => l["Tip"] === tip);
-
-    if (lib) {
-      // ✅ Library tip
-      return `
-        <li>
-          <strong>${tip}</strong>
-          ${lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
-        </li>
-      `;
-    } else if (/<[a-z][\s\S]*>/i.test(tip)) {
-      // ✅ Raw HTML tip (detects tags like <a>, <iframe>, <div>)
-      return `<li>${tip}</li>`;
-    } else {
-      // ✅ Plain text fallback (no match, no HTML)
-      return `<li><strong>${tip}</strong></li>`;
-    }
-  }).join("");
-}
-
-
-
-
-  // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
-    const firstRow = rows[0]; // use first row for patient-level metadata
+    const firstRow = rows[0];
     visitTimelineList.innerHTML = `
       <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${firstRow["Previous Visit"] || ""}</span></li>
       <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${firstRow["Next Visit"] || ""}</span></li>
     `;
   }
 
-  // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList) {
     const firstRow = rows[0];
@@ -278,7 +238,6 @@ if (lifestyleList) {
       : "";
   }
 
-  // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList) {
     const firstRow = rows[0];
@@ -288,8 +247,6 @@ if (lifestyleList) {
   }
 }
 
-
-
 // ============================
 // 5. Fetch & Match Patient Rows
 // ============================
@@ -297,7 +254,6 @@ function csvToJSON(csv) {
   const rows = [];
   const lines = csv.split("\n");
   const headers = parseCSVLine(lines.shift());
-
   lines.forEach(line => {
     if (!line.trim()) return;
     const values = parseCSVLine(line);
@@ -314,21 +270,14 @@ function parseCSVLine(line) {
   const result = [];
   let cur = "";
   let inQuotes = false;
-
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
-
     if (char === '"' && line[i + 1] === '"') {
-      // Handle escaped double quotes
-      cur += '"';
-      i++;
+      cur += '"'; i++;
     } else if (char === '"') {
-      // Toggle quoted state
       inQuotes = !inQuotes;
     } else if (char === "," && !inQuotes) {
-      // End of cell
-      result.push(cur);
-      cur = "";
+      result.push(cur); cur = "";
     } else {
       cur += char;
     }
@@ -337,24 +286,22 @@ function parseCSVLine(line) {
   return result;
 }
 
-
 function getPatientIdFromUrl() {
   const parts = window.location.pathname.split("/");
   return parts.pop() || parts.pop();
 }
 
 // ============================
-// Load Patient Data (max debug)
+// Load Patient Data (with cache-buster)
 // ============================
 async function loadPatientData() {
   console.log("🚀 loadPatientData() started");
-
   try {
     console.log("Fetching sheets...");
     const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
-      fetch(TABS.wellness).then(r => r.text()),
-      fetch(TABS.meds).then(r => r.text()),
-      fetch(TABS.lifestyle).then(r => r.text())
+      fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text())
     ]);
     console.log("✅ Fetched all sheets");
 
@@ -368,9 +315,7 @@ async function loadPatientData() {
     const patientId = getPatientIdFromUrl();
     console.log("Looking for Patient ID:", patientId);
 
-    const patientRows = wellnessData.filter(r =>
-      (r["Patient ID"] || "").trim() === patientId.trim()
-    );
+    const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
     console.log("Matched rows:", patientRows);
 
     if (patientRows.length > 0) {
@@ -379,16 +324,21 @@ async function loadPatientData() {
     } else {
       console.warn("⚠️ No patient found for ID:", patientId);
     }
-
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
 
-// --- Run after DOM is ready ---
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("📌 DOM ready, calling loadPatientData()");
+// ============================
+// 6. Bootstrap: always run loadPatientData
+// ============================
+function bootstrapWellnessPlan() {
+  console.log("📌 Bootstrapping wellness plan, calling loadPatientData()");
   loadPatientData();
-});
+}
 
-
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", bootstrapWellnessPlan);
+} else {
+  bootstrapWellnessPlan();
+}
