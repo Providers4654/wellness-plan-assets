@@ -210,21 +210,31 @@ function injectPatientData(rows, lifestyleData, medsData) {
     }
   });
 
-  // --- Lifestyle Tips ---
-  const lifestyleList = document.getElementById("lifestyleTips");
-  if (lifestyleList) {
-    const tips = rows.map(r => r["Lifestyle Tips"]).filter(Boolean);
+// --- Lifestyle Tips ---
+const lifestyleList = document.getElementById("lifestyleTips");
+if (lifestyleList) {
+  // Collect all selected tips across rows, split by commas
+  let tips = rows
+    .map(r => r["Lifestyle Tips"])
+    .filter(Boolean)
+    .flatMap(t => t.split(",").map(x => x.trim()))  // split multi-selects
+    .filter(Boolean);
 
-    lifestyleList.innerHTML = tips.map(tip => {
-      const lib = lifestyleData.find(l => l["Tip"] === tip);
-      return `
-        <li>
-          <strong>${tip}</strong>
-          ${lib && lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
-        </li>
-      `;
-    }).join("");
-  }
+  // Remove duplicates
+  tips = [...new Set(tips)];
+
+  // Build list items with blurbs
+  lifestyleList.innerHTML = tips.map(tip => {
+    const lib = lifestyleData.find(l => l["Tip"] === tip);
+    return `
+      <li>
+        <strong>${tip}</strong>
+        ${lib && lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
+      </li>
+    `;
+  }).join("");
+}
+
 
   // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
