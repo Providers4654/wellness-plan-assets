@@ -116,7 +116,7 @@ document.addEventListener("click", (e) => {
 // ============================
 // 4. Build Section Content From Sheet
 // ============================
-function injectPatientData(rows, lifestyleData) {
+function injectPatientData(rows, lifestyleData, medsData) {
   // --- Goals & Follow-Up section headers ---
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
@@ -127,85 +127,88 @@ function injectPatientData(rows, lifestyleData) {
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
- // --- Group meds & supplements by category ---
-const medsByCategory = {
-  Daily: { meds: [], supps: [] },
-  Evening: { meds: [], supps: [] },
-  Weekly: { meds: [], supps: [] },
-  PRN: { meds: [], supps: [] },
-  "To Consider": { meds: [], supps: [] }
-};
+  // --- Group meds & supplements by category ---
+  const medsByCategory = {
+    Daily: { meds: [], supps: [] },
+    Evening: { meds: [], supps: [] },
+    Weekly: { meds: [], supps: [] },
+    PRN: { meds: [], supps: [] },
+    "To Consider": { meds: [], supps: [] }
+  };
 
-rows.forEach((r) => {
-  const med = r["Meds/Supp"];
-  const dose = r["Dose"] || "";
-  const cat = (r["Category"] || "").trim();
-  const blurb = r["Blurb"] || "";
+  rows.forEach((r) => {
+    const med = r["Meds/Supp"];
+    const dose = r["Dose"] || "";
+    const cat = (r["Category"] || "").trim();
 
-  if (!med) return;
-
-const medHtml = `
-  <li class="med-row">
-    <div class="med-name">
-      <strong>${med}</strong>
-      ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
-    </div>
-    <div class="dose">${dose}</div>
-    ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
-  </li>
-`;
-
-
-
-  // Check if category is Supplement or not
-  if (cat.includes("Supplement")) {
-    if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
-    else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
-    else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
-    else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
-  } else {
-    if (medsByCategory[cat]) medsByCategory[cat].meds.push(medHtml);
-  }
-});
-
-// --- Inject into DOM ---
-Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-  const listId = {
-    Daily: "dailyMeds",
-    Evening: "eveningMeds",
-    Weekly: "weeklyMeds",
-    PRN: "prnMeds",
-    "To Consider": "toConsider",
-  }[cat];
-
-  const blockId = {
-    Daily: "dailyBlock",
-    Evening: "eveningBlock",
-    Weekly: "weeklyBlock",
-    PRN: "prnBlock",
-    "To Consider": "toConsiderBlock",
-  }[cat];
-
-  const block = document.getElementById(blockId);
-  const list = document.getElementById(listId);
-
-  if (list && block) {
-    if (meds.length > 0 || supps.length > 0) {
-      let html = "";
-      if (meds.length > 0) html += meds.join("");
-      if (supps.length > 0) {
-        html += `
-          <li class="med-subtitle"><span>SUPPLEMENTS</span></li>
-          ${supps.join("")}
-        `;
-      }
-      list.innerHTML = html;
-    } else {
-      block.remove();
+    // ✅ lookup blurb in Medication Info tab instead of current sheet
+    let blurb = "";
+    if (med) {
+      const medInfo = medsData.find(m => m["Medication"] === med);
+      blurb = medInfo ? medInfo["Blurb"] : "";
     }
-  }
-});
 
+    if (!med) return;
+
+    const medHtml = `
+      <li class="med-row">
+        <div class="med-name">
+          <strong>${med}</strong>
+          ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
+        </div>
+        <div class="dose">${dose}</div>
+        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
+      </li>
+    `;
+
+    // Check if category is Supplement or not
+    if (cat.includes("Supplement")) {
+      if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
+      else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
+      else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
+      else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
+    } else {
+      if (medsByCategory[cat]) medsByCategory[cat].meds.push(medHtml);
+    }
+  });
+
+  // --- Inject into DOM ---
+  Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+    const listId = {
+      Daily: "dailyMeds",
+      Evening: "eveningMeds",
+      Weekly: "weeklyMeds",
+      PRN: "prnMeds",
+      "To Consider": "toConsider",
+    }[cat];
+
+    const blockId = {
+      Daily: "dailyBlock",
+      Evening: "eveningBlock",
+      Weekly: "weeklyBlock",
+      PRN: "prnBlock",
+      "To Consider": "toConsiderBlock",
+    }[cat];
+
+    const block = document.getElementById(blockId);
+    const list = document.getElementById(listId);
+
+    if (list && block) {
+      if (meds.length > 0 || supps.length > 0) {
+        let html = "";
+        if (meds.length > 0) html += meds.join("");
+        if (supps.length > 0) {
+          html += `
+            <li class="med-subtitle"><span>SUPPLEMENTS</span></li>
+            ${supps.join("")}
+          `;
+        }
+        list.innerHTML = html;
+      } else {
+        block.remove();
+      }
+    }
+  });
 
   // --- Lifestyle Tips ---
   const lifestyleList = document.getElementById("lifestyleTips");
@@ -251,6 +254,7 @@ Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
       : "";
   }
 }
+
 
 
 // ============================
@@ -308,19 +312,21 @@ function getPatientIdFromUrl() {
 
 async function loadPatientData() {
   try {
-    const [wellnessRes, lifestyleRes] = await Promise.all([
+    const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
       fetch(TABS.wellness).then(r => r.text()),
+      fetch(TABS.meds).then(r => r.text()),
       fetch(TABS.lifestyle).then(r => r.text())
     ]);
 
     const wellnessData = csvToJSON(wellnessRes);
+    const medsData = csvToJSON(medsRes);         // Medication Info tab
     const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
     const patientRows = wellnessData.filter(r => r["Patient ID"] === patientId);
 
     if (patientRows.length > 0) {
-      injectPatientData(patientRows, lifestyleData);
+      injectPatientData(patientRows, lifestyleData, medsData);
     } else {
       console.warn("No patient found for ID:", patientId);
     }
@@ -328,6 +334,7 @@ async function loadPatientData() {
     console.error("Error fetching sheet:", err);
   }
 }
+
 
 // --- Run on load ---
 loadPatientData();
