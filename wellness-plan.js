@@ -163,40 +163,43 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     }
   });
 
-  // --- Inject Meds & Supplements ---
-  Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-    const listId = {
-      Daily: "dailyMeds",
-      Evening: "eveningMeds",
-      Weekly: "weeklyMeds",
-      PRN: "prnMeds",
-      "To Consider": "toConsider",
-    }[cat];
+// --- Inject Meds & Supplements ---
+Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+  const listId = {
+    Daily: "dailyMeds",
+    Evening: "eveningMeds",
+    Weekly: "weeklyMeds",
+    PRN: "prnMeds",
+    "To Consider": "toConsider",
+  }[cat];
 
-    const blockId = {
-      Daily: "dailyBlock",
-      Evening: "eveningBlock",
-      Weekly: "weeklyBlock",
-      PRN: "prnBlock",
-      "To Consider": "toConsiderBlock",
-    }[cat];
+  const blockId = {
+    Daily: "dailyBlock",
+    Evening: "eveningBlock",
+    Weekly: "weeklyBlock",
+    PRN: "prnBlock",
+    "To Consider": "toConsiderBlock",
+  }[cat];
 
-    const block = document.getElementById(blockId);
-    const list = document.getElementById(listId);
+  const block = document.getElementById(blockId);
+  const list = document.getElementById(listId);
 
-    if (list && block) {
-      if (meds.length > 0 || supps.length > 0) {
-        let html = "";
-        if (meds.length > 0) html += meds.join("");
-        if (supps.length > 0) {
-          html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-        }
-        list.innerHTML = html;
-      } else {
-        block.remove();
+  if (list && block) {
+    if (meds.length > 0 || supps.length > 0) {
+      let html = "";
+      if (meds.length > 0) html += meds.join("");
+      if (supps.length > 0) {
+        html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
+      }
+      list.innerHTML = html;
+    } else {
+      if (block && block.parentNode) {
+        block.remove(); // ✅ safe removal
       }
     }
-  });
+  }
+});
+
 
   // --- Lifestyle Tips ---
   const lifestyleList = document.getElementById("lifestyleTips");
