@@ -935,14 +935,23 @@ html, body {
    RESOURCE LINKS (bottom of bubbles)
    ============================ */
 .resource-link {
-  margin-top: 8px;      /* smaller gap between stacked links */
-  padding-top: 0;       /* remove extra space above */
-  border-top: none;     /* only keep divider if you want it globally */
-  display: block;       /* no need for flow-root */
+  margin-top: 8px;        /* light spacing between blocks */
+  padding-top: 0;         /* no excess padding */
+  border-top: none;       /* remove divider by default */
+  display: block;
 }
 
-/* Remove any bottom margin from element directly before */
-.wellness-bubble > *:last-child { margin-bottom: 0 !important; }
+/* First resource link in a section: add divider if needed */
+.wellness-bubble .resource-link:first-of-type {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+/* Remove any bottom margin from the last element in bubble */
+.wellness-bubble > *:last-child {
+  margin-bottom: 0 !important;
+}
 
 /* Resource link text */
 .resource-link a {
@@ -951,49 +960,43 @@ html, body {
   font-size: 14px;
   text-decoration: none;
   display: block;
-  margin-bottom: 2px;   /* tighten link → note spacing */
+  margin-bottom: 2px;     /* tight spacing above note */
 }
-.resource-link a:hover { text-decoration: underline; }
+.resource-link a:hover {
+  text-decoration: underline;
+}
 
-/* Extra spacing for buttons so they match text link spacing */
-.resource-link .schedule-followup-btn { margin-top: 10px; }
+/* Extra spacing for buttons only */
+.resource-link .schedule-followup-btn {
+  margin-top: 10px;
+}
 
-/* Note text */
+/* Note text (sits directly under link) */
 .wellness-plan .resource-note {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 0;            /* no extra vertical gap */
-  display: block;       /* forces it under the link */
-  line-height: 1.4;     /* neat, compact spacing */
+  margin: 0;              /* no vertical gaps */
+  display: block;
+  line-height: 1.4;
 }
 
-
-/* Testosterone links container variant */
+/* Special variant: Testosterone links container */
 .resource-link.med {
-  margin-top: 4px;   /* or even 0 */
+  margin-top: 4px;
   margin-bottom: 0;
 }
-
 
 /* ============================
    RESOURCE LINKS (alignment fix)
    ============================ */
-
-/* Normalize all resource link items so they line up flush left */
 .resource-link,
 .resource-link a,
 .wellness-plan .resource-note {
-  display: block;           /* each takes a full line */
   margin-left: 0 !important;
   padding-left: 0 !important;
-  text-align: left;         /* enforce left edge */
+  text-align: left;
 }
-
-/* Consistent vertical rhythm */
-.resource-link a { margin-bottom: 6px; }
-.wellness-plan .resource-note { margin: 6px 0; }
-
 
 
 
