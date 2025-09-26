@@ -213,7 +213,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
 // --- Lifestyle Tips ---
 const lifestyleList = document.getElementById("lifestyleTips");
 if (lifestyleList) {
-  // Collect all selected tips across rows, split by commas
+  // Collect all selected tips across rows
   let tips = rows
     .map(r => r["Lifestyle Tips"])
     .filter(Boolean)
@@ -225,20 +225,37 @@ if (lifestyleList) {
 
   // Sort by order in library tab
   const orderedTips = lifestyleData
-    .map(l => l["Tip"])           // take library order
-    .filter(t => tips.includes(t)); // only keep chosen tips
+    .map(l => l["Tip"]) // keep library order
+    .filter(t => tips.includes(t));
 
-  // Build list items with blurbs in library order
-  lifestyleList.innerHTML = orderedTips.map(tip => {
+  // Keep custom (non-library) entries in the order they were typed
+  const customTips = tips.filter(t => !orderedTips.includes(t));
+
+  // Merge library-ordered tips + custom tips
+  const finalTips = [...orderedTips, ...customTips];
+
+  // Render tips
+  lifestyleList.innerHTML = finalTips.map(tip => {
     const lib = lifestyleData.find(l => l["Tip"] === tip);
-    return `
-      <li>
-        <strong>${tip}</strong>
-        ${lib && lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
-      </li>
-    `;
+
+    if (lib) {
+      // ✅ Library tip
+      return `
+        <li>
+          <strong>${tip}</strong>
+          ${lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}
+        </li>
+      `;
+    } else if (/<[a-z][\s\S]*>/i.test(tip)) {
+      // ✅ Raw HTML tip (detects tags like <a>, <iframe>, <div>)
+      return `<li>${tip}</li>`;
+    } else {
+      // ✅ Plain text fallback (no match, no HTML)
+      return `<li><strong>${tip}</strong></li>`;
+    }
   }).join("");
 }
+
 
 
 
