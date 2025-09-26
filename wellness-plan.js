@@ -270,15 +270,17 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
         b => normalize(b["State"]) === normalize(keyOrHtml)
       );
 
-      if (lib) {
-        html = decodeHTML(lib["Blurb"]);  // ✅ decode before injecting
-      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-        html = decodeHTML(keyOrHtml);     // ✅ decode inline HTML from cell
-      } else {
-        html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
-      }
+if (lib) {
+  html = decodeHTML(lib["Blurb"]);
+} else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+  html = decodeHTML(keyOrHtml);
+} else {
+  html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
+}
 
-      bodyCompList.innerHTML = `<li>${html}</li>`;
+// ✅ inject directly, don’t wrap in <li> again
+bodyCompList.innerHTML = html;
+
     } else {
       bodyCompList.innerHTML = "";
     }
