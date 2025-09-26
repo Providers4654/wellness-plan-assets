@@ -300,24 +300,31 @@ function csvToJSON(csv) {
   const rows = [];
   const lines = csv.split("\n");
 
-  // Parse headers
+  // Clean headers
   const headers = parseCSVLine(lines.shift()).map(h =>
-    h.replace(/\uFEFF/g, "").trim() // remove BOM + trim spaces
+    h.replace(/\uFEFF/g, "").trim()
   );
 
-  // Parse rows
   lines.forEach(line => {
     if (!line.trim()) return;
+
     const values = parseCSVLine(line);
+
+    // Ensure same length
+    while (values.length < headers.length) values.push("");
+    while (values.length > headers.length) values = values.slice(0, headers.length);
+
     let obj = {};
     headers.forEach((h, i) => {
       obj[h] = (values[i] || "").trim();
     });
+
     rows.push(obj);
   });
 
   return rows;
 }
+
 
 
 function parseCSVLine(line) {
