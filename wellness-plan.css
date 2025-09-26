@@ -937,8 +937,8 @@ html, body {
 /* Resource link block */
 .resource-link {
   border-top: 1px solid #eee;
-  padding-top: 12px;      /* space between divider and link */
-  margin: 16px 0 0;       /* only top margin for block spacing */
+  padding-top: 20px;      /* more space between divider and link */
+  margin: 20px 0 0;       /* consistent vertical rhythm */
 }
 
 /* Compact variant for stacked med links (no divider) */
@@ -960,7 +960,7 @@ html, body {
   font-size: 14px;
   text-decoration: none;
   display: block;
-  margin: 0;
+  margin: 0 0 4px;        /* small bottom margin to “hug” note */
   line-height: 1.4;
 }
 .resource-link a:hover {
@@ -977,7 +977,7 @@ html, body {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 0;              /* no gaps */
+  margin: 0;              /* keep tight under link */
   display: block;
   line-height: 1.4;
 }
