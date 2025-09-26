@@ -368,7 +368,7 @@ async function loadPatientData(retryCount = 0) {
       setOverlayMessage("Plan is taking longer than expected. Please refresh.", "#bd243f");
       console.error("⏱ Hard timeout reached — Google Sheets fetch too slow.");
 
-      // 👇 Force-hide overlay even if fetch hangs
+      // 👇 Force-hide overlay if still stuck
       overlay.style.transition = "opacity 0.4s";
       overlay.style.opacity = "0";
       setTimeout(() => (overlay.style.display = "none"), 400);
@@ -393,6 +393,14 @@ async function loadPatientData(retryCount = 0) {
 
     if (patientRows.length > 0) {
       injectPatientData(patientRows, lifestyleData, medsData);
+
+      // ✅ SUCCESS → clear timeout + fade out overlay
+      clearTimeout(timeout);
+      if (overlay) {
+        overlay.style.transition = "opacity 0.4s";
+        overlay.style.opacity = "0";
+        setTimeout(() => (overlay.style.display = "none"), 400);
+      }
     } else {
       console.warn("No patient found for ID:", patientId);
       setOverlayMessage("No plan found for this patient ID.", "#bd243f");
@@ -406,13 +414,6 @@ async function loadPatientData(retryCount = 0) {
       console.error("Error fetching sheet:", err);
       setOverlayMessage("Error loading plan. Please refresh.", "#bd243f");
     }
-  } finally {
-    clearTimeout(timeout);
-    if (overlay) {
-      overlay.style.transition = "opacity 0.4s";
-      overlay.style.opacity = "0";
-      setTimeout(() => (overlay.style.display = "none"), 400);
-    }
   }
 }
 
@@ -420,4 +421,3 @@ async function loadPatientData(retryCount = 0) {
 document.addEventListener("DOMContentLoaded", () => {
   loadPatientData();
 });
-
