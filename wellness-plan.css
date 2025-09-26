@@ -938,20 +938,24 @@ html, body {
 
 
 /* ============================
-   RESOURCE LINKS (tight pairs like example screenshot)
+   RESOURCE LINKS (inline pairs)
    ============================ */
 .resource-link {
-  border-top: 1px solid #eee;   /* divider between groups */
-  padding: 18px 0;              /* equal spacing above/below pair */
-  margin: 0;                    /* reset margins */
+  border-top: 1px solid #eee;
+  padding: 12px 0;
+  margin: 0;
+  display: flex;               /* ✅ put link + note side by side */
+  align-items: center;         /* ✅ vertical alignment */
+  gap: 8px;                    /* ✅ spacing between link and note */
+  flex-wrap: wrap;             /* ✅ allow wrapping on small screens */
 }
 
-/* First resource link in bubble gets a little breathing room */
+/* First resource link in bubble */
 .wellness-bubble .resource-link:first-of-type {
   margin-top: 20px;
 }
 
-/* Last resource link: no extra padding below */
+/* Last resource link */
 .wellness-bubble .resource-link:last-of-type {
   padding-bottom: 0;
   border-bottom: none;
@@ -959,13 +963,12 @@ html, body {
 
 /* Link */
 .resource-link a {
-  display: block;
-  margin: 0;                    /* no gap above note */
+  display: inline;             /* ✅ inline instead of block */
   color: #bd243f;
   font-weight: 700;
   font-size: 14px;
-  line-height: 1.4;
   text-decoration: none;
+  white-space: nowrap;         /* ✅ keeps link together */
 }
 .resource-link a:hover {
   text-decoration: underline;
@@ -973,13 +976,26 @@ html, body {
 
 /* Note */
 .resource-note {
-  display: block;
-  margin: 2px 0 0 0;            /* hugs the link closely */
   font-size: 14px;
   font-style: italic;
   color: #777;
+  margin: 0;                   /* ✅ snug to link */
   line-height: 1.4;
 }
+
+
+
+/* ============================
+   RESOURCE LINKS (alignment fix)
+   ============================ */
+.resource-link,
+.resource-link a,
+.wellness-plan .resource-note {
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  text-align: left;
+}
+
 
 
 
