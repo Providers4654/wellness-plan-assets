@@ -257,49 +257,32 @@ function normalizeCellText(text) {
 }
 
 
-  // --- Body Comp ---
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList) {
-    const firstRow = rows[0];
-    const keyOrHtml = firstRow["Body Comp"];
-    console.log("🔎 Body Comp raw value", keyOrHtml);
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+if (bodyCompList) {
+  const firstRow = rows[0];
+  const keyOrHtml = firstRow["Body Comp"]; 
+  let html = "";
 
-    let html = "";
-    if (keyOrHtml) {
-      const normalize = s =>
-        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
-
-      const lib = bodyCompData.find(b => normalize(b["State"]) === normalize(keyOrHtml));
-      console.log("📚 Matched BodyComp lib", lib);
-
-      if (lib && lib["Blurb"]) {
-        html = `<span class="editable">${normalizeCellText(lib["Blurb"])}</span>`;
-      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-        html = `<span class="editable">${keyOrHtml}</span>`;
-      } else {
-        html = `<span class="editable"><strong>${normalizeCellText(keyOrHtml)}</strong></span>`;
-      }
-
-      bodyCompList.innerHTML = html;
-      console.log("✅ Body Comp injected", html);
-    } else {
-      bodyCompList.innerHTML = "";
-      console.log("⚠️ No Body Comp found");
-    }
+  if (keyOrHtml) {
+    html = `<span class="editable">${keyOrHtml}</span>`;
+    bodyCompList.innerHTML = html;
+    console.log("🚀 Injected Body Comp HTML:", html);
+  } else {
+    bodyCompList.innerHTML = "";
   }
+}
 
-  // --- Target Goals ---
-  const targetGoalsList = document.getElementById("targetGoals");
-  if (targetGoalsList) {
-    const firstRow = rows[0];
-    if (firstRow["Target Goals"]) {
-      targetGoalsList.innerHTML = `<li><span class="editable">${normalizeCellText(firstRow["Target Goals"])}</span></li>`;
-      console.log("✅ Target Goals injected", firstRow["Target Goals"]);
-    } else {
-      targetGoalsList.innerHTML = "";
-      console.log("⚠️ No Target Goals found");
-    }
+// --- Target Goals ---
+const targetGoalsList = document.getElementById("targetGoals");
+if (targetGoalsList) {
+  const firstRow = rows[0];
+  if (firstRow["Target Goals"]) {
+    targetGoalsList.innerHTML = `<li><span class="editable">${firstRow["Target Goals"]}</span></li>`;
+  } else {
+    targetGoalsList.innerHTML = "";
   }
+}
 
   console.log("🏁 injectPatientData END");
 }
