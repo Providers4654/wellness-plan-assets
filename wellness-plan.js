@@ -17,45 +17,6 @@ function cssVar(name) {
 }
 
 
-function decodeHTML(str) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = str;
-  return txt.value;
-}
-
-
-// ============================
-// Helper: render text as list if it has line breaks
-// ============================
-function renderAsListOrHTML(text) {
-  if (!text) return "";
-
-  // If already contains HTML tags, return as-is
-  if (/<[a-z][\s\S]*>/i.test(text)) {
-    return `<span class="editable">${text}</span>`;
-  }
-
-  // Split by line breaks
-  const parts = text.split(/\r?\n/).map(p => p.trim()).filter(Boolean);
-
-  if (parts.length === 0) return "";
-
-  let html = "";
-  if (parts.length === 1) {
-    // Single line
-    html = `<li><span class="editable">${parts[0]}</span></li>`;
-  } else {
-    // First line as editable paragraph
-    const firstLine = parts.shift();
-    const listItems = parts.map(p => `<li><span class="editable">${p}</span></li>`).join("");
-    html = `<li><span class="editable">${firstLine}</span></li>${listItems}`;
-  }
-
-  return html;
-}
-
-
-
 
 
 // ============================
@@ -289,11 +250,17 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     `;
   }
 
+// --- Helper: convert newlines into <br>
+function normalizeCellText(text) {
+  if (!text) return "";
+  return text.replace(/(\r\n|\r|\n)/g, "<br>");
+}
+
 // --- Body Comp ---
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
   const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"];
+  const keyOrHtml = firstRow["Body Comp"]; 
   let html = "";
 
   if (keyOrHtml) {
@@ -304,15 +271,16 @@ if (bodyCompList) {
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
 
-if (lib && lib["Blurb"]) {
-  html = renderAsListOrHTML(lib["Blurb"]);
-} else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-  html = `<li><span class="editable">${keyOrHtml}</span></li>`;
-} else {
-  html = renderAsListOrHTML(keyOrHtml);
-}
-
-
+    if (lib && lib["Blurb"]) {
+      // ✅ Blurb from library, process newlines
+      html = `<span class="editable">${normalizeCellText(lib["Blurb"])}</span>`;
+    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+      // ✅ Raw HTML from wellness sheet cell
+      html = `<span class="editable">${keyOrHtml}</span>`;
+    } else {
+      // ✅ Plain text with line breaks converted
+      html = `<span class="editable"><strong>${normalizeCellText(keyOrHtml)}</strong></span>`;
+    }
 
     bodyCompList.innerHTML = html;
     console.log("🚀 Injected Body Comp HTML:", html);
@@ -323,13 +291,15 @@ if (lib && lib["Blurb"]) {
 
 
 
-  // --- Target Goals ---
-  const targetGoalsList = document.getElementById("targetGoals");
-  if (targetGoalsList) {
-    const firstRow = rows[0];
-    targetGoalsList.innerHTML = firstRow["Target Goals"]
-      ? `<li><span class="editable">${firstRow["Target Goals"]}</span></li>`
-      : "";
+
+// --- Target Goals ---
+const targetGoalsList = document.getElementById("targetGoals");
+if (targetGoalsList) {
+  const firstRow = rows[0];
+  if (firstRow["Target Goals"]) {
+    targetGoalsList.innerHTML = `<li><span class="editable">${normalizeCellText(firstRow["Target Goals"])}</span></li>`;
+  } else {
+    targetGoalsList.innerHTML = "";
   }
 }
 
