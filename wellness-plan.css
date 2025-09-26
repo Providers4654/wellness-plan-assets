@@ -938,63 +938,60 @@ html, body {
 
 
 /* ============================
-   RESOURCE LINKS (inline pairs)
+   RESOURCE LINKS — match reference screenshot
    ============================ */
-.resource-link {
-  border-top: 1px solid #eee;
-  padding: 12px 0;
+.wellness-plan .resource-link{
+  border-top: 1px solid #eee;   /* divider between groups */
+  padding: 14px 0 12px;         /* equal space above/below the pair */
   margin: 0;
-  display: flex;               /* ✅ put link + note side by side */
-  align-items: center;         /* ✅ vertical alignment */
-  gap: 8px;                    /* ✅ spacing between link and note */
-  flex-wrap: wrap;             /* ✅ allow wrapping on small screens */
 }
 
-/* First resource link in bubble */
-.wellness-bubble .resource-link:first-of-type {
-  margin-top: 20px;
-}
-
-/* Last resource link */
-.wellness-bubble .resource-link:last-of-type {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-/* Link */
-.resource-link a {
-  display: inline;             /* ✅ inline instead of block */
+.wellness-plan .resource-link a{
+  display: block;               /* link on its own line */
   color: #bd243f;
   font-weight: 700;
   font-size: 14px;
+  line-height: 1.35;
   text-decoration: none;
-  white-space: nowrap;         /* ✅ keeps link together */
 }
-.resource-link a:hover {
-  text-decoration: underline;
-}
+.wellness-plan .resource-link a:hover{ text-decoration: underline; }
 
-/* Note */
-.resource-note {
+.wellness-plan .resource-link .resource-note{
+  display: block;               /* note on next line under link */
+  margin: 4px 0 0;              /* hugs the link */
   font-size: 14px;
   font-style: italic;
   color: #777;
-  margin: 0;                   /* ✅ snug to link */
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
+/* Link followed by its note → collapse the seam between them */
+.wellness-plan .resource-link:has(a) + .resource-link:has(.resource-note){
+  border-top: 0;                 /* no divider inside a pair */
+  padding-top: 2px;              /* bring note closer */
+  margin-top: -8px;              /* visually “touching” */
+}
 
+/* Note followed by its link (coaching pair) */
+.wellness-plan .resource-link:has(.resource-note) + .resource-link:has(a){
+  border-top: 0;
+  padding-top: 2px;
+  margin-top: -4px;
+}
 
-/* ============================
-   RESOURCE LINKS (alignment fix)
-   ============================ */
-.resource-link,
-.resource-link a,
-.wellness-plan .resource-note {
+/* First/last item in the bubble */
+.wellness-plan .wellness-bubble .resource-link:first-of-type{ margin-top: 18px; }
+.wellness-plan .wellness-bubble .resource-link:last-of-type{ padding-bottom: 0; }
+
+/* Alignment safety */
+.wellness-plan .resource-link,
+.wellness-plan .resource-link a,
+.wellness-plan .resource-link .resource-note{
   margin-left: 0 !important;
   padding-left: 0 !important;
   text-align: left;
 }
+
 
 
 
