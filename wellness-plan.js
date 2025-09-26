@@ -246,9 +246,10 @@ Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     let html = "";
 
     if (keyOrHtml) {
-     const lib = bodyCompData.find(
+const lib = bodyCompData.find(
   b => (b["State"] || "").trim().toLowerCase() === keyOrHtml.trim().toLowerCase()
 );
+
 
       if (lib) {
         html = lib["Blurb"]; // library match
