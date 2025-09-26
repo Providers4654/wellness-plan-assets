@@ -944,12 +944,14 @@ html, body {
 /* Remove any bottom margin from element directly before */
 .wellness-bubble > *:last-child { margin-bottom: 0 !important; }
 
-/* Link styling (resource links only) */
+/* Resource link text */
 .resource-link a {
-  color: #bd243f;   /* don’t override buttons */
+  color: #bd243f;
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
+  display: block;
+  margin-bottom: 2px;   /* tighten link → note spacing */
 }
 .resource-link a:hover { text-decoration: underline; }
 
@@ -961,9 +963,9 @@ html, body {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 2px 0 0 0;   /* only a tiny top margin */
-  display: block;      /* keep it directly under the link */
-  line-height: 1.4;    /* tighter line height */
+  margin: 0;            /* no extra vertical gap */
+  display: block;       /* forces it under the link */
+  line-height: 1.4;     /* neat, compact spacing */
 }
 
 
