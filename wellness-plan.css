@@ -971,6 +971,29 @@ html, body {
   margin-bottom: 0;
 }
 
+
+/* ============================
+   RESOURCE LINKS (alignment fix)
+   ============================ */
+
+/* Normalize all resource link items so they line up flush left */
+.resource-link,
+.resource-link a,
+.wellness-plan .resource-note {
+  display: block;           /* each takes a full line */
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  text-align: left;         /* enforce left edge */
+}
+
+/* Consistent vertical rhythm */
+.resource-link a { margin-bottom: 6px; }
+.wellness-plan .resource-note { margin: 6px 0; }
+
+
+
+
+
 /* ============================
    BUTTONS: SCHEDULE + PRINT
    ============================ */
