@@ -343,7 +343,10 @@ function getPatientIdFromUrl() {
   return parts.pop() || parts.pop();
 }
 
-async function loadPatientData() {
+// ============================
+// Load Patient Data (with retry + DOM ready)
+// ============================
+async function loadPatientData(retryCount = 0) {
   try {
     const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
       fetch(TABS.wellness).then(r => r.text()),
@@ -352,7 +355,7 @@ async function loadPatientData() {
     ]);
 
     const wellnessData = csvToJSON(wellnessRes);
-    const medsData = csvToJSON(medsRes);         // Medication Info tab
+    const medsData = csvToJSON(medsRes);
     const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
@@ -363,11 +366,24 @@ async function loadPatientData() {
     } else {
       console.warn("No patient found for ID:", patientId);
     }
+
+    // ✅ Hide loading overlay once done
+    document.getElementById("loadingOverlay").style.display = "none";
+
   } catch (err) {
-    console.error("Error fetching sheet:", err);
+    if (retryCount < 3) {
+      console.warn("Retrying fetch…", err);
+      setTimeout(() => loadPatientData(retryCount + 1), 500);
+    } else {
+      console.error("Error fetching sheet:", err);
+      document.getElementById("loadingOverlay").textContent =
+        "Error loading plan. Please refresh.";
+    }
   }
 }
 
 
-// --- Run on load ---
-loadPatientData();
+// --- Run after DOM is ready ---
+document.addEventListener("DOMContentLoaded", () => {
+  loadPatientData();
+});
