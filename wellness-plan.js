@@ -359,8 +359,12 @@ async function loadPatientData(retryCount = 0) {
     const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
-    console.log("Patient ID:", patientId);
-    const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
+    console.log("Patient ID from URL:", patientId);
+    console.log("Sample wellness rows:", wellnessData.slice(0,3)); // ✅ safe log
+
+    const patientRows = wellnessData.filter(r =>
+      (r["Patient ID"] || "").trim() === patientId.trim()
+    );
     console.log("Matched rows:", patientRows.length);
 
     if (patientRows.length > 0) {
@@ -368,7 +372,6 @@ async function loadPatientData(retryCount = 0) {
     } else {
       console.warn("No patient found for ID:", patientId);
     }
-
   } catch (err) {
     if (retryCount < 3) {
       console.warn("Retrying fetch…", err);
@@ -378,6 +381,7 @@ async function loadPatientData(retryCount = 0) {
     }
   }
 }
+
 
 // --- Run after DOM is ready ---
 document.addEventListener("DOMContentLoaded", () => {
