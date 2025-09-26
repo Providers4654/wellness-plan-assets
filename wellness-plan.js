@@ -266,29 +266,30 @@ if (bodyCompList) {
     const normalize = s =>
       (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
-    // Library match
+    // Try to find in BodyComp sheet
     const lib = bodyCompData.find(
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
 
     if (lib && lib["Blurb"]) {
-      // 🚨 force raw HTML from BodyComp sheet
+      // 🚨 Insert the Blurb exactly as-is
       html = lib["Blurb"];
     } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      // 🚨 force raw HTML from Wellness sheet cell
+      // 🚨 Treat the wellness sheet cell as raw HTML
       html = keyOrHtml;
     } else {
-      // Plain text only → wrap in editable span
+      // Plain text fallback
       html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
     }
 
-    // 🚨 Always inject directly as HTML
+    // ✅ Direct injection
     bodyCompList.innerHTML = html;
     console.log("🚀 Injected Body Comp HTML:", html);
   } else {
     bodyCompList.innerHTML = "";
   }
 }
+
 
 
 
