@@ -396,9 +396,10 @@ async function loadPatientData(retryCount = 0) {
       }
     }
   } finally {
-    clearTimeout(timeout); // ✅ stop timeout if things succeed
-    if (overlay) overlay.style.display = "none";
-  }
+  clearTimeout(timeout);
+  const overlay = document.getElementById("loadingOverlay");
+  if (overlay) overlay.style.display = "none";
+}
 }
 
 
