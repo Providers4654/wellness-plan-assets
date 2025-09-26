@@ -352,22 +352,23 @@ async function loadPatientData() {
   console.log("🚀 loadPatientData() started");
   try {
     console.log("Fetching sheets...");
-const [wellnessRes, medsRes, lifestyleRes, bodyCompRes] = await Promise.all([
-  fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
-  fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
-  fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
-  fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text())
-]);
+    const [wellnessRes, medsRes, lifestyleRes, bodyCompRes] = await Promise.all([
+      fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text())
+    ]);
     console.log("✅ Fetched all sheets");
 
-const wellnessData = csvToJSON(wellnessRes);
-const medsData = csvToJSON(medsRes);
-const lifestyleData = csvToJSON(lifestyleRes);
-const bodyCompData = csvToJSON(bodyCompRes);
-
+    const wellnessData = csvToJSON(wellnessRes);
+    const medsData = csvToJSON(medsRes);
+    const lifestyleData = csvToJSON(lifestyleRes);
+    const bodyCompData = csvToJSON(bodyCompRes);
 
     console.log("CSV Headers (Wellness):", Object.keys(wellnessData[0] || {}));
-    console.log("Wellness Data Sample:", wellnessData.slice(0, 3));
+    console.log("CSV Headers (Meds):", Object.keys(medsData[0] || {}));
+    console.log("CSV Headers (Lifestyle):", Object.keys(lifestyleData[0] || {}));
+    console.log("CSV Headers (BodyComp):", Object.keys(bodyCompData[0] || {}));
 
     const patientId = getPatientIdFromUrl();
     console.log("Looking for Patient ID:", patientId);
@@ -375,17 +376,19 @@ const bodyCompData = csvToJSON(bodyCompRes);
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
     console.log("Matched rows:", patientRows);
 
-if (patientRows.length > 0) {
-  console.log("✅ Injecting data...");
-  injectPatientData(patientRows, lifestyleData, medsData, bodyCompData);
-} else {
-  console.warn("⚠️ No patient found for ID:", patientId);
-}
-
+    if (patientRows.length > 0) {
+      console.log("✅ Injecting data...");
+      console.log("Patient Body Comp value:", patientRows[0]["Body Comp"]);
+      console.log("BodyCompData States:", bodyCompData.map(b => b["State"]));
+      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData);
+    } else {
+      console.warn("⚠️ No patient found for ID:", patientId);
+    }
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 // ============================
 // 6. Bootstrap: always run loadPatientData
