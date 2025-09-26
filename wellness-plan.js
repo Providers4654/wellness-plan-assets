@@ -70,10 +70,19 @@ if (coachingNote) coachingNote.textContent = cssVar("--coaching-note");
 const followBtn = document.getElementById("followupText");
 if (followBtn) followBtn.textContent = cssVar("--followup-text");
 
-document.querySelector(".title-plan").textContent = cssVar("--title-plan");
-document.querySelector(".title-summary").textContent = cssVar("--title-summary");
-document.querySelector(".title-lifestyle").textContent = cssVar("--title-lifestyle");
-document.querySelector(".title-goals").textContent = cssVar("--title-goals");
+function setTextIfAvailable(selector, cssVarName, fallback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    const val = cssVar(cssVarName);
+    el.textContent = val || fallback;
+  }
+}
+
+setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
+setTextIfAvailable(".title-summary", "--title-summary", "Summary");
+setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Habits");
+setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
+
 
 const intro = document.querySelector(".intro-text");
 if (intro) intro.textContent = cssVar("--intro-message");
@@ -331,21 +340,26 @@ function parseCSVLine(line) {
   const result = [];
   let cur = "";
   let inQuotes = false;
+
   for (let i = 0; i < line.length; i++) {
     const char = line[i];
     if (char === '"' && line[i + 1] === '"') {
-      cur += '"'; i++;
+      cur += '"'; // escaped quote
+      i++;
     } else if (char === '"') {
-      inQuotes = !inQuotes;
+      inQuotes = !inQuotes; // toggle state
     } else if (char === "," && !inQuotes) {
-      result.push(cur); cur = "";
+      result.push(cur);
+      cur = "";
     } else {
       cur += char;
     }
   }
   result.push(cur);
+
   return result;
 }
+
 
 function getPatientIdFromUrl() {
   const parts = window.location.pathname.split("/");
