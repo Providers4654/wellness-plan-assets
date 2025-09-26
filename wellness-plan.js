@@ -209,21 +209,28 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     }
   }
 
-  // Body comp
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList && bodyCompTitle) {
-    const key = (rows[0]["Body Comp"] || "").trim();
-    if (key) {
-      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-      const html = compRow && compRow["Blurb"]
-        ? `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`
-        : `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-      bodyCompList.innerHTML = html;
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+
+if (bodyCompList && bodyCompTitle) {
+  const firstRow = rows[0];
+  const key = (firstRow["Body Comp"] || "").trim();
+
+  if (key) {
+    const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+    let html = "";
+    if (compRow && compRow["Blurb"]) {
+      html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
     } else {
-      if (bodyCompTitle) bodyCompTitle.remove();
-      bodyCompList.remove();
+      html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
     }
+    bodyCompList.innerHTML = html;
+  } else {
+    if (bodyCompTitle) bodyCompTitle.remove();
+    bodyCompList.remove();
   }
+}
+
 
   // Target goals
   const targetGoalsList = document.getElementById("targetGoals");
