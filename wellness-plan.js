@@ -257,6 +257,12 @@ if (bodyCompList) {
     const normalize = s =>
       (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
+
+console.log("Patient Body Comp value:", keyOrHtml);
+console.log("BodyCompData States:", bodyCompData.map(b => Object.keys(b)));
+console.log("First few BodyCompData rows:", bodyCompData.slice(0, 3));
+
+    
     const lib = bodyCompData.find(
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
