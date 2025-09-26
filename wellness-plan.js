@@ -217,14 +217,19 @@ if (lifestyleList) {
   let tips = rows
     .map(r => r["Lifestyle Tips"])
     .filter(Boolean)
-    .flatMap(t => t.split(",").map(x => x.trim()))  // split multi-selects
+    .flatMap(t => t.split(",").map(x => x.trim()))
     .filter(Boolean);
 
   // Remove duplicates
   tips = [...new Set(tips)];
 
-  // Build list items with blurbs
-  lifestyleList.innerHTML = tips.map(tip => {
+  // Sort by order in library tab
+  const orderedTips = lifestyleData
+    .map(l => l["Tip"])           // take library order
+    .filter(t => tips.includes(t)); // only keep chosen tips
+
+  // Build list items with blurbs in library order
+  lifestyleList.innerHTML = orderedTips.map(tip => {
     const lib = lifestyleData.find(l => l["Tip"] === tip);
     return `
       <li>
@@ -234,6 +239,7 @@ if (lifestyleList) {
     `;
   }).join("");
 }
+
 
 
   // --- Visit Timeline ---
