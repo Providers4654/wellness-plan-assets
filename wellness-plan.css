@@ -935,8 +935,8 @@ html, body {
    RESOURCE LINKS (bottom of bubbles)
    ============================ */
 .resource-link {
-  margin-top: 24px;        /* space above each block */
-  padding-top: 16px;
+  margin: 16px 0 0;       /* spacing above each block */
+  padding: 0;
   border-top: 1px solid #eee;
   display: block;
 }
@@ -953,14 +953,14 @@ html, body {
   margin-bottom: 0 !important;
 }
 
-/* Resource link text */
+/* Link styling */
 .resource-link a {
   color: #bd243f;
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
-  display: block;         /* ensures note falls below */
-  margin-bottom: 2px;     /* tight link→note spacing */
+  display: block;
+  margin: 0;              /* kill spacing below */
 }
 .resource-link a:hover {
   text-decoration: underline;
@@ -971,12 +971,12 @@ html, body {
   margin-top: 10px;
 }
 
-/* Note text */
+/* Note text — sits directly under link */
 .wellness-plan .resource-note {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 0;              /* no vertical gaps */
+  margin: 2px 0 0;        /* just a hairline gap */
   display: block;
   line-height: 1.4;
 }
