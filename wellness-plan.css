@@ -935,10 +935,10 @@ html, body {
    RESOURCE LINKS (bottom of bubbles)
    ============================ */
 .resource-link {
-  margin-top: 35px;          /* same gap above divider everywhere */
-  padding-top: 24px;
-  border-top: 1px solid #eee;
-  display: flow-root;
+  margin-top: 8px;      /* smaller gap between stacked links */
+  padding-top: 0;       /* remove extra space above */
+  border-top: none;     /* only keep divider if you want it globally */
+  display: block;       /* no need for flow-root */
 }
 
 /* Remove any bottom margin from element directly before */
