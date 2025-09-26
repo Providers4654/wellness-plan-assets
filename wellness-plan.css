@@ -961,9 +961,11 @@ html, body {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin-left: 8px;
-  display: inline-block;
+  margin: 2px 0 0 0;   /* only a tiny top margin */
+  display: block;      /* keep it directly under the link */
+  line-height: 1.4;    /* tighter line height */
 }
+
 
 /* Testosterone links container variant */
 .resource-link.med {
