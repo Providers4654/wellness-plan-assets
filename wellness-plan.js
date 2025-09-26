@@ -255,42 +255,44 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     `;
   }
 
-  // --- Body Comp ---
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList) {
-    const firstRow = rows[0];
-    const keyOrHtml = firstRow["Body Comp"]; 
-    let html = "";
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+if (bodyCompList) {
+  const firstRow = rows[0];
+  const keyOrHtml = firstRow["Body Comp"]; 
+  let html = "";
 
-    if (keyOrHtml) {
-      const normalize = s =>
-        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
+  if (keyOrHtml) {
+    const normalize = s =>
+      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
-      const lib = bodyCompData.find(
-        b => normalize(b["State"]) === normalize(keyOrHtml)
-      );
+    const lib = bodyCompData.find(
+      b => normalize(b["State"]) === normalize(keyOrHtml)
+    );
 
-      if (lib && lib["Blurb"]) {
-        html = `<li>${lib["Blurb"]}</li>`;
-      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-        html = `<li>${keyOrHtml}</li>`;
-      } else {
-        html = `<li><span class="editable"><strong>${keyOrHtml}</strong></span></li>`;
-      }
-
-      if (html.includes("<ul")) {
-        const temp = document.createElement("div");
-        temp.innerHTML = html;
-        const innerLis = temp.querySelector("ul")?.innerHTML;
-        if (innerLis) html = innerLis;
-      }
-
-      bodyCompList.innerHTML = html;
-      console.log("🚀 Injected Body Comp HTML:", html);
+    if (lib && lib["Blurb"]) {
+      html = lib["Blurb"];   // ✅ no wrapper
+    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+      html = keyOrHtml;      // ✅ no wrapper
     } else {
-      bodyCompList.innerHTML = "";
+      html = `<li><span class="editable"><strong>${keyOrHtml}</strong></span></li>`;
     }
+
+    // ✅ If blurb has <ul>, flatten to <li> only
+    if (html.includes("<ul")) {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      const innerLis = temp.querySelector("ul")?.innerHTML;
+      if (innerLis) html = innerLis;
+    }
+
+    bodyCompList.innerHTML = html;
+    console.log("🚀 Injected Body Comp HTML:", html);
+  } else {
+    bodyCompList.innerHTML = "";
   }
+}
+
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
