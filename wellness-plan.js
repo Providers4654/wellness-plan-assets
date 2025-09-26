@@ -270,30 +270,22 @@ if (bodyCompList) {
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
 
-    if (lib) {
-      html = decodeHTML(lib["Blurb"]);
+    if (lib && lib["Blurb"]) {
+      html = decodeHTML(lib["Blurb"]);       // ✅ library match
     } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      // ✅ render raw HTML exactly as written
-      html = decodeHTML(keyOrHtml);
+      html = decodeHTML(keyOrHtml);          // ✅ render raw HTML from sheet
     } else {
-      html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
+      html = keyOrHtml;                      // ✅ plain text fallback
     }
 
-    // ✅ Always normalize: if user pasted <ul>…</ul>, strip wrapper so we only keep <li> tags
-    if (html.includes("<ul")) {
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      html = temp.querySelector("ul")?.innerHTML || html;
-    }
-
-    // ✅ Inject final HTML directly
-    bodyCompList.innerHTML = html;
+    bodyCompList.innerHTML = html;           // ✅ inject as-is
     console.log("🚀 Injected Body Comp HTML:", html);
 
   } else {
     bodyCompList.innerHTML = "";
   }
 }
+
 
 
   // --- Target Goals ---
