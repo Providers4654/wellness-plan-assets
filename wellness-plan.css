@@ -994,6 +994,18 @@ html, body {
 
 
 
+/* Force all resource links and notes to be left aligned */
+.wellness-plan .resource-link,
+.wellness-plan .resource-link a,
+.wellness-plan .resource-link .resource-note {
+  text-align: left !important;
+  display: block;         /* keeps them stacked */
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+
+
 
 /* ============================
    BUTTONS: SCHEDULE + PRINT
