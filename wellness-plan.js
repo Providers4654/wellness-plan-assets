@@ -344,45 +344,9 @@ function getPatientIdFromUrl() {
 }
 
 // ============================
-// Overlay Helpers
-// ============================
-function setOverlayMessage(msg, color = "#444", bg = "#fff") {
-  const msgBox = document.querySelector("#loadingOverlay .loading-message");
-  const overlay = document.getElementById("loadingOverlay");
-  if (msgBox) msgBox.textContent = msg;
-  if (overlay) {
-    overlay.style.background = bg;
-    if (msgBox) msgBox.style.color = color;
-  }
-}
-
-function hideOverlay() {
-  const overlay = document.getElementById("loadingOverlay");
-  if (!overlay) return;
-  overlay.style.transition = "opacity 0.4s";
-  overlay.style.opacity = "0";
-  setTimeout(() => (overlay.style.display = "none"), 400);
-}
-
-
-// ============================
-// Load Patient Data (with retry + overlay fixes)
+// Load Patient Data (clean, no overlay)
 // ============================
 async function loadPatientData(retryCount = 0) {
-  const overlay = document.getElementById("loadingOverlay");
-
-  // ⏱ Hard timeout (10 seconds max wait)
-  const timeout = setTimeout(() => {
-    if (overlay && overlay.style.display !== "none") {
-      setOverlayMessage("Plan is taking longer than expected. Please refresh.", "#bd243f");
-      console.error("⏱ Hard timeout reached — Google Sheets fetch too slow.");
-
-      // 👇 Force-hide overlay if still stuck
-hideOverlay();
-
-    }
-  }, 10000);
-
   try {
     const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
       fetch(TABS.wellness).then(r => r.text()),
@@ -401,17 +365,8 @@ hideOverlay();
 
     if (patientRows.length > 0) {
       injectPatientData(patientRows, lifestyleData, medsData);
-
-      // ✅ SUCCESS → clear timeout + fade out overlay
-      clearTimeout(timeout);
-      if (overlay) {
-        overlay.style.transition = "opacity 0.4s";
-        overlay.style.opacity = "0";
-        setTimeout(() => (overlay.style.display = "none"), 400);
-      }
     } else {
       console.warn("No patient found for ID:", patientId);
-      setOverlayMessage("No plan found for this patient ID.", "#bd243f");
     }
 
   } catch (err) {
@@ -420,7 +375,6 @@ hideOverlay();
       setTimeout(() => loadPatientData(retryCount + 1), 500);
     } else {
       console.error("Error fetching sheet:", err);
-      setOverlayMessage("Error loading plan. Please refresh.", "#bd243f");
     }
   }
 }
@@ -429,3 +383,4 @@ hideOverlay();
 document.addEventListener("DOMContentLoaded", () => {
   loadPatientData();
 });
+
