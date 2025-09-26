@@ -100,13 +100,18 @@ document.addEventListener("click", (e) => {
   const content = row?.querySelector(".learn-more-content");
   if (!content) return;
 
+  // Close any other open blurbs
   document.querySelectorAll(".learn-more-content.expanded")
     .forEach((openContent) => {
-      if (openContent !== content) openContent.classList.remove("expanded");
+      if (openContent !== content) {
+        openContent.classList.remove("expanded");
+      }
     });
 
+  // Toggle this one
   content.classList.toggle("expanded");
 });
+
 
 // ============================
 // 4. Build Section Content From Sheet
@@ -143,12 +148,13 @@ const medHtml = `
   <li class="med-row">
     <div class="med-name">
       <strong>${med}</strong>
-      <span class="info-icon" title="More info">ℹ</span>
+      ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
     </div>
     <div class="dose">${dose}</div>
     ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
   </li>
 `;
+
 
 
   // Check if category is Supplement or not
