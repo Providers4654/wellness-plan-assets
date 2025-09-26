@@ -259,32 +259,34 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
   const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; // "In State", "Out of State", or raw HTML
+  const keyOrHtml = firstRow["Body Comp"]; 
   let html = "";
 
   if (keyOrHtml) {
     const normalize = s =>
       (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
+    // Try to match against library state
     const lib = bodyCompData.find(
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
 
     if (lib && lib["Blurb"]) {
-      html = decodeHTML(lib["Blurb"]);       // ✅ library match
-    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      html = decodeHTML(keyOrHtml);          // ✅ render raw HTML from sheet
+      // ✅ render BodyComp sheet blurbs as raw HTML
+      html = decodeHTML(lib["Blurb"]);
     } else {
-      html = keyOrHtml;                      // ✅ plain text fallback
+      // ✅ render inline HTML typed in Wellness sheet
+      html = decodeHTML(keyOrHtml);
     }
 
-    bodyCompList.innerHTML = html;           // ✅ inject as-is
+    // ✅ Inject raw HTML (no extra <li> wrappers)
+    bodyCompList.innerHTML = html;
     console.log("🚀 Injected Body Comp HTML:", html);
-
   } else {
     bodyCompList.innerHTML = "";
   }
 }
+
 
 
 
