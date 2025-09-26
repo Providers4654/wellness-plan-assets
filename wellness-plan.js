@@ -255,36 +255,46 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     `;
   }
 
-  // --- Body Comp ---
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList) {
-    const firstRow = rows[0];
-    const keyOrHtml = firstRow["Body Comp"]; // "In State", "Out of State", or inline HTML
-    let html = "";
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+if (bodyCompList) {
+  const firstRow = rows[0];
+  const keyOrHtml = firstRow["Body Comp"]; // "In State", "Out of State", or raw HTML
+  let html = "";
 
-    if (keyOrHtml) {
-      const normalize = s =>
-        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
+  if (keyOrHtml) {
+    const normalize = s =>
+      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
-      const lib = bodyCompData.find(
-        b => normalize(b["State"]) === normalize(keyOrHtml)
-      );
+    const lib = bodyCompData.find(
+      b => normalize(b["State"]) === normalize(keyOrHtml)
+    );
 
-if (lib) {
-  html = decodeHTML(lib["Blurb"]);
-} else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-  html = decodeHTML(keyOrHtml);
-} else {
-  html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
+    if (lib) {
+      html = decodeHTML(lib["Blurb"]);
+    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+      // ✅ render raw HTML exactly as written
+      html = decodeHTML(keyOrHtml);
+    } else {
+      html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
+    }
+
+    // ✅ Always normalize: if user pasted <ul>…</ul>, strip wrapper so we only keep <li> tags
+    if (html.includes("<ul")) {
+      const temp = document.createElement("div");
+      temp.innerHTML = html;
+      html = temp.querySelector("ul")?.innerHTML || html;
+    }
+
+    // ✅ Inject final HTML directly
+    bodyCompList.innerHTML = html;
+    console.log("🚀 Injected Body Comp HTML:", html);
+
+  } else {
+    bodyCompList.innerHTML = "";
+  }
 }
 
-// ✅ inject directly, don’t wrap in <li> again
-bodyCompList.innerHTML = html;
-
-    } else {
-      bodyCompList.innerHTML = "";
-    }
-  }
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
