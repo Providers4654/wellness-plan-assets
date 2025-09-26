@@ -290,11 +290,14 @@ if (lifestyleBlock) {
 function normalizeCellText(text) {
   if (!text) return "";
   return text
-    // convert real line breaks to <br>
+    // Google Sheets sometimes uses carriage return entities
+    .replace(/&#10;/g, "<br>")
+    // real line breaks
     .replace(/(\r\n|\r|\n)/g, "<br>")
-    // don’t double-escape existing <br>
+    // already-typed <br> (don’t double escape)
     .replace(/&lt;br&gt;/g, "<br>");
 }
+
 
 
 // --- Body Comp ---
