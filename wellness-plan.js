@@ -367,6 +367,11 @@ async function loadPatientData(retryCount = 0) {
     if (overlay && overlay.style.display !== "none") {
       setOverlayMessage("Plan is taking longer than expected. Please refresh.", "#bd243f");
       console.error("⏱ Hard timeout reached — Google Sheets fetch too slow.");
+
+      // 👇 Force-hide overlay even if fetch hangs
+      overlay.style.transition = "opacity 0.4s";
+      overlay.style.opacity = "0";
+      setTimeout(() => (overlay.style.display = "none"), 400);
     }
   }, 10000);
 
@@ -382,7 +387,7 @@ async function loadPatientData(retryCount = 0) {
     const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
-    console.log("Patient ID:", patientId); // 🔍 Debug
+    console.log("Patient ID:", patientId);
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
     console.log("Matched rows:", patientRows.length);
 
@@ -397,7 +402,6 @@ async function loadPatientData(retryCount = 0) {
     if (retryCount < 3) {
       console.warn("Retrying fetch…", err);
       setTimeout(() => loadPatientData(retryCount + 1), 500);
-      return; // prevent clearing overlay too soon
     } else {
       console.error("Error fetching sheet:", err);
       setOverlayMessage("Error loading plan. Please refresh.", "#bd243f");
@@ -416,3 +420,4 @@ async function loadPatientData(retryCount = 0) {
 document.addEventListener("DOMContentLoaded", () => {
   loadPatientData();
 });
+
