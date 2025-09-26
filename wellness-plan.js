@@ -246,6 +246,25 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     console.log("✅ Visit Timeline injected", firstRow);
   }
 
+
+
+// --- Lifestyle Tips ---
+const lifestyleBlock = document.getElementById("lifestyleTips");
+if (lifestyleBlock) {
+  const patientId = rows[0]["Patient ID"];
+  const tipRow = lifestyleData.find(r => (r["Patient ID"] || "").trim() === patientId);
+  if (tipRow && tipRow["Tips"]) {
+    lifestyleBlock.innerHTML = normalizeCellText(tipRow["Tips"]);
+    console.log("✅ Injected Lifestyle Tips");
+  } else {
+    lifestyleBlock.innerHTML = "";
+    console.log("ℹ️ No Lifestyle Tips found");
+  }
+}
+
+
+  
+
   // --- Helper: convert newlines into <br>
 function normalizeCellText(text) {
   if (!text) return "";
@@ -261,17 +280,22 @@ function normalizeCellText(text) {
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
   const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; 
+  const key = (firstRow["Body Comp"] || "").trim(); // e.g. "In State"
+  
+  // Try to match against bodyCompData
   let html = "";
-
-  if (keyOrHtml) {
-    html = `<span class="editable">${keyOrHtml}</span>`;
-    bodyCompList.innerHTML = html;
-    console.log("🚀 Injected Body Comp HTML:", html);
-  } else {
-    bodyCompList.innerHTML = "";
+  const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+  if (compRow && compRow["Blurb"]) {
+    html = `<span class="editable">${normalizeCellText(compRow["Blurb"])}</span>`;
+  } else if (key) {
+    // fallback: just show raw key
+    html = `<span class="editable">${key}</span>`;
   }
+
+  bodyCompList.innerHTML = html;
+  console.log("🚀 Injected Body Comp HTML:", html);
 }
+
 
 // --- Target Goals ---
 const targetGoalsList = document.getElementById("targetGoals");
