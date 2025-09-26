@@ -32,27 +32,28 @@ function renderAsListOrHTML(text) {
 
   // If already contains HTML tags, return as-is
   if (/<[a-z][\s\S]*>/i.test(text)) {
-    return text;
+    return `<span class="editable">${text}</span>`;
   }
 
-  // Otherwise, split by line breaks
+  // Split by line breaks
   const parts = text.split(/\r?\n/).map(p => p.trim()).filter(Boolean);
 
   if (parts.length === 0) return "";
 
   let html = "";
   if (parts.length === 1) {
-    // Just one line — plain paragraph
-    html = `<p>${parts[0]}</p>`;
+    // Single line
+    html = `<li><span class="editable">${parts[0]}</span></li>`;
   } else {
-    // First line as paragraph, rest as list
+    // First line as editable paragraph
     const firstLine = parts.shift();
-    const listItems = parts.map(p => `<li>${p}</li>`).join("");
-    html = `<p>${firstLine}</p><ul>${listItems}</ul>`;
+    const listItems = parts.map(p => `<li><span class="editable">${p}</span></li>`).join("");
+    html = `<li><span class="editable">${firstLine}</span></li>${listItems}`;
   }
 
   return html;
 }
+
 
 
 
@@ -306,10 +307,11 @@ if (bodyCompList) {
 if (lib && lib["Blurb"]) {
   html = renderAsListOrHTML(lib["Blurb"]);
 } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-  html = keyOrHtml; // already HTML
+  html = `<li><span class="editable">${keyOrHtml}</span></li>`;
 } else {
   html = renderAsListOrHTML(keyOrHtml);
 }
+
 
 
     bodyCompList.innerHTML = html;
