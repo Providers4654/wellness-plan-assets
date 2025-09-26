@@ -8,6 +8,7 @@ const TABS = {
   wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv",
   meds: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
   lifestyle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv"
+  bodycomp: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv"
 }; 
 
 // Helper
@@ -109,7 +110,7 @@ document.addEventListener("click", (e) => {
 // ============================
 // 4. Build Section Content From Sheet
 // ============================
-function injectPatientData(rows, lifestyleData, medsData) {
+function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
 
@@ -119,6 +120,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
+  // --- Group meds & supplements by category ---
   const medsByCategory = {
     Daily: { meds: [], supps: [] },
     Evening: { meds: [], supps: [] },
@@ -161,6 +163,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
     }
   });
 
+  // --- Inject Meds & Supplements ---
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     const listId = {
       Daily: "dailyMeds",
@@ -195,6 +198,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
     }
   });
 
+  // --- Lifestyle Tips ---
   const lifestyleList = document.getElementById("lifestyleTips");
   if (lifestyleList) {
     let tips = rows
@@ -214,13 +218,14 @@ function injectPatientData(rows, lifestyleData, medsData) {
       if (lib) {
         return `<li><strong>${tip}</strong>${lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}</li>`;
       } else if (/<[a-z][\s\S]*>/i.test(tip)) {
-        return `<li>${tip}</li>`;
+        return `<li>${tip}</li>`; // raw HTML entered directly
       } else {
         return `<li><strong>${tip}</strong></li>`;
       }
     }).join("");
   }
 
+  // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
     const firstRow = rows[0];
@@ -230,14 +235,31 @@ function injectPatientData(rows, lifestyleData, medsData) {
     `;
   }
 
+  // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList) {
     const firstRow = rows[0];
-    bodyCompList.innerHTML = firstRow["Body Comp"]
-      ? `<li><span class="editable">${firstRow["Body Comp"]}</span></li>`
-      : "";
+    const keyOrHtml = firstRow["Body Comp"]; // Could be "In State", "Out of State", or raw HTML
+    let html = "";
+
+    if (keyOrHtml) {
+      const lib = bodyCompData.find(b => b["Key"].trim().toLowerCase() === keyOrHtml.trim().toLowerCase());
+
+      if (lib) {
+        html = lib["Blurb"]; // library match
+      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+        html = keyOrHtml; // raw HTML entered directly in patient row
+      } else {
+        html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`; // fallback plain text
+      }
+
+      bodyCompList.innerHTML = `<li>${html}</li>`;
+    } else {
+      bodyCompList.innerHTML = "";
+    }
   }
 
+  // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList) {
     const firstRow = rows[0];
@@ -246,6 +268,7 @@ function injectPatientData(rows, lifestyleData, medsData) {
       : "";
   }
 }
+
 
 // ============================
 // 5. Fetch & Match Patient Rows
@@ -298,16 +321,18 @@ async function loadPatientData() {
   console.log("🚀 loadPatientData() started");
   try {
     console.log("Fetching sheets...");
-    const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
-      fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text())
-    ]);
+const [wellnessRes, medsRes, lifestyleRes, bodyCompRes] = await Promise.all([
+  fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text())
+]);
     console.log("✅ Fetched all sheets");
 
-    const wellnessData = csvToJSON(wellnessRes);
-    const medsData = csvToJSON(medsRes);
-    const lifestyleData = csvToJSON(lifestyleRes);
+const wellnessData = csvToJSON(wellnessRes);
+const medsData = csvToJSON(medsRes);
+const lifestyleData = csvToJSON(lifestyleRes);
+const bodyCompData = csvToJSON(bodyCompRes);
 
     console.log("CSV Headers (Wellness):", Object.keys(wellnessData[0] || {}));
     console.log("Wellness Data Sample:", wellnessData.slice(0, 3));
