@@ -377,27 +377,30 @@ html, body {
   gap: 4px;
 }
 
-/* Small outlined circle info icon */
+/* Outlined info icon (slightly superscript) */
 .wellness-plan .info-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 15px;
-  height: 15px;
-  font-size: 10px;
+  width: 14px;
+  height: 14px;
+  font-size: 9px;
   font-weight: bold;
-  color: #666;
-  border: 1px solid #aaa;
+  color: #555;
+  border: 1px solid #bbb;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  vertical-align: super;
-  background: transparent;   /* no fill */
+  margin-left: 3px;
+
+  /* Nudge upward and right */
+  transform: translate(1px, -3px);
+
   transition: border 0.2s ease, color 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  border-color: #555;
+  border-color: #666;
   color: #222;
 }
 
