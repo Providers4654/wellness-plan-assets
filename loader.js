@@ -18,7 +18,8 @@
   fetch(`https://providers4654.github.io/wellness-plan-assets/wellness-plan.html?v=${version}&t=${ts}`)
     .then(res => res.text())
     .then(html => {
-      document.body.innerHTML = html;
+      document.getElementById("wellness-root").innerHTML = html;
+
 
       // === 2. Load CSS after HTML ===
       const cssLink = document.createElement("link");
