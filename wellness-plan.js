@@ -27,23 +27,33 @@ function decodeHTML(str) {
 // ============================
 // Helper: render text as list if it has line breaks
 // ============================
-function renderAsListOrHTML(value) {
-  if (!value) return "";
+function renderAsListOrHTML(text) {
+  if (!text) return "";
 
-  // If raw HTML is pasted, render directly
-  if (/<[a-z][\s\S]*>/i.test(value)) return value;
-
-  // Otherwise, split on newlines and make bullets
-  const lines = value.split(/\n+/).map(l => l.trim()).filter(Boolean);
-
-  if (lines.length > 1) {
-    const first = `<p>${lines.shift()}</p>`; // intro text
-    const list = `<ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`;
-    return first + list;
+  // If already contains HTML tags, return as-is
+  if (/<[a-z][\s\S]*>/i.test(text)) {
+    return text;
   }
 
-  return `<p>${lines[0]}</p>`;
+  // Otherwise, split by line breaks
+  const parts = text.split(/\r?\n/).map(p => p.trim()).filter(Boolean);
+
+  if (parts.length === 0) return "";
+
+  let html = "";
+  if (parts.length === 1) {
+    // Just one line — plain paragraph
+    html = `<p>${parts[0]}</p>`;
+  } else {
+    // First line as paragraph, rest as list
+    const firstLine = parts.shift();
+    const listItems = parts.map(p => `<li>${p}</li>`).join("");
+    html = `<p>${firstLine}</p><ul>${listItems}</ul>`;
+  }
+
+  return html;
 }
+
 
 
 
@@ -293,11 +303,14 @@ if (bodyCompList) {
       b => normalize(b["State"]) === normalize(keyOrHtml)
     );
 
-    if (lib && lib["Blurb"]) {
-      html = renderAsListOrHTML(lib["Blurb"]);
-    } else {
-      html = renderAsListOrHTML(keyOrHtml);
-    }
+if (lib && lib["Blurb"]) {
+  html = renderAsListOrHTML(lib["Blurb"]);
+} else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+  html = keyOrHtml; // already HTML
+} else {
+  html = renderAsListOrHTML(keyOrHtml);
+}
+
 
     bodyCompList.innerHTML = html;
     console.log("🚀 Injected Body Comp HTML:", html);
