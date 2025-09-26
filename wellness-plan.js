@@ -258,16 +258,28 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     }
   });
 
-  // --- Visit Timeline ---
-  const visitTimelineList = document.getElementById("visitTimeline");
-  if (visitTimelineList) {
-    const firstRow = rows[0];
+// --- Visit Timeline ---
+const visitWrapper = document.getElementById("visitTimelineTitle")?.closest("div.section-wrapper");
+const visitTimelineList = document.getElementById("visitTimeline");
+
+if (visitTimelineList && visitWrapper) {
+  const firstRow = rows[0];
+  const prev = firstRow["Previous Visit"] || "";
+  const next = firstRow["Next Visit"] || "";
+
+  if (prev || next) {
     visitTimelineList.innerHTML = `
-      <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${firstRow["Previous Visit"] || ""}</span></li>
-      <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${firstRow["Next Visit"] || ""}</span></li>
+      ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
+      ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
     `;
-    console.log("✅ Visit Timeline injected", firstRow);
+    console.log("✅ Injected Visit Timeline");
+  } else {
+    document.getElementById("visitTimelineTitle").remove();
+    visitTimelineList.remove();
+    console.log("🗑 Removed Visit Timeline (no visits)");
   }
+}
+
 
 
 
@@ -310,34 +322,30 @@ if (lifestyleBlock) {
 
 
 // --- Body Comp ---
+const bodyCompTitle = document.getElementById("bodyCompTitle");
 const bodyCompList = document.getElementById("bodyComp");
-if (bodyCompList) {
+
+if (bodyCompList && bodyCompTitle) {
   const firstRow = rows[0];
   const key = (firstRow["Body Comp"] || "").trim();
 
-  let html = "";
-  const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-  if (compRow && compRow["Blurb"]) {
-    html = `
-      <ul class="goals-list">
-        <li>
-          <span class="editable">${normalizeCellText(compRow["Blurb"])}</span>
-        </li>
-      </ul>
-    `;
-  } else if (key) {
-    html = `
-      <ul class="goals-list">
-        <li>
-          <span class="editable">${normalizeCellText(key)}</span>
-        </li>
-      </ul>
-    `;
+  if (key) {
+    const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+    let html = "";
+    if (compRow && compRow["Blurb"]) {
+      html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+    } else {
+      html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+    }
+    bodyCompList.innerHTML = html;
+    console.log("✅ Injected Body Comp");
+  } else {
+    bodyCompTitle.remove();
+    bodyCompList.remove();
+    console.log("🗑 Removed Body Comp (empty cell)");
   }
-
-  bodyCompList.innerHTML = html;
-  console.log("🚀 Injected Body Comp HTML (editable):", html);
 }
+
 
 
 
@@ -345,17 +353,19 @@ if (bodyCompList) {
 
 
 // --- Target Goals ---
+const targetTitle = document.getElementById("targetTitle");
 const targetGoalsList = document.getElementById("targetGoals");
-if (targetGoalsList) {
+
+if (targetGoalsList && targetTitle) {
   const firstRow = rows[0];
   if (firstRow["Target Goals"]) {
     targetGoalsList.innerHTML = `<li><span class="editable">${firstRow["Target Goals"]}</span></li>`;
+    console.log("✅ Injected Target Goals");
   } else {
-    targetGoalsList.innerHTML = "";
+    targetTitle.remove();
+    targetGoalsList.remove();
+    console.log("🗑 Removed Target Goals (empty cell)");
   }
-}
-
-  console.log("🏁 injectPatientData END");
 }
 
 
