@@ -459,6 +459,14 @@ html, body {
   }
 }
 
+/* Medium desktops/laptops (~601px to ~1200px) */
+@media (min-width: 601px) and (max-width: 1200px) {
+  .wellness-plan .wellness-bubble {
+    padding: 56px 24px 28px !important; /* more top breathing room */
+  }
+}
+
+
 
 
 
