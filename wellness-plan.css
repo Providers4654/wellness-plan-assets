@@ -374,23 +374,33 @@ html, body {
 .med-name {
   display: inline-flex;
   align-items: flex-start;   /* keeps ℹ slightly lifted */
-  gap: 4px;                  /* space between text and icon */
+  gap: 6px;                  /* space between text and icon */
 }
 
-/* The clickable info icon */
+/* The clickable info icon (circled) */
 .wellness-plan .info-icon {
-  font-size: 12px;           /* small but readable */
-  color: #999;               /* light gray by default */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  font-size: 11px;
+  font-weight: bold;
+  color: #777;
+  background: #f1f3f5;       /* light gray circle */
+  border-radius: 50%;        /* makes it a circle */
+  border: 1px solid #ccc;    /* subtle border */
   cursor: pointer;
-  vertical-align: super;     /* footnote-like lift */
+  vertical-align: super;     /* slight lift next to med name */
   line-height: 1;
-  margin-top: 1px;           /* tweak for baseline alignment */
-  opacity: 0.85;
-  transition: color 0.2s ease, opacity 0.2s ease;
+  opacity: 0.9;
+  transition: background 0.2s ease, color 0.2s ease, border 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  color: #555;               /* darken on hover */
+  background: #e2e6ea;
+  color: #333;
+  border-color: #aaa;
   opacity: 1;
 }
 
@@ -412,6 +422,7 @@ html, body {
 .learn-more-content.expanded {
   display: block;
 }
+
 
 
 
