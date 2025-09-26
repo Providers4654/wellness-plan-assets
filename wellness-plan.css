@@ -935,20 +935,20 @@ html, body {
    RESOURCE LINKS (bottom of bubbles)
    ============================ */
 .resource-link {
-  margin-top: 8px;        /* light spacing between blocks */
-  padding-top: 0;         /* no excess padding */
-  border-top: none;       /* remove divider by default */
+  margin-top: 24px;        /* space above each block */
+  padding-top: 16px;
+  border-top: 1px solid #eee;
   display: block;
 }
 
-/* First resource link in a section: add divider if needed */
-.wellness-bubble .resource-link:first-of-type {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #eee;
+/* Compact variant for stacked med links (no divider) */
+.resource-link.med {
+  margin-top: 8px;
+  padding-top: 0;
+  border-top: none;
 }
 
-/* Remove any bottom margin from the last element in bubble */
+/* Remove extra margin at bottom of last bubble child */
 .wellness-bubble > *:last-child {
   margin-bottom: 0 !important;
 }
@@ -959,19 +959,19 @@ html, body {
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
-  display: block;
-  margin-bottom: 2px;     /* tight spacing above note */
+  display: block;         /* ensures note falls below */
+  margin-bottom: 2px;     /* tight link→note spacing */
 }
 .resource-link a:hover {
   text-decoration: underline;
 }
 
-/* Extra spacing for buttons only */
+/* Buttons in resource links */
 .resource-link .schedule-followup-btn {
   margin-top: 10px;
 }
 
-/* Note text (sits directly under link) */
+/* Note text */
 .wellness-plan .resource-note {
   font-size: 14px;
   color: #777;
@@ -979,12 +979,6 @@ html, body {
   margin: 0;              /* no vertical gaps */
   display: block;
   line-height: 1.4;
-}
-
-/* Special variant: Testosterone links container */
-.resource-link.med {
-  margin-top: 4px;
-  margin-bottom: 0;
 }
 
 /* ============================
@@ -997,7 +991,6 @@ html, body {
   padding-left: 0 !important;
   text-align: left;
 }
-
 
 
 
