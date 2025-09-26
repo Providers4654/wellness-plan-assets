@@ -258,25 +258,29 @@ if (lifestyleBlock) {
     .filter(Boolean);
 
   if (selectedTips.length > 0) {
-    let html = "";
+    let html = '<ul class="lifestyle-tips-list">';
     selectedTips.forEach(tipName => {
       const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
       if (tipInfo) {
         html += `
-          <div class="lifestyle-tip">
-            <strong>${tipInfo["Tip"]}</strong><br>
-            ${tipInfo["Blurb"]}
-          </div>
+          <li>
+            <span class="editable">
+              <strong>${tipInfo["Tip"]}:</strong><br>
+              ${tipInfo["Blurb"]}
+            </span>
+          </li>
         `;
       }
     });
+    html += "</ul>";
     lifestyleBlock.innerHTML = html;
-    console.log("✅ Injected Lifestyle Tips", selectedTips);
+    console.log("✅ Injected Lifestyle Tips (editable)", selectedTips);
   } else {
     lifestyleBlock.innerHTML = "";
     console.log("ℹ️ No Lifestyle Tips selected for this patient");
   }
 }
+
 
 
 
@@ -297,19 +301,32 @@ function normalizeCellText(text) {
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
   const firstRow = rows[0];
-  const key = (firstRow["Body Comp"] || "").trim(); // e.g. "In State"
-  
+  const key = (firstRow["Body Comp"] || "").trim();
+
   let html = "";
   const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
   if (compRow && compRow["Blurb"]) {
-    html = `<span class="editable">${normalizeCellText(compRow["Blurb"])}</span>`;
+    html = `
+      <ul class="goals-list">
+        <li>
+          <span class="editable">${normalizeCellText(compRow["Blurb"])}</span>
+        </li>
+      </ul>
+    `;
   } else if (key) {
-    html = `<span class="editable">${key}</span>`;
+    html = `
+      <ul class="goals-list">
+        <li>
+          <span class="editable">${key}</span>
+        </li>
+      </ul>
+    `;
   }
 
   bodyCompList.innerHTML = html;
-  console.log("🚀 Injected Body Comp HTML:", html);
+  console.log("🚀 Injected Body Comp HTML (editable):", html);
 }
+
 
 
 
