@@ -938,75 +938,60 @@ html, body {
 
 
 /* ============================
-   RESOURCE LINKS — match reference screenshot
+   RESOURCE LINKS (correct pairing)
    ============================ */
-.wellness-plan .resource-link{
-  border-top: 1px solid #eee;   /* divider between groups */
-  padding: 14px 0 12px;         /* equal space above/below the pair */
+.wellness-plan .resource-link {
+  border-top: 1px solid #eee;    /* divider between groups */
+  padding: 14px 0 12px;          /* consistent vertical spacing */
   margin: 0;
 }
 
-.wellness-plan .resource-link a{
-  display: block;               /* link on its own line */
-  color: #bd243f;
+.wellness-plan .resource-link a {
+  display: block;                /* link always on its own line */
+  color: #bd243f;                /* red */
   font-weight: 700;
   font-size: 14px;
   line-height: 1.35;
   text-decoration: none;
 }
-.wellness-plan .resource-link a:hover{ text-decoration: underline; }
+.wellness-plan .resource-link a:hover {
+  text-decoration: underline;
+}
 
-.wellness-plan .resource-link .resource-note{
-  display: block;               /* note on next line under link */
-  margin: 4px 0 0;              /* hugs the link */
+.wellness-plan .resource-link .resource-note {
+  display: block;                /* note always under the link */
+  margin-top: 4px;               /* hug the link */
   font-size: 14px;
   font-style: italic;
   color: #777;
   line-height: 1.35;
 }
 
-/* Link followed by its note → collapse the seam between them */
-.wellness-plan .resource-link:has(a) + .resource-link:has(.resource-note){
-  border-top: 0;                 /* no divider inside a pair */
-  padding-top: 2px;              /* bring note closer */
-  margin-top: -8px;              /* visually “touching” */
-}
-
-/* Note followed by its link (coaching pair) */
-.wellness-plan .resource-link:has(.resource-note) + .resource-link:has(a){
-  border-top: 0;
+/* Pair link + note without extra border */
+.wellness-plan .resource-link:has(a) + .resource-link:has(.resource-note) {
+  border-top: none;              /* no divider between link and its note */
   padding-top: 2px;
-  margin-top: -4px;
+  margin-top: -6px;
 }
 
-/* First/last item in the bubble */
-.wellness-plan .wellness-bubble .resource-link:first-of-type{ margin-top: 18px; }
-.wellness-plan .wellness-bubble .resource-link:last-of-type{ padding-bottom: 0; }
-
-/* Alignment safety */
-.wellness-plan .resource-link,
-.wellness-plan .resource-link a,
-.wellness-plan .resource-link .resource-note{
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  text-align: left;
+/* Coaching note always stays right above coaching link */
+#coachingNote {
+  margin-bottom: 4px;            /* small gap before link */
+  display: block;
+  font-size: 14px;
+  font-style: italic;
+  color: #777;
+  line-height: 1.35;
 }
 
-
-
-
-
-
-/* ============================
-   RESOURCE LINKS (alignment fix)
-   ============================ */
-.resource-link,
-.resource-link a,
-.wellness-plan .resource-note {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  text-align: left;
+/* First/last adjustments inside bubbles */
+.wellness-plan .wellness-bubble .resource-link:first-of-type {
+  margin-top: 18px;
 }
+.wellness-plan .wellness-bubble .resource-link:last-of-type {
+  padding-bottom: 0;
+}
+
 
 
 
