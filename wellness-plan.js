@@ -25,6 +25,29 @@ function decodeHTML(str) {
 
 
 // ============================
+// Helper: render text as list if it has line breaks
+// ============================
+function renderAsListOrHTML(value) {
+  if (!value) return "";
+
+  // If raw HTML is pasted, render directly
+  if (/<[a-z][\s\S]*>/i.test(value)) return value;
+
+  // Otherwise, split on newlines and make bullets
+  const lines = value.split(/\n+/).map(l => l.trim()).filter(Boolean);
+
+  if (lines.length > 1) {
+    const first = `<p>${lines.shift()}</p>`; // intro text
+    const list = `<ul>${lines.map(l => `<li>${l}</li>`).join("")}</ul>`;
+    return first + list;
+  }
+
+  return `<p>${lines[0]}</p>`;
+}
+
+
+
+// ============================
 // 1. Apply CSS variable URLs to dynamic links
 // ============================
 [
@@ -259,7 +282,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
   const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; 
+  const keyOrHtml = firstRow["Body Comp"];
   let html = "";
 
   if (keyOrHtml) {
@@ -271,19 +294,9 @@ if (bodyCompList) {
     );
 
     if (lib && lib["Blurb"]) {
-      html = lib["Blurb"];   // ✅ no wrapper
-    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      html = keyOrHtml;      // ✅ no wrapper
+      html = renderAsListOrHTML(lib["Blurb"]);
     } else {
-      html = `<li><span class="editable"><strong>${keyOrHtml}</strong></span></li>`;
-    }
-
-    // ✅ If blurb has <ul>, flatten to <li> only
-    if (html.includes("<ul")) {
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      const innerLis = temp.querySelector("ul")?.innerHTML;
-      if (innerLis) html = innerLis;
+      html = renderAsListOrHTML(keyOrHtml);
     }
 
     bodyCompList.innerHTML = html;
@@ -292,6 +305,7 @@ if (bodyCompList) {
     bodyCompList.innerHTML = "";
   }
 }
+
 
 
   // --- Target Goals ---
