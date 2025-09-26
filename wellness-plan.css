@@ -370,37 +370,38 @@ html, body {
    INFO ICON + BLURB DROPDOWN
 ============================ */
 
-/* Container keeps med + icon aligned */
+/* Keep med name + icon aligned */
 .med-name {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-/* Outlined info icon */
+/* Small outlined circle info icon */
 .wellness-plan .info-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
-  font-size: 9px;
+  width: 15px;
+  height: 15px;
+  font-size: 10px;
   font-weight: bold;
-  color: #555;
-  border: 1px solid #bbb;   /* thin outline */
+  color: #666;
+  border: 1px solid #aaa;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
   vertical-align: super;
+  background: transparent;   /* no fill */
   transition: border 0.2s ease, color 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  border-color: #666;
+  border-color: #555;
   color: #222;
 }
 
-/* Blurb box */
+/* Hidden blurb */
 .learn-more-content {
   display: none;
   margin-top: 6px;
@@ -418,10 +419,6 @@ html, body {
 .learn-more-content.expanded {
   display: block;
 }
-
-
-
-
 
 
 
