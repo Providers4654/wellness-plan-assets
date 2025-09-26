@@ -139,14 +139,17 @@ rows.forEach((r) => {
 
   if (!med) return;
 
-  const medHtml = `
-    <li class="med-row">
+const medHtml = `
+  <li class="med-row">
+    <div class="med-name">
       <strong>${med}</strong>
       <span class="info-icon" title="More info">ℹ</span>
-      <div class="dose">${dose}</div>
-      ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
-    </li>
-  `;
+    </div>
+    <div class="dose">${dose}</div>
+    ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
+  </li>
+`;
+
 
   // Check if category is Supplement or not
   if (cat.includes("Supplement")) {
