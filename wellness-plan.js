@@ -120,18 +120,29 @@ document.addEventListener("click", (e) => {
 });
 
 // ============================
-// 4. Build Section Content From Sheet
+// 4. Build Section Content From Sheet (with deep debug logging)
 // ============================
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
+  console.log("🔍 injectPatientData START", { rows, lifestyleData, medsData, bodyCompData });
+
   // --- Section Titles ---
   const visitTitle = document.getElementById("visitTimelineTitle");
-  if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
+  if (visitTitle) {
+    visitTitle.textContent = cssVar("--visit-timeline-title");
+    console.log("✅ visitTimelineTitle set");
+  }
 
   const bodyCompTitle = document.getElementById("bodyCompTitle");
-  if (bodyCompTitle) bodyCompTitle.textContent = cssVar("--bodycomp-title");
+  if (bodyCompTitle) {
+    bodyCompTitle.textContent = cssVar("--bodycomp-title");
+    console.log("✅ bodyCompTitle set");
+  }
 
   const targetTitle = document.getElementById("targetTitle");
-  if (targetTitle) targetTitle.textContent = cssVar("--target-title");
+  if (targetTitle) {
+    targetTitle.textContent = cssVar("--target-title");
+    console.log("✅ targetTitle set");
+  }
 
   // --- Group meds & supplements by category ---
   const medsByCategory = {
@@ -141,19 +152,23 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     PRN: { meds: [], supps: [] },
     "To Consider": { meds: [], supps: [] }
   };
+  console.log("📦 medsByCategory initialized", medsByCategory);
 
-  rows.forEach((r) => {
+  rows.forEach((r, idx) => {
+    console.log(`➡️ Processing row[${idx}]`, r);
+
     const med = r["Meds/Supp"];
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
 
-    let blurb = "";
-    if (med) {
-      const medInfo = medsData.find(m => m["Medication"] === med);
-      blurb = medInfo ? medInfo["Blurb"] : "";
+    if (!med) {
+      console.log("⏭️ Skipped row (no Meds/Supp)");
+      return;
     }
 
-    if (!med) return;
+    let blurb = "";
+    const medInfo = medsData.find(m => m["Medication"] === med);
+    if (medInfo) blurb = medInfo["Blurb"] || "";
 
     const medHtml = `
       <li class="med-row">
@@ -171,13 +186,17 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
       else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
       else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
       else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
-    } else {
-      if (medsByCategory[cat]) medsByCategory[cat].meds.push(medHtml);
+    } else if (medsByCategory[cat]) {
+      medsByCategory[cat].meds.push(medHtml);
     }
+
+    console.log("📥 medsByCategory updated", medsByCategory);
   });
 
-  // --- Inject Meds & Supplements ---
+  // --- Inject Meds ---
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+    console.log(`⚙️ Injecting category: ${cat}`, { meds, supps });
+
     const listId = {
       Daily: "dailyMeds",
       Evening: "eveningMeds",
@@ -197,48 +216,24 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     const block = document.getElementById(blockId);
     const list = document.getElementById(listId);
 
-    if (list && block) {
-      if (meds.length > 0 || supps.length > 0) {
-        let html = "";
-        if (meds.length > 0) html += meds.join("");
-        if (supps.length > 0) {
-          html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-        }
-        list.innerHTML = html;
-      } else {
-        if (block && block.parentNode) {
-          block.remove(); // ✅ safe removal
-        }
+    if (!list || !block) {
+      console.warn(`⚠️ Missing DOM for ${cat}`, { listId, blockId });
+      return;
+    }
+
+    if (meds.length > 0 || supps.length > 0) {
+      let html = "";
+      if (meds.length > 0) html += meds.join("");
+      if (supps.length > 0) {
+        html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
       }
+      list.innerHTML = html;
+      console.log(`✅ Injected ${cat} meds/supps`, html);
+    } else {
+      console.log(`🗑 Removing empty block for ${cat}`);
+      block.remove();
     }
   });
-
-  // --- Lifestyle Tips ---
-  const lifestyleList = document.getElementById("lifestyleTips");
-  if (lifestyleList) {
-    let tips = rows
-      .map(r => r["Lifestyle Tips"])
-      .filter(Boolean)
-      .flatMap(t => t.split(",").map(x => x.trim()))
-      .filter(Boolean);
-
-    tips = [...new Set(tips)];
-
-    const orderedTips = lifestyleData.map(l => l["Tip"]).filter(t => tips.includes(t));
-    const customTips = tips.filter(t => !orderedTips.includes(t));
-    const finalTips = [...orderedTips, ...customTips];
-
-    lifestyleList.innerHTML = finalTips.map(tip => {
-      const lib = lifestyleData.find(l => l["Tip"] === tip);
-      if (lib) {
-        return `<li><strong>${tip}</strong>${lib["Blurb"] ? `<div class="tip-blurb">${lib["Blurb"]}</div>` : ""}</li>`;
-      } else if (/<[a-z][\s\S]*>/i.test(tip)) {
-        return `<li>${tip}</li>`; // raw HTML entered directly
-      } else {
-        return `<li><strong>${tip}</strong></li>`;
-      }
-    }).join("");
-  }
 
   // --- Visit Timeline ---
   const visitTimelineList = document.getElementById("visitTimeline");
@@ -248,61 +243,62 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
       <li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${firstRow["Previous Visit"] || ""}</span></li>
       <li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${firstRow["Next Visit"] || ""}</span></li>
     `;
+    console.log("✅ Visit Timeline injected", firstRow);
   }
 
-// --- Helper: convert newlines into <br>
-function normalizeCellText(text) {
-  if (!text) return "";
-  return text.replace(/(\r\n|\r|\n)/g, "<br>");
-}
+  // --- Helper: convert newlines into <br>
+  function normalizeCellText(text) {
+    if (!text) return "";
+    return text.replace(/(\r\n|\r|\n)/g, "<br>");
+  }
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
-if (bodyCompList) {
-  const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; 
-  let html = "";
+  // --- Body Comp ---
+  const bodyCompList = document.getElementById("bodyComp");
+  if (bodyCompList) {
+    const firstRow = rows[0];
+    const keyOrHtml = firstRow["Body Comp"];
+    console.log("🔎 Body Comp raw value", keyOrHtml);
 
-  if (keyOrHtml) {
-    const normalize = s =>
-      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
+    let html = "";
+    if (keyOrHtml) {
+      const normalize = s =>
+        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
-    const lib = bodyCompData.find(
-      b => normalize(b["State"]) === normalize(keyOrHtml)
-    );
+      const lib = bodyCompData.find(b => normalize(b["State"]) === normalize(keyOrHtml));
+      console.log("📚 Matched BodyComp lib", lib);
 
-    if (lib && lib["Blurb"]) {
-      // ✅ Blurb from library, process newlines
-      html = `<span class="editable">${normalizeCellText(lib["Blurb"])}</span>`;
-    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      // ✅ Raw HTML from wellness sheet cell
-      html = `<span class="editable">${keyOrHtml}</span>`;
+      if (lib && lib["Blurb"]) {
+        html = `<span class="editable">${normalizeCellText(lib["Blurb"])}</span>`;
+      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+        html = `<span class="editable">${keyOrHtml}</span>`;
+      } else {
+        html = `<span class="editable"><strong>${normalizeCellText(keyOrHtml)}</strong></span>`;
+      }
+
+      bodyCompList.innerHTML = html;
+      console.log("✅ Body Comp injected", html);
     } else {
-      // ✅ Plain text with line breaks converted
-      html = `<span class="editable"><strong>${normalizeCellText(keyOrHtml)}</strong></span>`;
+      bodyCompList.innerHTML = "";
+      console.log("⚠️ No Body Comp found");
     }
-
-    bodyCompList.innerHTML = html;
-    console.log("🚀 Injected Body Comp HTML:", html);
-  } else {
-    bodyCompList.innerHTML = "";
   }
-}
-}
 
-
-
-
-// --- Target Goals ---
-const targetGoalsList = document.getElementById("targetGoals");
-if (targetGoalsList) {
-  const firstRow = rows[0];
-  if (firstRow["Target Goals"]) {
-    targetGoalsList.innerHTML = `<li><span class="editable">${normalizeCellText(firstRow["Target Goals"])}</span></li>`;
-  } else {
-    targetGoalsList.innerHTML = "";
+  // --- Target Goals ---
+  const targetGoalsList = document.getElementById("targetGoals");
+  if (targetGoalsList) {
+    const firstRow = rows[0];
+    if (firstRow["Target Goals"]) {
+      targetGoalsList.innerHTML = `<li><span class="editable">${normalizeCellText(firstRow["Target Goals"])}</span></li>`;
+      console.log("✅ Target Goals injected", firstRow["Target Goals"]);
+    } else {
+      targetGoalsList.innerHTML = "";
+      console.log("⚠️ No Target Goals found");
+    }
   }
+
+  console.log("🏁 injectPatientData END");
 }
+
 
 
 // ============================
