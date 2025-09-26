@@ -128,6 +128,7 @@ document.addEventListener("click", (e) => {
 // 4. Build Section Content From Sheet
 // ============================
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
+  // --- Section Titles ---
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
 
@@ -180,43 +181,42 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     }
   });
 
-// --- Inject Meds & Supplements ---
-Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-  const listId = {
-    Daily: "dailyMeds",
-    Evening: "eveningMeds",
-    Weekly: "weeklyMeds",
-    PRN: "prnMeds",
-    "To Consider": "toConsider",
-  }[cat];
+  // --- Inject Meds & Supplements ---
+  Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+    const listId = {
+      Daily: "dailyMeds",
+      Evening: "eveningMeds",
+      Weekly: "weeklyMeds",
+      PRN: "prnMeds",
+      "To Consider": "toConsider",
+    }[cat];
 
-  const blockId = {
-    Daily: "dailyBlock",
-    Evening: "eveningBlock",
-    Weekly: "weeklyBlock",
-    PRN: "prnBlock",
-    "To Consider": "toConsiderBlock",
-  }[cat];
+    const blockId = {
+      Daily: "dailyBlock",
+      Evening: "eveningBlock",
+      Weekly: "weeklyBlock",
+      PRN: "prnBlock",
+      "To Consider": "toConsiderBlock",
+    }[cat];
 
-  const block = document.getElementById(blockId);
-  const list = document.getElementById(listId);
+    const block = document.getElementById(blockId);
+    const list = document.getElementById(listId);
 
-  if (list && block) {
-    if (meds.length > 0 || supps.length > 0) {
-      let html = "";
-      if (meds.length > 0) html += meds.join("");
-      if (supps.length > 0) {
-        html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-      }
-      list.innerHTML = html;
-    } else {
-      if (block && block.parentNode) {
-        block.remove(); // ✅ safe removal
+    if (list && block) {
+      if (meds.length > 0 || supps.length > 0) {
+        let html = "";
+        if (meds.length > 0) html += meds.join("");
+        if (supps.length > 0) {
+          html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
+        }
+        list.innerHTML = html;
+      } else {
+        if (block && block.parentNode) {
+          block.remove(); // ✅ safe removal
+        }
       }
     }
-  }
-});
-
+  });
 
   // --- Lifestyle Tips ---
   const lifestyleList = document.getElementById("lifestyleTips");
@@ -255,41 +255,34 @@ Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     `;
   }
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
-if (bodyCompList) {
-  const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; // Could be "In State", "Out of State", or raw HTML
-  let html = "";
+  // --- Body Comp ---
+  const bodyCompList = document.getElementById("bodyComp");
+  if (bodyCompList) {
+    const firstRow = rows[0];
+    const keyOrHtml = firstRow["Body Comp"]; // "In State", "Out of State", or inline HTML
+    let html = "";
 
-  if (keyOrHtml) {
-    const normalize = s =>
-      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
+    if (keyOrHtml) {
+      const normalize = s =>
+        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
+      const lib = bodyCompData.find(
+        b => normalize(b["State"]) === normalize(keyOrHtml)
+      );
 
-console.log("Patient Body Comp value:", keyOrHtml);
-console.log("BodyCompData States:", bodyCompData.map(b => Object.keys(b)));
-console.log("First few BodyCompData rows:", bodyCompData.slice(0, 3));
+      if (lib) {
+        html = decodeHTML(lib["Blurb"]);  // ✅ decode before injecting
+      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+        html = decodeHTML(keyOrHtml);     // ✅ decode inline HTML from cell
+      } else {
+        html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`;
+      }
 
-    
-    const lib = bodyCompData.find(
-      b => normalize(b["State"]) === normalize(keyOrHtml)
-    );
-
-    if (lib) {
-      html = lib["Blurb"]; // library match
-    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      html = decodeHTML(keyOrHtml); // ✅ decode raw HTML from cell
+      bodyCompList.innerHTML = `<li>${html}</li>`;
     } else {
-      html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`; // fallback plain text
+      bodyCompList.innerHTML = "";
     }
-
-    bodyCompList.innerHTML = `<li>${html}</li>`;
-  } else {
-    bodyCompList.innerHTML = "";
   }
-}
-
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
@@ -300,6 +293,7 @@ console.log("First few BodyCompData rows:", bodyCompData.slice(0, 3));
       : "";
   }
 }
+
 
 
 // ============================
