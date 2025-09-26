@@ -13,8 +13,14 @@ const TABS = {
 
 // Helper
 function cssVar(name) {
-  return root.getPropertyValue(name).replace(/["']/g, "").trim();
+  let val = root.getPropertyValue(name).trim();
+  // Remove leading and trailing quotes if present
+  if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
+    val = val.slice(1, -1);
+  }
+  return val;
 }
+
 
 
 
