@@ -243,7 +243,9 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     let html = "";
 
     if (keyOrHtml) {
-      const lib = bodyCompData.find(b => b["Key"].trim().toLowerCase() === keyOrHtml.trim().toLowerCase());
+     const lib = bodyCompData.find(
+  b => (b["State"] || "").trim().toLowerCase() === keyOrHtml.trim().toLowerCase()
+);
 
       if (lib) {
         html = lib["Blurb"]; // library match
@@ -343,12 +345,13 @@ const bodyCompData = csvToJSON(bodyCompRes);
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
     console.log("Matched rows:", patientRows);
 
-    if (patientRows.length > 0) {
-      console.log("✅ Injecting data...");
-      injectPatientData(patientRows, lifestyleData, medsData);
-    } else {
-      console.warn("⚠️ No patient found for ID:", patientId);
-    }
+if (patientRows.length > 0) {
+  console.log("✅ Injecting data...");
+  injectPatientData(patientRows, lifestyleData, medsData, bodyCompData);
+} else {
+  console.warn("⚠️ No patient found for ID:", patientId);
+}
+
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
