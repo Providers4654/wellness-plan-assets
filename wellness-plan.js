@@ -123,16 +123,12 @@ document.addEventListener("click", (e) => {
 // 4. Build Section Content From Sheet (with deep debug logging)
 // ============================
 
-  // --- Helper: convert newlines into <br>
+// --- Helper: convert newlines into <br>
 function normalizeCellText(text) {
   if (!text) return "";
   return text
-    // Google Sheets sometimes uses carriage return entities
-    .replace(/&#10;/g, "<br>")
-    // real line breaks
-    .replace(/(\r\n|\r|\n)/g, "<br>")
-    // already-typed <br> (don’t double escape)
-    .replace(/&lt;br&gt;/g, "<br>");
+    .replace(/(\r\n|\r|\n)/g, "<br>")  // real line breaks
+    .replace(/&lt;br&gt;/g, "<br>");   // already-typed <br>
 }
 
 
@@ -301,6 +297,7 @@ if (lifestyleBlock) {
 
 
 
+
 // --- Body Comp ---
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList) {
@@ -330,6 +327,7 @@ if (bodyCompList) {
   bodyCompList.innerHTML = html;
   console.log("🚀 Injected Body Comp HTML (editable):", html);
 }
+
 
 
 
