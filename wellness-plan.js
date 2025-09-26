@@ -16,6 +16,14 @@ function cssVar(name) {
   return root.getPropertyValue(name).replace(/["']/g, "").trim();
 }
 
+
+function decodeHTML(str) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = str;
+  return txt.value;
+}
+
+
 // ============================
 // 1. Apply CSS variable URLs to dynamic links
 // ============================
@@ -238,32 +246,35 @@ Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     `;
   }
 
-  // --- Body Comp ---
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList) {
-    const firstRow = rows[0];
-    const keyOrHtml = firstRow["Body Comp"]; // Could be "In State", "Out of State", or raw HTML
-    let html = "";
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+if (bodyCompList) {
+  const firstRow = rows[0];
+  const keyOrHtml = firstRow["Body Comp"]; // Could be "In State", "Out of State", or raw HTML
+  let html = "";
 
-    if (keyOrHtml) {
-const lib = bodyCompData.find(
-  b => (b["State"] || "").trim().toLowerCase() === keyOrHtml.trim().toLowerCase()
-);
+  if (keyOrHtml) {
+    const normalize = s =>
+      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
+    const lib = bodyCompData.find(
+      b => normalize(b["State"]) === normalize(keyOrHtml)
+    );
 
-      if (lib) {
-        html = lib["Blurb"]; // library match
-      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-        html = keyOrHtml; // raw HTML entered directly in patient row
-      } else {
-        html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`; // fallback plain text
-      }
-
-      bodyCompList.innerHTML = `<li>${html}</li>`;
+    if (lib) {
+      html = lib["Blurb"]; // library match
+    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+      html = decodeHTML(keyOrHtml); // ✅ decode raw HTML from cell
     } else {
-      bodyCompList.innerHTML = "";
+      html = `<span class="editable"><strong>${keyOrHtml}</strong></span>`; // fallback plain text
     }
+
+    bodyCompList.innerHTML = `<li>${html}</li>`;
+  } else {
+    bodyCompList.innerHTML = "";
   }
+}
+
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
