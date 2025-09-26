@@ -370,19 +370,27 @@ html, body {
    INFO ICON + BLURB DROPDOWN
 ============================ */
 
+/* Wrapper so med name + icon sit inline */
+.med-name {
+  display: inline-flex;
+  align-items: flex-start;   /* keeps ℹ slightly lifted */
+  gap: 4px;                  /* space between text and icon */
+}
+
 /* The clickable info icon */
 .wellness-plan .info-icon {
-  font-size: 11px;          /* smaller, subtle */
-  margin-left: 4px;         /* spacing from med name */
-  color: #999;              /* light gray by default */
+  font-size: 12px;           /* small but readable */
+  color: #999;               /* light gray by default */
   cursor: pointer;
-  vertical-align: super;    /* lift up like a footnote */
+  vertical-align: super;     /* footnote-like lift */
+  line-height: 1;
+  margin-top: 1px;           /* tweak for baseline alignment */
   opacity: 0.85;
   transition: color 0.2s ease, opacity 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  color: #555;              /* darken on hover */
+  color: #555;               /* darken on hover */
   opacity: 1;
 }
 
@@ -404,6 +412,7 @@ html, body {
 .learn-more-content.expanded {
   display: block;
 }
+
 
 
 
