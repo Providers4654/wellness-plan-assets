@@ -299,18 +299,26 @@ console.log("First few BodyCompData rows:", bodyCompData.slice(0, 3));
 function csvToJSON(csv) {
   const rows = [];
   const lines = csv.split("\n");
-  const headers = parseCSVLine(lines.shift());
+
+  // Parse headers
+  const headers = parseCSVLine(lines.shift()).map(h =>
+    h.replace(/\uFEFF/g, "").trim() // remove BOM + trim spaces
+  );
+
+  // Parse rows
   lines.forEach(line => {
     if (!line.trim()) return;
     const values = parseCSVLine(line);
     let obj = {};
     headers.forEach((h, i) => {
-      obj[h.trim()] = (values[i] || "").trim();
+      obj[h] = (values[i] || "").trim();
     });
     rows.push(obj);
   });
+
   return rows;
 }
+
 
 function parseCSVLine(line) {
   const result = [];
@@ -356,6 +364,7 @@ const wellnessData = csvToJSON(wellnessRes);
 const medsData = csvToJSON(medsRes);
 const lifestyleData = csvToJSON(lifestyleRes);
 const bodyCompData = csvToJSON(bodyCompRes);
+
 
     console.log("CSV Headers (Wellness):", Object.keys(wellnessData[0] || {}));
     console.log("Wellness Data Sample:", wellnessData.slice(0, 3));
