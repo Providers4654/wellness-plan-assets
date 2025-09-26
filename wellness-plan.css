@@ -936,10 +936,9 @@ html, body {
    ============================ */
 /* Resource link block */
 .resource-link {
-  margin: 20px 0;         /* equal top & bottom space */
-  padding: 0;
   border-top: 1px solid #eee;
-  display: block;
+  padding-top: 12px;      /* space between divider and link */
+  margin: 16px 0 0;       /* only top margin for block spacing */
 }
 
 /* Compact variant for stacked med links (no divider) */
@@ -978,7 +977,7 @@ html, body {
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 0;
+  margin: 0;              /* no gaps */
   display: block;
   line-height: 1.4;
 }
