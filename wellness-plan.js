@@ -359,7 +359,9 @@ async function loadPatientData(retryCount = 0) {
     const lifestyleData = csvToJSON(lifestyleRes);
 
     const patientId = getPatientIdFromUrl();
+    console.log("Patient ID:", patientId); // 🔍 Debug
     const patientRows = wellnessData.filter(r => r["Patient ID"] === patientId);
+    console.log("Matched rows:", patientRows.length);
 
     if (patientRows.length > 0) {
       injectPatientData(patientRows, lifestyleData, medsData);
@@ -367,20 +369,23 @@ async function loadPatientData(retryCount = 0) {
       console.warn("No patient found for ID:", patientId);
     }
 
-    // ✅ Hide loading overlay once done
-    document.getElementById("loadingOverlay").style.display = "none";
-
   } catch (err) {
     if (retryCount < 3) {
       console.warn("Retrying fetch…", err);
       setTimeout(() => loadPatientData(retryCount + 1), 500);
+      return; // prevent running finally block too soon
     } else {
       console.error("Error fetching sheet:", err);
       document.getElementById("loadingOverlay").textContent =
         "Error loading plan. Please refresh.";
     }
+  } finally {
+    // ✅ Always hide overlay, even if other scripts error
+    const overlay = document.getElementById("loadingOverlay");
+    if (overlay) overlay.style.display = "none";
   }
 }
+
 
 
 // --- Run after DOM is ready ---
