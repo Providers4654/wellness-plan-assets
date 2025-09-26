@@ -932,47 +932,52 @@ html, body {
 }
 
 /* ============================
-   RESOURCE LINKS (balanced pairs)
+   RESOURCE LINKS (clean + tight pair)
    ============================ */
+
+/* Container */
 .resource-link {
   border-top: 1px solid #eee;
-  margin: 24px 0 0;       /* space above each block */
-  padding-top: 12px;      /* moderate gap from divider */
+  padding: 12px 0;        /* equal top/bottom padding */
+  margin: 0;              /* reset margins */
 }
 
-/* Compact variant for stacked med links (no divider) */
-.resource-link.med {
-  margin-top: 8px;
-  padding-top: 0;
-  border-top: none;
+/* First link in a bubble: add extra space from content above */
+.wellness-bubble .resource-link:first-of-type {
+  margin-top: 24px;
 }
 
-/* Link */
+/* Link line */
 .resource-link a {
+  display: block;
   color: #bd243f;
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
-  display: block;
-  margin-bottom: 2px;      /* keep note close under link */
-  line-height: 1.5;
+  margin: 0;              /* no extra gap */
+  line-height: 1.3;
 }
-.resource-link a:hover { text-decoration: underline; }
+.resource-link a:hover {
+  text-decoration: underline;
+}
 
-/* Note (glued under link) */
+/* Note line (sits tight under link) */
 .wellness-plan .resource-note {
+  display: block;
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 0 0 4px;         /* just a hair of breathing room */
-  display: block;
+  margin: 2px 0 0;        /* just a tiny nudge under link */
   line-height: 1.4;
 }
 
-/* First resource link in a bubble should not crowd meds */
-.wellness-bubble .resource-link:first-of-type {
-  margin-top: 28px;   /* a little extra */
+/* Compact variant for stacked med links (no divider) */
+.resource-link.med {
+  border-top: none;
+  padding-top: 4px;
+  margin-top: 4px;
 }
+
 
 
 
