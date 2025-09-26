@@ -35,9 +35,7 @@
       jsScript.referrerPolicy = "no-referrer";
       jsScript.onload = () => {
         console.log("[Loader] wellness-plan.js loaded");
-        if (typeof bootstrapWellnessPlan === "function") {
-          bootstrapWellnessPlan();
-        }
+
       };
       document.body.appendChild(jsScript);
     })
