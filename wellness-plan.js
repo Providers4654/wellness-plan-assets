@@ -251,16 +251,33 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
 // --- Lifestyle Tips ---
 const lifestyleBlock = document.getElementById("lifestyleTips");
 if (lifestyleBlock) {
-  const patientId = rows[0]["Patient ID"];
-  const tipRow = lifestyleData.find(r => (r["Patient ID"] || "").trim() === patientId);
-  if (tipRow && tipRow["Tips"]) {
-    lifestyleBlock.innerHTML = normalizeCellText(tipRow["Tips"]);
-    console.log("✅ Injected Lifestyle Tips");
+  const firstRow = rows[0];
+  const selectedTips = (firstRow["Lifestyle Tips"] || "")
+    .split(",")
+    .map(t => t.trim())
+    .filter(Boolean);
+
+  if (selectedTips.length > 0) {
+    let html = "";
+    selectedTips.forEach(tipName => {
+      const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+      if (tipInfo) {
+        html += `
+          <div class="lifestyle-tip">
+            <strong>${tipInfo["Tip"]}</strong><br>
+            ${tipInfo["Blurb"]}
+          </div>
+        `;
+      }
+    });
+    lifestyleBlock.innerHTML = html;
+    console.log("✅ Injected Lifestyle Tips", selectedTips);
   } else {
     lifestyleBlock.innerHTML = "";
-    console.log("ℹ️ No Lifestyle Tips found");
+    console.log("ℹ️ No Lifestyle Tips selected for this patient");
   }
 }
+
 
 
   
@@ -282,19 +299,18 @@ if (bodyCompList) {
   const firstRow = rows[0];
   const key = (firstRow["Body Comp"] || "").trim(); // e.g. "In State"
   
-  // Try to match against bodyCompData
   let html = "";
   const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
   if (compRow && compRow["Blurb"]) {
     html = `<span class="editable">${normalizeCellText(compRow["Blurb"])}</span>`;
   } else if (key) {
-    // fallback: just show raw key
     html = `<span class="editable">${key}</span>`;
   }
 
   bodyCompList.innerHTML = html;
   console.log("🚀 Injected Body Comp HTML:", html);
 }
+
 
 
 // --- Target Goals ---
