@@ -932,19 +932,26 @@ html, body {
 }
 
 /* ============================
-   RESOURCE LINKS (clean + tight pair)
+   RESOURCE LINKS (tight + even pairs)
    ============================ */
 
-/* Container */
+/* Container for each resource pair */
 .resource-link {
   border-top: 1px solid #eee;
-  padding: 12px 0;        /* equal top/bottom padding */
-  margin: 0;              /* reset margins */
+  padding: 12px 0;        /* equal spacing above/below pair */
+  margin: 0;              /* reset default margins */
 }
 
-/* First link in a bubble: add extra space from content above */
+/* First resource link in a bubble: add extra top breathing room */
 .wellness-bubble .resource-link:first-of-type {
   margin-top: 24px;
+}
+
+/* Kill bottom gap after last link so bubble closes snug */
+.wellness-bubble .resource-link:last-of-type {
+  padding-bottom: 0;
+  margin-bottom: 0;
+  border-bottom: none;
 }
 
 /* Link line */
@@ -954,20 +961,20 @@ html, body {
   font-weight: 700;
   font-size: 14px;
   text-decoration: none;
-  margin: 0;              /* no extra gap */
+  margin: 0;              /* no extra margin */
   line-height: 1.3;
 }
 .resource-link a:hover {
   text-decoration: underline;
 }
 
-/* Note line (sits tight under link) */
+/* Note line (sits right under link) */
 .wellness-plan .resource-note {
   display: block;
   font-size: 14px;
   color: #777;
   font-style: italic;
-  margin: 2px 0 0;        /* just a tiny nudge under link */
+  margin: 2px 0 0;        /* just a small nudge under link */
   line-height: 1.4;
 }
 
@@ -977,7 +984,6 @@ html, body {
   padding-top: 4px;
   margin-top: 4px;
 }
-
 
 
 
