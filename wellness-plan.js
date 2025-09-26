@@ -344,46 +344,49 @@ function getPatientIdFromUrl() {
 }
 
 // ============================
-// Load Patient Data (clean, no overlay)
+// Load Patient Data (debug version)
 // ============================
-async function loadPatientData(retryCount = 0) {
+async function loadPatientData() {
   try {
+    // --- Fetch all 3 tabs ---
     const [wellnessRes, medsRes, lifestyleRes] = await Promise.all([
       fetch(TABS.wellness).then(r => r.text()),
       fetch(TABS.meds).then(r => r.text()),
       fetch(TABS.lifestyle).then(r => r.text())
     ]);
 
+    // --- Convert CSVs to JSON ---
     const wellnessData = csvToJSON(wellnessRes);
     const medsData = csvToJSON(medsRes);
     const lifestyleData = csvToJSON(lifestyleRes);
 
+    // --- Debug: show sample data ---
+    console.log("CSV Headers (Wellness):", Object.keys(wellnessData[0] || {}));
+    console.log("Wellness Data Sample:", wellnessData.slice(0, 3));
+
+    // --- Find patient ID from URL ---
     const patientId = getPatientIdFromUrl();
-    console.log("Patient ID from URL:", patientId);
-    console.log("Sample wellness rows:", wellnessData.slice(0,3)); // ✅ safe log
+    console.log("Looking for Patient ID:", patientId);
 
+    // --- Match rows ---
     const patientRows = wellnessData.filter(r =>
-      (r["Patient ID"] || "").trim() === patientId.trim()
+      Object.values(r).some(v => (v || "").trim() === patientId.trim())
     );
-    console.log("Matched rows:", patientRows.length);
+    console.log("Matched rows:", patientRows);
 
+    // --- Inject if found ---
     if (patientRows.length > 0) {
       injectPatientData(patientRows, lifestyleData, medsData);
     } else {
-      console.warn("No patient found for ID:", patientId);
+      console.warn("⚠️ No patient found for ID:", patientId);
     }
+
   } catch (err) {
-    if (retryCount < 3) {
-      console.warn("Retrying fetch…", err);
-      setTimeout(() => loadPatientData(retryCount + 1), 500);
-    } else {
-      console.error("Error fetching sheet:", err);
-    }
+    console.error("❌ Error fetching sheet:", err);
   }
 }
 
-
-// --- Run after DOM is ready ---
+// --- Run on load ---
 document.addEventListener("DOMContentLoaded", () => {
   loadPatientData();
 });
