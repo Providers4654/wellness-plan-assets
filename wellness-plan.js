@@ -255,55 +255,42 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
     `;
   }
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
-if (bodyCompList) {
-  const firstRow = rows[0];
-  const keyOrHtml = firstRow["Body Comp"]; 
-  let html = "";
+  // --- Body Comp ---
+  const bodyCompList = document.getElementById("bodyComp");
+  if (bodyCompList) {
+    const firstRow = rows[0];
+    const keyOrHtml = firstRow["Body Comp"]; 
+    let html = "";
 
-  if (keyOrHtml) {
-    const normalize = s =>
-      (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
+    if (keyOrHtml) {
+      const normalize = s =>
+        (s || "").toLowerCase().replace(/\s+/g, " ").replace(/\u00a0/g, " ").trim();
 
-    // Try to find in BodyComp sheet
-    const lib = bodyCompData.find(
-      b => normalize(b["State"]) === normalize(keyOrHtml)
-    );
+      const lib = bodyCompData.find(
+        b => normalize(b["State"]) === normalize(keyOrHtml)
+      );
 
-    if (lib && lib["Blurb"]) {
-      // 🚨 Insert the Blurb as-is, but wrapped in <li>
-      html = `<li>${lib["Blurb"]}</li>`;
-    } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
-      // 🚨 Treat the wellness sheet cell as raw HTML, wrapped in <li>
-      html = `<li>${keyOrHtml}</li>`;
+      if (lib && lib["Blurb"]) {
+        html = `<li>${lib["Blurb"]}</li>`;
+      } else if (/<[a-z][\s\S]*>/i.test(keyOrHtml)) {
+        html = `<li>${keyOrHtml}</li>`;
+      } else {
+        html = `<li><span class="editable"><strong>${keyOrHtml}</strong></span></li>`;
+      }
+
+      if (html.includes("<ul")) {
+        const temp = document.createElement("div");
+        temp.innerHTML = html;
+        const innerLis = temp.querySelector("ul")?.innerHTML;
+        if (innerLis) html = innerLis;
+      }
+
+      bodyCompList.innerHTML = html;
+      console.log("🚀 Injected Body Comp HTML:", html);
     } else {
-      // Plain text fallback, wrapped in <li>
-      html = `<li><span class="editable"><strong>${keyOrHtml}</strong></span></li>`;
+      bodyCompList.innerHTML = "";
     }
-
-    // ✅ If it contains a <ul>, flatten so only <li> remain
-    if (html.includes("<ul")) {
-      const temp = document.createElement("div");
-      temp.innerHTML = html;
-      const innerLis = temp.querySelector("ul")?.innerHTML;
-      if (innerLis) html = innerLis;
-    }
-
-    // ✅ Direct injection into the <ul id="bodyComp">
-    bodyCompList.innerHTML = html;
-    console.log("🚀 Injected Body Comp HTML:", html);
-  } else {
-    bodyCompList.innerHTML = "";
   }
-} // 👈 make sure this closing brace is there
-
-
-
-
-
-
-
 
   // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
@@ -314,7 +301,6 @@ if (bodyCompList) {
       : "";
   }
 }
-
 
 
 // ============================
