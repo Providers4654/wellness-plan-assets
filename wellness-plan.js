@@ -288,6 +288,7 @@ if (bodyCompList) {
     bodyCompList.innerHTML = "";
   }
 }
+}
 
 
 
