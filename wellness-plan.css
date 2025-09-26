@@ -933,55 +933,39 @@ html, body {
 
 
 
-
-
-
-
 /* ============================
-   RESOURCE LINKS (correct pairing)
+   RESOURCE LINKS (clean + even)
    ============================ */
 .wellness-plan .resource-link {
   border-top: 1px solid #eee;    /* divider between groups */
-  padding: 14px 0 12px;          /* consistent vertical spacing */
+  padding: 14px 0;               /* even top/bottom */
   margin: 0;
 }
 
 .wellness-plan .resource-link a {
-  display: block;                /* link always on its own line */
-  color: #bd243f;                /* red */
+  display: block;                /* link on its own line */
+  color: #bd243f;
   font-weight: 700;
   font-size: 14px;
-  line-height: 1.35;
+  line-height: 1.4;
   text-decoration: none;
+  margin-bottom: 4px;            /* tight gap before note */
 }
 .wellness-plan .resource-link a:hover {
   text-decoration: underline;
 }
 
 .wellness-plan .resource-link .resource-note {
-  display: block;                /* note always under the link */
-  margin-top: 4px;               /* hug the link */
+  display: block;                /* note directly under link */
   font-size: 14px;
   font-style: italic;
   color: #777;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
-/* Pair link + note without extra border */
-.wellness-plan .resource-link:has(a) + .resource-link:has(.resource-note) {
-  border-top: none;              /* no divider between link and its note */
-  padding-top: 2px;
-  margin-top: -6px;
-}
-
-/* Coaching note always stays right above coaching link */
+/* Coaching note stays above coaching link */
 #coachingNote {
-  margin-bottom: 4px;            /* small gap before link */
-  display: block;
-  font-size: 14px;
-  font-style: italic;
-  color: #777;
-  line-height: 1.35;
+  margin-bottom: 4px;            /* same spacing rhythm */
 }
 
 /* First/last adjustments inside bubbles */
@@ -992,16 +976,13 @@ html, body {
   padding-bottom: 0;
 }
 
-
-
 /* Force all resource links and notes to be left aligned */
 .wellness-plan .resource-link,
 .wellness-plan .resource-link a,
 .wellness-plan .resource-link .resource-note {
-  text-align: left !important;
-  display: block;         /* keeps them stacked */
-  margin-left: 0 !important;
-  padding-left: 0 !important;
+  text-align: left;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 
