@@ -247,10 +247,15 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
   }
 
   // --- Helper: convert newlines into <br>
-  function normalizeCellText(text) {
-    if (!text) return "";
-    return text.replace(/(\r\n|\r|\n)/g, "<br>");
-  }
+function normalizeCellText(text) {
+  if (!text) return "";
+  return text
+    // convert real line breaks to <br>
+    .replace(/(\r\n|\r|\n)/g, "<br>")
+    // don’t double-escape existing <br>
+    .replace(/&lt;br&gt;/g, "<br>");
+}
+
 
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
