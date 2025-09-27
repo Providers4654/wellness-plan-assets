@@ -534,6 +534,35 @@ html, body {
 
 
 
+/* ============================
+   RESPONSIVE: MOBILE FONT TWEAKS
+   ============================ */
+@media (max-width: 600px) {
+  /* Section Titles (📋 Personalized Wellness Plan, 💊 Treatment Summary, etc.) */
+  .wellness-plan .section-title {
+    font-size: 15px !important;   /* smaller on mobile */
+    padding: 4px 14px !important; /* tighter pill padding */
+  }
+
+  /* To Consider subtitles (PEPTIDES, HORMONES, etc.) */
+  .to-consider-subtitle {
+    font-size: 0.75rem !important; /* slightly smaller */
+  }
+
+  /* Treatment Summary blocks (Daily, Evening, Weekly, PRN) */
+  .wellness-plan .med-time-label {
+    font-size: 16px !important;   /* smaller block headings */
+    padding: 8px 12px !important; /* reduced padding */
+  }
+
+  /* Optional: shrink med rows too for tighter fit */
+  .wellness-plan .medication-list li {
+    font-size: 14px !important;
+  }
+}
+
+
+
 
 
 
