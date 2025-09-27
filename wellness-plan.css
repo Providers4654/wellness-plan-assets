@@ -338,25 +338,10 @@ html, body {
 
 
 /* ============================
-   TO CONSIDER STYLING (FIXED SPACING)
+   TO CONSIDER SUBTITLE STYLING (Simple)
    ============================ */
-
-/* Reset UL + LI defaults */
-#toConsider {
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 14px;   /* base indent */
-}
-
-#toConsider li {
-  margin: 0;
-  padding: 0;
-}
-
-/* Medication rows */
 .to-consider-row {
-  margin-bottom: 12px;
-  padding-left: 14px;    /* indent under subtitle */
+  margin-bottom: 14px;
 }
 
 .to-consider-name {
@@ -367,39 +352,35 @@ html, body {
 .to-consider-blurb {
   font-style: italic;
   color: #444;
-  margin: 2px 0 6px;
+  margin-top: 2px;
+  margin-bottom: 8px;
   line-height: 1.4;
 }
 
 .to-consider-blurb a {
-  font-style: normal;
-  color: #0073e6;
+  font-style: normal;        /* cancel italics for links */
+  color: #0073e6;            /* MTN HLTH blue */
   text-decoration: underline;
 }
 
-/* --- Subtitle Divider --- */
+/* --- Subtitle Divider (simple) --- */
 .to-consider-subtitle {
   display: flex;
   align-items: center;
-  width: 100%;
-  
   font-size: 0.85rem;
-  font-style: italic;
+  font-style: italic;        /* italicize the label */
   font-weight: 600;
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-
-  padding: 10px 0 4px 0;    /* 10px space above, 4px below */
-  margin: 0;                /* reset margins */
-  line-height: 1.2;          /* tighten vertical rhythm */
+  margin: 18px 0 6px;        /* space above & below */
 }
 
 .to-consider-subtitle::after {
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ddd;
+  background-color: #ddd;   /* subtle divider */
   margin-left: 8px;
 }
 
