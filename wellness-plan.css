@@ -374,7 +374,11 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 20px 0 6px;        /* ⬆️ more space above, ⬇️ less below */
+  margin: 14px 0 6px;        /* default: tighter spacing */
+}
+
+.to-consider-subtitle:first-of-type {
+  margin-top: 22px;          /* extra space above the very first subtitle */
 }
 
 .to-consider-subtitle::after {
