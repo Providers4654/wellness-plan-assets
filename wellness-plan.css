@@ -363,27 +363,29 @@ html, body {
   text-decoration: underline;
 }
 
-/* --- Subtitle Divider --- */
+/* --- Subtitle Divider (final tweak) --- */
 .to-consider-subtitle {
   display: flex;
   align-items: center;
   font-size: 0.85rem;
-  font-style: italic;        /* italicize the label */
+  font-style: italic;
   font-weight: 600;
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 18px;          /* keep space above */
-  margin-bottom: 4px;        /* tighten space below */
+
+  margin-top: 18px;        /* keep good space above */
+  margin-bottom: 4px !important;   /* force tighter space below */
 }
 
 .to-consider-subtitle::after {
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ddd;   /* subtle divider */
+  background-color: #ddd;
   margin-left: 8px;
 }
+
 
 
 
