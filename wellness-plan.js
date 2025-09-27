@@ -115,27 +115,23 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  // Group meds
+  // Group meds (Daily/Evening/Weekly/PRN)
   const medsByCategory = {
     Daily: { meds: [], supps: [] },
     Evening: { meds: [], supps: [] },
     Weekly: { meds: [], supps: [] },
-    PRN: { meds: [], supps: [] },
-    "To Consider": { meds: [], supps: [] }
+    PRN: { meds: [], supps: [] }
   };
 
   rows.forEach(r => {
-    const med = r["Meds/Supp"] || r["To Consider"];  // ✅ allow either column
+    const med = r["Meds/Supp"];
     if (!med) return;
 
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
 
     let blurb = "";
-    let medInfo = medsData.find(m => m["Medication"] === med);
-    if (!medInfo && cat === "To Consider") {
-      medInfo = toConsiderData.find(m => m["Medication"] === med);
-    }
+    const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
     const medHtml = `
@@ -145,7 +141,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
           ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
         </div>
         <div class="dose">${dose}</div>
-        ${blurb ? `<div class="learn-more-content">${blurb}</div>` : ""}
+        ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
       </li>
     `;
 
@@ -159,10 +155,10 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // Inject meds
+  // Inject standard meds
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-    const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds", "To Consider": "toConsider" }[cat];
-    const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock", "To Consider": "toConsiderBlock" }[cat];
+    const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds" }[cat];
+    const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock" }[cat];
     const block = document.getElementById(blockId);
     const list = document.getElementById(listId);
     if (!list || !block) return;
@@ -175,6 +171,37 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       block.remove();
     }
   });
+
+  // --- To Consider ---
+  const toConsiderList = document.getElementById("toConsider");
+  const toConsiderBlock = document.getElementById("toConsiderBlock");
+  if (toConsiderList && toConsiderBlock) {
+    const firstRow = rows[0];
+    const meds = (firstRow["To Consider"] || "")
+      .split(",")
+      .map(t => t.trim())
+      .filter(Boolean);
+
+    if (meds.length > 0) {
+      let html = "";
+      meds.forEach(med => {
+        let info = toConsiderData.find(r => r["Medication"].trim() === med);
+        let blurb = info ? info["Blurb"] : "";
+        html += `
+          <li class="med-row">
+            <div class="med-name">
+              <strong>${med}</strong>
+              ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
+            </div>
+            ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
+          </li>
+        `;
+      });
+      toConsiderList.innerHTML = html;
+    } else {
+      toConsiderBlock.remove();
+    }
+  }
 
   // Visit timeline
   const visitTimelineList = document.getElementById("visitTimeline");
@@ -215,28 +242,26 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
+  // Body Comp
+  const bodyCompList = document.getElementById("bodyComp");
+  if (bodyCompList && bodyCompTitle) {
+    const firstRow = rows[0];
+    const key = (firstRow["Body Comp"] || "").trim();
 
-if (bodyCompList && bodyCompTitle) {
-  const firstRow = rows[0];
-  const key = (firstRow["Body Comp"] || "").trim();
-
-  if (key) {
-    const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-    let html = "";
-    if (compRow && compRow["Blurb"]) {
-      html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+    if (key) {
+      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+      let html = "";
+      if (compRow && compRow["Blurb"]) {
+        html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+      } else {
+        html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+      }
+      bodyCompList.innerHTML = html;
     } else {
-      html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+      if (bodyCompTitle) bodyCompTitle.remove();
+      bodyCompList.remove();
     }
-    bodyCompList.innerHTML = html;
-  } else {
-    if (bodyCompTitle) bodyCompTitle.remove();
-    bodyCompList.remove();
   }
-}
-
 
   // Target goals
   const targetGoalsList = document.getElementById("targetGoals");
@@ -249,6 +274,7 @@ if (bodyCompList && bodyCompTitle) {
     }
   }
 }
+
 
 // ============================
 // CSV Helpers
