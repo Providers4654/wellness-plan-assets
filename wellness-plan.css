@@ -334,6 +334,43 @@ html, body {
   margin-bottom: 4px; /* tight before next item */
 }
 
+
+
+
+/* ============================
+   SUBTITLE: TO CONSIDER STYLING
+   ============================ */
+.to-consider-row {
+  margin-bottom: 18px;
+}
+
+.to-consider-name {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.to-consider-blurb {
+  font-style: italic;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.to-consider-subtitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 20px 0 8px;
+  color: #666;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+
+
+
+
+
+
 /* ============================
    MED LINK GROUP (Testosterone links)
    ============================ */
