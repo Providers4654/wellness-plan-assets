@@ -196,10 +196,17 @@ if (toConsiderList && toConsiderBlock) {
       const blurb = info["Blurb"] || "";
       const category = (info["Category"] || "").trim();
 
-// Insert subtitle when category changes
+// Insert subtitle only if group has meds
 if (category && category !== lastCategory) {
-  html += `<li class="to-consider-subtitle">${category}</li>`;
-  lastCategory = category;
+  // check ahead if this category actually has at least one med
+  const categoryMeds = meds.filter(m => {
+    const info = toConsiderData.find(r => r["Medication"].trim() === m);
+    return info && (info["Category"] || "").trim() === category;
+  });
+  if (categoryMeds.length > 0) {
+    html += `<li class="to-consider-subtitle">${category}</li>`;
+    lastCategory = category;
+  }
 }
 
 
