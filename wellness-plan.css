@@ -338,17 +338,25 @@ html, body {
 
 
 /* ============================
-   TO CONSIDER SUBTITLE STYLING
+   TO CONSIDER STYLING
    ============================ */
+
+/* Reset UL defaults */
 #toConsider {
   list-style: none;
   margin: 0;
-  padding-left: 14px;   /* base indent for subtitles */
+  padding: 0 0 0 14px;   /* base indent for subtitles */
 }
 
+#toConsider li {
+  margin: 0;
+  padding: 0;
+}
+
+/* Medication rows */
 .to-consider-row {
   margin-bottom: 12px;
-  padding-left: 14px;   /* extra indent for meds under subtitles */
+  padding-left: 14px;    /* extra indent for meds under subtitles */
 }
 
 .to-consider-name {
@@ -359,18 +367,17 @@ html, body {
 .to-consider-blurb {
   font-style: italic;
   color: #444;
-  margin-top: 2px;
-  margin-bottom: 6px;
+  margin: 2px 0 6px;
   line-height: 1.4;
 }
 
 .to-consider-blurb a {
-  font-style: normal;
-  color: #0073e6;
+  font-style: normal;     /* cancel italics for links */
+  color: #0073e6;         /* MTN HLTH blue */
   text-decoration: underline;
 }
 
-/* --- Subtitle Divider --- */
+/* Subtitle row */
 .to-consider-subtitle {
   display: flex;
   align-items: center;
@@ -380,18 +387,19 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 18px 0 2px;   /* more space above, less below */
-  padding-left: 0;      /* relative to #toConsider’s base indent */
+
+  margin-top: 18px;       /* more space above */
+  margin-bottom: 2px;     /* tighter space below */
+  padding-left: 0;        /* aligned with base indent */
 }
 
 .to-consider-subtitle::after {
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ddd;
+  background-color: #ddd; /* subtle divider */
   margin-left: 8px;
 }
-
 
 
 
