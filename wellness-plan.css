@@ -362,14 +362,14 @@ html, body {
 }
 
 .to-consider-subtitle {
-  font-size: 0.9rem;
+  background: #f0f4ff;          /* soft blue-gray background */
+  color: #1a3a6e;               /* darker blue text */
   font-weight: 700;
-  color: #444;
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin: 16px 0 6px;   /* tighter spacing below */
-  padding-bottom: 4px;
-  border-bottom: 2px solid #ddd;  /* underline effect */
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 14px 0 10px;
 }
 
 
