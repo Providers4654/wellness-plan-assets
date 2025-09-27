@@ -338,17 +338,10 @@ html, body {
 
 
 /* ============================
-   TO CONSIDER SUBTITLE STYLING (Simple, Fixed)
+   TO CONSIDER SUBTITLE STYLING (Tightened)
    ============================ */
-#toConsider {
-  list-style: none;
-  margin: 0;
-  padding: 0;   /* reset browser defaults */
-}
-
 .to-consider-row {
   margin-bottom: 14px;
-  padding-left: 16px;   /* indent meds relative to subtitle */
 }
 
 .to-consider-name {
@@ -370,7 +363,7 @@ html, body {
   text-decoration: underline;
 }
 
-/* --- Subtitle Divider (simple) --- */
+/* --- Subtitle Divider --- */
 .to-consider-subtitle {
   display: flex;
   align-items: center;
@@ -380,9 +373,8 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: 18px;          /* spacing above subtitle */
-  margin-bottom: 6px;        /* tighter spacing below */
-  padding-left: 8px;         /* indent slightly */
+  margin-top: 18px;          /* keep space above */
+  margin-bottom: 4px;        /* tighten space below */
 }
 
 .to-consider-subtitle::after {
