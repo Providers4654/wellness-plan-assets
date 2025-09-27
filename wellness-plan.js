@@ -4,13 +4,25 @@
 
 const root = getComputedStyle(document.documentElement);
 
+// --- Provider-specific Wellness sheets ---
+const PROVIDERS = {
+  pj: {
+    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv", // Joe
+  },
+  pb: {
+    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRV9VSxPY8Sy_v7mq_dDOYTRSIr0aWqbj7FH9ATxJJs8IsqTeZkmSTJcv7MyIjrI_fzmRY7qdZjEJZb/pub?gid=0&single=true&output=csv", // Bryan
+  }
+  // add more providers later (pk, pm, etc.)
+};
+
+// --- Shared reference tabs (same for all providers) ---
 const TABS = {
-  wellness:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv",
   meds:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
   lifestyle:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
   bodycomp:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
   toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv"
 };
+
 
 // --- Helper: Read CSS vars safely
 function cssVar(name) {
@@ -356,8 +368,15 @@ function getPatientIdFromUrl() {
 // ============================
 async function loadPatientData() {
   try {
+    const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
+    const provider = PROVIDERS[providerCode];
+    if (!provider) {
+      console.error("❌ Unknown provider code:", providerCode);
+      return;
+    }
+
     const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
-      fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
+      fetch(provider.wellness + "&cb=" + Date.now()).then(r => r.text()),
       fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
       fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
       fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text()),
@@ -370,7 +389,6 @@ async function loadPatientData() {
     const bodyCompData = csvToJSON(bodyCompRes);
     const toConsiderData = csvToJSON(toConsiderRes);
 
-    const patientId = getPatientIdFromUrl();
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
 
     if (patientRows.length > 0) {
@@ -382,6 +400,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 // ============================
 // Bootstrap
