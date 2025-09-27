@@ -196,11 +196,12 @@ if (toConsiderList && toConsiderBlock) {
       const blurb = info["Blurb"] || "";
       const category = (info["Category"] || "").trim();
 
-      // Insert subtitle when category changes
-      if (category && category !== lastCategory) {
-        html += `<li class="to-consider-subtitle"><span>${category}</span></li>`;
-        lastCategory = category;
-      }
+// Insert subtitle when category changes
+if (category && category !== lastCategory) {
+  html += `<li class="to-consider-subtitle">${category}</li>`;
+  lastCategory = category;
+}
+
 
       html += `
         <li class="to-consider-row">
