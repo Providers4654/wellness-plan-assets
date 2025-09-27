@@ -365,14 +365,15 @@ html, body {
 
 /* --- Subtitle Banner --- */
 .to-consider-subtitle {
-  display: block;
-  background: #f9f2e9;       /* warm beige backdrop */
-  color: #8b4513;            /* rich brown text */
+  display: inline-block;
+  border: 2px solid #ff7043;   /* warm accent border */
+  background: #fffaf6;         /* very light warm tint */
+  color: #b34700;              /* deep warm text */
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 4px;
   margin: 16px 0 10px;
 }
