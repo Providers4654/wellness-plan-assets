@@ -236,24 +236,27 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // Visit timeline
-  const visitTimelineList = document.getElementById("visitTimeline");
-  if (visitTimelineList) {
-    const firstRow = rows[0];
-    const prev = firstRow["Previous Visit"] || "";
-    const next = firstRow["Next Visit"] || "";
+// Visit timeline
+const visitTimelineList = document.getElementById("visitTimeline");
+if (visitTimelineList) {
+  const firstRow = rows[0];
+  const prev = firstRow["Previous Visit"] || "";
+  const next = firstRow["Next Visit"] || "";
+  const freq = firstRow["F/U Freq (Days)"] || "";
 
-    if (prev || next) {
-      visitTimelineList.innerHTML = `
-        ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
-        ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
-      `;
-    } else {
-      const vtTitle = document.getElementById("visitTimelineTitle");
-      if (vtTitle) vtTitle.remove();
-      visitTimelineList.remove();
-    }
+  if (prev || next || freq) {
+    visitTimelineList.innerHTML = `
+      ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
+      ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
+      ${freq ? `<li><span class="editable"><strong>Follow-up Frequency:</strong> ${freq} days</span></li>` : ""}
+    `;
+  } else {
+    const vtTitle = document.getElementById("visitTimelineTitle");
+    if (vtTitle) vtTitle.remove();
+    visitTimelineList.remove();
   }
+}
+
 
   // Lifestyle tips
   const lifestyleBlock = document.getElementById("lifestyleTips");
