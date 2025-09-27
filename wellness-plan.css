@@ -374,7 +374,7 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 12px 0 4px;        /* tighter spacing */
+  margin: 20px 0 6px;        /* ⬆️ more space above, ⬇️ less below */
 }
 
 .to-consider-subtitle::after {
@@ -384,6 +384,7 @@ html, body {
   background-color: #ddd;   /* subtle divider */
   margin-left: 8px;
 }
+
 
 
 
