@@ -338,7 +338,7 @@ html, body {
 
 
 /* ============================
-   TO CONSIDER STYLING
+   TO CONSIDER SUBTITLE STYLING
    ============================ */
 .to-consider-row {
   margin-bottom: 16px;
@@ -363,17 +363,24 @@ html, body {
   text-decoration: underline;
 }
 
-/* --- Subtitle Banner --- */
+/* --- Subtitle Divider --- */
 .to-consider-subtitle {
-  display: block;                /* force full-width row */
-  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
   font-weight: 700;
-  color: #333;
+  color: #444;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin: 18px 0 8px;
-  padding-bottom: 6px;
-  border-bottom: 2px solid #ff7043;  /* bold accent underline */
+  letter-spacing: 0.6px;
+  margin: 16px 0 10px;
+}
+
+.to-consider-subtitle::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: #e0e0e0;   /* soft gray divider */
+  margin-left: 8px;
 }
 
 
