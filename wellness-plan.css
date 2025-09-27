@@ -380,7 +380,7 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 18px 0 4px;   /* more space above, less below */
+  margin: 18px 0 2px;   /* more space above, less below */
   padding-left: 0;      /* relative to #toConsider’s base indent */
 }
 
