@@ -172,36 +172,47 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // --- To Consider ---
-  const toConsiderList = document.getElementById("toConsider");
-  const toConsiderBlock = document.getElementById("toConsiderBlock");
-  if (toConsiderList && toConsiderBlock) {
-    const firstRow = rows[0];
-    const meds = (firstRow["To Consider"] || "")
-      .split(",")
-      .map(t => t.trim())
-      .filter(Boolean);
+// --- To Consider ---
+const toConsiderList = document.getElementById("toConsider");
+const toConsiderBlock = document.getElementById("toConsiderBlock");
+if (toConsiderList && toConsiderBlock) {
+  const firstRow = rows[0];
+  const meds = (firstRow["To Consider"] || "")
+    .split(",")
+    .map(t => t.trim())
+    .filter(Boolean);
 
-    if (meds.length > 0) {
-      let html = "";
-      meds.forEach(med => {
-        let info = toConsiderData.find(r => r["Medication"].trim() === med);
-        let blurb = info ? info["Blurb"] : "";
-        html += `
-          <li class="med-row">
-            <div class="med-name">
-              <strong>${med}</strong>
-              ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
-            </div>
-            ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
-          </li>
-        `;
-      });
-      toConsiderList.innerHTML = html;
-    } else {
-      toConsiderBlock.remove();
-    }
+  if (meds.length > 0) {
+    let html = "";
+    let lastCategory = "";
+
+    meds.forEach(med => {
+      let info = toConsiderData.find(r => r["Medication"].trim() === med);
+      if (!info) return;
+
+      const blurb = info["Blurb"] || "";
+      const category = (info["Category"] || "").trim();
+
+      // Insert subtitle when category changes
+      if (category && category !== lastCategory) {
+        html += `<li class="to-consider-subtitle"><span>${category}</span></li>`;
+        lastCategory = category;
+      }
+
+      html += `
+        <li class="to-consider-row">
+          <div class="to-consider-name"><strong>${med}</strong></div>
+          ${blurb ? `<div class="to-consider-blurb">${normalizeCellText(blurb)}</div>` : ""}
+        </li>
+      `;
+    });
+
+    toConsiderList.innerHTML = html;
+  } else {
+    toConsiderBlock.remove();
   }
+}
+
 
   // Visit timeline
   const visitTimelineList = document.getElementById("visitTimeline");
