@@ -341,16 +341,16 @@ html, body {
    TO CONSIDER SUBTITLE STYLING
    ============================ */
 
-/* reset UL so our li styles actually show */
+/* reset list but keep left padding for subtitles */
 #toConsider {
   list-style: none;
   margin: 0;
-  padding-left: 0;
+  padding-left: 0;   /* subtitles align with card edge */
 }
 
 .to-consider-row {
-  margin-bottom: 10px;     /* reduced spacing */
-  padding-left: 18px;      /* real indent */
+  margin-bottom: 12px;
+  padding-left: 18px;   /* indent meds only */
 }
 
 .to-consider-name {
@@ -362,7 +362,7 @@ html, body {
   font-style: italic;
   color: #444;
   margin-top: 2px;
-  margin-bottom: 6px;      /* tighter */
+  margin-bottom: 6px;
   line-height: 1.4;
 }
 
@@ -382,8 +382,8 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 18px 0 4px;      /* more above, less below */
-  padding-left: 2px;       /* slight indent for alignment */
+  margin: 18px 0 4px;   /* more above, less below */
+  padding-left: 0;      /* keep subtitle flush left */
 }
 
 .to-consider-subtitle::after {
