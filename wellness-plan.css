@@ -389,7 +389,7 @@ html, body {
   letter-spacing: 0.5px;
 
   margin-top: 18px;       /* more space above */
-  margin-bottom: 2px;     /* tighter space below */
+  margin-bottom: 5px;     /* tighter space below */
   padding-left: 0;        /* aligned with base indent */
 }
 
