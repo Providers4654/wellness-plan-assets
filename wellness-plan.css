@@ -342,11 +342,12 @@ html, body {
    ============================ */
 .to-consider-row {
   margin-bottom: 14px;
+  padding-left: 12px;       /* indent meds under subtitle */
 }
 
 .to-consider-name {
   font-weight: 600;
-  margin-bottom: 2px;   /* tighter */
+  margin-bottom: 2px;
 }
 
 .to-consider-blurb {
@@ -373,14 +374,14 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 12px 0 4px;        /* much closer spacing */
+  margin: 12px 0 4px;        /* tighter spacing */
 }
 
 .to-consider-subtitle::after {
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ddd;   /* softer divider line */
+  background-color: #ddd;   /* subtle divider */
   margin-left: 8px;
 }
 
