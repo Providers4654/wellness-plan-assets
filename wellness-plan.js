@@ -8,8 +8,10 @@ const TABS = {
   wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv",
   meds: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
   lifestyle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
-  bodycomp: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv"
-}; 
+  bodycomp: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
+  toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1041049772&single=true&output=csv"
+};
+
 
 // --- Helper: Read CSS vars safely
 function cssVar(name) {
@@ -101,7 +103,7 @@ function normalizeCellText(text) {
 // ============================
 // Inject Patient Data
 // ============================
-function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
+function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
   // Section titles
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
@@ -122,14 +124,17 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData) {
   };
 
   rows.forEach(r => {
-    const med = r["Meds/Supp"];
+    const med = r["Meds/Supp"] || r["To Consider"];  // ✅ allow either column
     if (!med) return;
 
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
 
     let blurb = "";
-    const medInfo = medsData.find(m => m["Medication"] === med);
+    let medInfo = medsData.find(m => m["Medication"] === med);
+    if (!medInfo && cat === "To Consider") {
+      medInfo = toConsiderData.find(m => m["Medication"] === med);
+    }
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
     const medHtml = `
@@ -289,23 +294,26 @@ function getPatientIdFromUrl() {
 // ============================
 async function loadPatientData() {
   try {
-    const [wellnessRes, medsRes, lifestyleRes, bodyCompRes] = await Promise.all([
-      fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text())
-    ]);
+const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
+  fetch(TABS.wellness + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text()),
+  fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.text())
+]);
 
-    const wellnessData = csvToJSON(wellnessRes);
-    const medsData = csvToJSON(medsRes);
-    const lifestyleData = csvToJSON(lifestyleRes);
-    const bodyCompData = csvToJSON(bodyCompRes);
+const wellnessData = csvToJSON(wellnessRes);
+const medsData = csvToJSON(medsRes);
+const lifestyleData = csvToJSON(lifestyleRes);
+const bodyCompData = csvToJSON(bodyCompRes);
+const toConsiderData = csvToJSON(toConsiderRes);
+
 
     const patientId = getPatientIdFromUrl();
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
 
     if (patientRows.length > 0) {
-      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData);
+      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
     } else {
       console.warn("⚠️ No patient found for ID:", patientId);
     }
