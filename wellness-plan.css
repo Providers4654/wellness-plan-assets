@@ -377,10 +377,12 @@ html, body {
   text-decoration: underline;
 }
 
-/* Subtitle row */
+/* --- Subtitle Divider --- */
 .to-consider-subtitle {
   display: flex;
   align-items: center;
+  width: 100%;
+  
   font-size: 0.85rem;
   font-style: italic;
   font-weight: 600;
@@ -388,9 +390,9 @@ html, body {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 
-  margin-top: 20px !important;   /* ensure spacing above */
-  margin-bottom: 5px !important; /* ensure spacing below */
-  padding-left: 0;
+  padding: 10px 0 4px 0;    /* 10px space above, 4px below */
+  margin: 0;                /* reset margins */
+  line-height: 1.2;          /* tighten vertical rhythm */
 }
 
 .to-consider-subtitle::after {
@@ -400,6 +402,7 @@ html, body {
   background-color: #ddd;
   margin-left: 8px;
 }
+
 
 
 
