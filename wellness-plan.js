@@ -178,6 +178,7 @@ Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
 // --- To Consider ---
 const toConsiderList = document.getElementById("toConsider");
 const toConsiderBlock = document.getElementById("toConsiderBlock");
+
 if (toConsiderList && toConsiderBlock) {
   const firstRow = rows[0];
   const meds = (firstRow["To Consider"] || "")
@@ -187,27 +188,62 @@ if (toConsiderList && toConsiderBlock) {
 
   if (meds.length > 0) {
     let html = "";
-    let lastCategory = "";
 
+    // Define your desired order
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
+
+    // Group meds by category
+    const grouped = {};
     meds.forEach(med => {
-      let info = toConsiderData.find(r => r["Medication"].trim() === med);
+      const info = toConsiderData.find(r => r["Medication"].trim() === med);
       if (!info) return;
+      const category = (info["Category"] || "").trim() || "Other";
+      if (!grouped[category]) grouped[category] = [];
+      grouped[category].push(info);
+    });
 
-      const blurb = info["Blurb"] || "";
-      const category = (info["Category"] || "").trim();
+    // Render in forced order
+    CATEGORY_ORDER.forEach(category => {
+      if (grouped[category]) {
+        // Subtitle
+        html += `<li class="to-consider-subtitle">${category}</li>`;
 
-// Insert subtitle only if group has meds
-if (category && category !== lastCategory) {
-  // check ahead if this category actually has at least one med
-  const categoryMeds = meds.filter(m => {
-    const info = toConsiderData.find(r => r["Medication"].trim() === m);
-    return info && (info["Category"] || "").trim() === category;
-  });
-  if (categoryMeds.length > 0) {
-    html += `<li class="to-consider-subtitle">${category}</li>`;
-    lastCategory = category;
+        // Meds
+        grouped[category].forEach(info => {
+          const blurb = info["Blurb"] || "";
+          html += `
+            <li class="to-consider-row">
+              <div class="to-consider-name">${info["Medication"]}</div>
+              <div class="to-consider-blurb">${blurb}</div>
+            </li>
+          `;
+        });
+      }
+    });
+
+    // Render any extra categories not in the predefined order
+    Object.keys(grouped).forEach(category => {
+      if (!CATEGORY_ORDER.includes(category)) {
+        html += `<li class="to-consider-subtitle">${category}</li>`;
+        grouped[category].forEach(info => {
+          const blurb = info["Blurb"] || "";
+          html += `
+            <li class="to-consider-row">
+              <div class="to-consider-name">${info["Medication"]}</div>
+              <div class="to-consider-blurb">${blurb}</div>
+            </li>
+          `;
+        });
+      }
+    });
+
+    toConsiderList.innerHTML = html;
+    toConsiderBlock.style.display = "block";
+  } else {
+    toConsiderBlock.style.display = "none"; // hide if empty
   }
 }
+
 
 
       html += `
