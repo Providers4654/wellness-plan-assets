@@ -358,14 +358,23 @@ function parseCSVLine(line) {
   return result;
 }
 
-function getPatientIdFromUrl() {
-  const parts = window.location.pathname.split("/");
-  return parts.pop() || parts.pop();
-}
+
 
 // ============================
 // Load Patient Data
 // ============================
+
+// --- Parse provider + patient ID from URL ---
+// Example: /pj/test-patient/999 → { providerCode: "pj", patientId: "999" }
+function getProviderAndPatientIdFromUrl() {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const providerCode = parts[0];   // "pj" or "pb"
+  const patientId = parts.pop();   // last segment (the ID)
+  return { providerCode, patientId };
+}
+
+
+
 async function loadPatientData() {
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
@@ -374,6 +383,9 @@ async function loadPatientData() {
       console.error("❌ Unknown provider code:", providerCode);
       return;
     }
+
+
+    console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
     const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
       fetch(provider.wellness + "&cb=" + Date.now()).then(r => r.text()),
