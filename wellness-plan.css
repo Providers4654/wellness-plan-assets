@@ -340,8 +340,10 @@ html, body {
 /* ============================
    TO CONSIDER SUBTITLE STYLING (Tightened)
    ============================ */
+/* Medication rows under subtitle */
 .to-consider-row {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
+  padding-left: 16px !important;   /* force indent */
 }
 
 .to-consider-name {
