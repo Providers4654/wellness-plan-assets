@@ -237,28 +237,6 @@ if (toConsiderList && toConsiderBlock) {
       }
     });
 
-    toConsiderList.innerHTML = html;
-    toConsiderBlock.style.display = "block";
-  } else {
-    toConsiderBlock.style.display = "none"; // hide if empty
-  }
-}
-
-
-
-      html += `
-        <li class="to-consider-row">
-          <div class="to-consider-name"><strong>${med}</strong></div>
-          ${blurb ? `<div class="to-consider-blurb">${normalizeCellText(blurb)}</div>` : ""}
-        </li>
-      `;
-    });
-
-    toConsiderList.innerHTML = html;
-  } else {
-    toConsiderBlock.remove();
-  }
-}
 
 
 
