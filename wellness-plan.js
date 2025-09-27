@@ -155,41 +155,24 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // Inject standard meds
+ 
+// Inject standard meds
 Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-  const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds", "To Consider": "toConsider" }[cat];
-  const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock", "To Consider": "toConsiderBlock" }[cat];
+  const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds" }[cat];
+  const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock" }[cat];
   const block = document.getElementById(blockId);
   const list = document.getElementById(listId);
   if (!list || !block) return;
 
-  if (cat === "To Consider") {
-    // group by Category column
-    const grouped = {};
-    meds.forEach(itemHtml => {
-      const match = itemHtml.match(/data-category="([^"]+)"/);
-      const group = match ? match[1] : "Other";
-      if (!grouped[group]) grouped[group] = [];
-      grouped[group].push(itemHtml);
-    });
-
-    let html = "";
-    Object.entries(grouped).forEach(([group, items]) => {
-      html += `<li class="to-consider-subtitle">${group}</li>`;
-      html += items.join("");
-    });
-
+  if (meds.length > 0 || supps.length > 0) {
+    let html = meds.join("");
+    if (supps.length > 0) html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
     list.innerHTML = html;
   } else {
-    if (meds.length > 0 || supps.length > 0) {
-      let html = meds.join("");
-      if (supps.length > 0) html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-      list.innerHTML = html;
-    } else {
-      block.remove();
-    }
+    block.remove();
   }
 });
+
 
 
 // --- To Consider ---
@@ -232,6 +215,7 @@ if (toConsiderList && toConsiderBlock) {
     toConsiderBlock.remove();
   }
 }
+
 
 
   // Visit timeline
