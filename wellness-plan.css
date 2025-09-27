@@ -363,28 +363,20 @@ html, body {
   text-decoration: underline;
 }
 
+/* --- Subtitle Banner --- */
 .to-consider-subtitle {
-  font-size: 0.9rem;
+  display: block;
+  background: #f9f2e9;       /* warm beige backdrop */
+  color: #8b4513;            /* rich brown text */
   font-weight: 700;
-  color: #222;                   /* darker, bolder text */
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 18px 0 8px;
-  position: relative;
-  padding-left: 10px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin: 16px 0 10px;
 }
 
-.to-consider-subtitle::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 4px;
-  height: 14px;
-  background-color: #ff7043;     /* warm accent (orange-red) */
-  border-radius: 2px;
-}
 
 
 
