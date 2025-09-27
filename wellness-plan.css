@@ -248,13 +248,23 @@ html, body {
 
 /* Mobile sizing of top buttons */
 @media (max-width: 600px) {
+  .top-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+
   .wellness-plan .top-link-btn {
-    width: 160px;
-    height: 38px;
-    padding: 8px 16px;
+    flex: 1 1 48%;   /* take up equal width side by side */
+    height: 40px;
     font-size: 13px;
+    padding: 8px;
+    max-width: none; /* don’t cap at 160px */
   }
 }
+
 
 
 /* ============================
