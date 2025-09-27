@@ -366,12 +366,24 @@ html, body {
 .to-consider-subtitle {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #555;                 /* neutral dark gray */
+  color: #222;                   /* darker, bolder text */
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 16px 0 6px;
-  padding-bottom: 3px;
-  border-bottom: 1px solid #ccc;  /* subtle underline divider */
+  margin: 18px 0 8px;
+  position: relative;
+  padding-left: 10px;
+}
+
+.to-consider-subtitle::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 14px;
+  background-color: #ff7043;     /* warm accent (orange-red) */
+  border-radius: 2px;
 }
 
 
