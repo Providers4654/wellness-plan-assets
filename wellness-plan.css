@@ -340,17 +340,15 @@ html, body {
 /* ============================
    TO CONSIDER SUBTITLE STYLING
    ============================ */
-
-/* reset list but keep left padding for subtitles */
 #toConsider {
   list-style: none;
   margin: 0;
-  padding-left: 0;   /* subtitles align with card edge */
+  padding-left: 14px;   /* base indent for subtitles */
 }
 
 .to-consider-row {
   margin-bottom: 12px;
-  padding-left: 18px;   /* indent meds only */
+  padding-left: 14px;   /* extra indent for meds under subtitles */
 }
 
 .to-consider-name {
@@ -382,8 +380,8 @@ html, body {
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 18px 0 4px;   /* more above, less below */
-  padding-left: 0;      /* keep subtitle flush left */
+  margin: 18px 0 4px;   /* more space above, less below */
+  padding-left: 0;      /* relative to #toConsider’s base indent */
 }
 
 .to-consider-subtitle::after {
@@ -393,7 +391,6 @@ html, body {
   background-color: #ddd;
   margin-left: 8px;
 }
-
 
 
 
