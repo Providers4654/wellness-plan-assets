@@ -340,9 +340,14 @@ html, body {
 /* ============================
    TO CONSIDER SUBTITLE STYLING
    ============================ */
+
+/* Indent the whole list slightly under the main title */
+#toConsider {
+  padding-left: 12px;
+}
+
 .to-consider-row {
   margin-bottom: 14px;
-  padding-left: 12px;       /* indent meds under subtitle */
 }
 
 .to-consider-name {
@@ -359,8 +364,8 @@ html, body {
 }
 
 .to-consider-blurb a {
-  font-style: normal;        /* cancel italics for links */
-  color: #0073e6;            /* MTN HLTH blue */
+  font-style: normal;         /* cancel italics for links */
+  color: #0073e6;             /* MTN HLTH blue */
   text-decoration: underline;
 }
 
@@ -369,25 +374,26 @@ html, body {
   display: flex;
   align-items: center;
   font-size: 0.85rem;
-  font-style: italic;        /* italicize the label */
+  font-style: italic;         /* italicize the label */
   font-weight: 600;
   color: #555;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin: 14px 0 6px;        /* default: tighter spacing */
+  margin: 16px 0 3px;         /* less space below for tighter grouping */
 }
 
 .to-consider-subtitle:first-of-type {
-  margin-top: 22px;          /* extra space above the very first subtitle */
+  margin-top: 24px;           /* extra space from TO CONSIDER title */
 }
 
 .to-consider-subtitle::after {
   content: "";
   flex: 1;
   height: 1px;
-  background-color: #ddd;   /* subtle divider */
+  background-color: #ddd;     /* subtle divider */
   margin-left: 8px;
 }
+
 
 
 
