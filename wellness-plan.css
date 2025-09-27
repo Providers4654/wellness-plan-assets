@@ -338,10 +338,10 @@ html, body {
 
 
 /* ============================
-   SUBTITLE: TO CONSIDER STYLING
+   TO CONSIDER STYLING
    ============================ */
 .to-consider-row {
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 }
 
 .to-consider-name {
@@ -351,26 +351,30 @@ html, body {
 
 .to-consider-blurb {
   font-style: italic;
-  color: #333;
-  margin-bottom: 12px;
+  color: #444;
+  margin-top: 2px;
+  margin-bottom: 10px;
+  line-height: 1.4;
 }
 
 .to-consider-blurb a {
   font-style: normal;        /* cancel italics for links */
-  color: #0073e6;            /* MTN HLTH blue or adjust */
+  color: #0073e6;            /* MTN HLTH blue */
   text-decoration: underline;
 }
 
 .to-consider-subtitle {
-  background: #f0f4ff;          /* soft blue-gray background */
-  color: #1a3a6e;               /* darker blue text */
+  display: inline-block;
+  background: #e9f0ff;       /* softer blue background */
+  color: #1a3a6e;            /* darker text */
   font-weight: 700;
   font-size: 0.85rem;
   text-transform: uppercase;
-  padding: 6px 10px;
-  border-radius: 6px;
-  margin: 14px 0 10px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin: 12px 0 8px;
 }
+
 
 
 
