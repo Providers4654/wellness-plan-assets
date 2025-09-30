@@ -372,43 +372,60 @@ if (targetGoalsList && targetTitle) {
 
 
 // ============================
-// Find contiguous block of rows for a patient ID
+// Find contiguous block of rows for a patient ID (with detailed logging)
 // ============================
 function getPatientBlock(rows, patientId) {
   const result = [];
   let insideBlock = false;
 
+  console.log(`🔎 getPatientBlock: Looking for Patient ID=${patientId}`);
+  console.log(`📊 Total rows provided: ${rows.length}`);
+
   rows.forEach((r, idx) => {
+    // normalize row: sometimes it's an array of cells, sometimes a single value
+    const cells = Array.isArray(r) ? r : [r];
     const id = (getIdField(r) || "").trim().replace(/\.0$/, "");
 
+    console.log(`---`);
+    console.log(`Row ${idx + 2}: raw=`, r);
+    console.log(`Row ${idx + 2}: normalized cells=`, JSON.stringify(cells));
+    console.log(`Row ${idx + 2}: extracted ID="${id}" (target=${patientId})`);
+
     if (id === patientId) {
-      console.log(`▶️ Row ${idx + 2}: START block for ${patientId}`, r);
+      console.log(`✅ Row ${idx + 2}: START block for ${patientId}`);
       insideBlock = true;
       result.push(r);
 
     } else if (insideBlock && !id) {
-      // only keep if row has *some* data (Meds/Supp, Category, etc.)
-      let hasData = false;
-      if (Array.isArray(r)) {
-        hasData = r.some((cell, ci) => ci > 1 && String(cell || "").trim() !== "");
-      }
+      // row has no ID → check if it has other data
+      const hasData = cells.some((cell, ci) => ci > 1 && String(cell || "").trim() !== "");
+      console.log(
+        `Row ${idx + 2}: insideBlock=true, blank ID, hasData=${hasData}, cells=${JSON.stringify(cells)}`
+      );
 
       if (hasData) {
-        console.log(`➡️ Row ${idx + 2}: continuing block (blank ID, but has data)`, r);
+        console.log(`➡️ Row ${idx + 2}: continuing block (blank ID but has data)`);
         result.push(r);
       } else {
-        console.log(`⚪ Row ${idx + 2}: blank ID and no data → skip`);
+        console.log(`⚪ Row ${idx + 2}: blank ID AND no data → skipping`);
       }
 
     } else if (insideBlock && id && id !== patientId) {
       console.log(`⛔ Row ${idx + 2}: hit new patient (${id}), stopping`);
       insideBlock = false;
+    } else {
+      console.log(`ℹ️ Row ${idx + 2}: not relevant (id="${id}", insideBlock=${insideBlock})`);
     }
   });
 
-  console.log(`✅ getPatientBlock: Found ${result.length} rows for Patient ID=${patientId}`);
+  console.log(`========================================`);
+  console.log(`🏁 getPatientBlock finished: Found ${result.length} rows for Patient ID=${patientId}`);
+  console.log(`Final block=`, JSON.stringify(result, null, 2));
+  console.log(`========================================`);
+
   return result;
 }
+
 
 
 
