@@ -415,12 +415,27 @@ async function loadPatientData() {
     }
 
     // ✅ Normalize header variations + ID formatting
-const filteredRows = patientRows.filter(r => {
-  // normalize header variations (with/without BOM)
-  const idRaw = r["Patient ID"] || r["﻿Patient ID"] || r["ID"] || "";
-  const id = String(idRaw).trim().replace(/\.0$/, ""); // also strips trailing .0 if ever exported
-  return id === patientId;
+const filteredRows = [];
+let lastId = null;
+
+patientRows.forEach((r, idx) => {
+  let idRaw = r["Patient ID"] || r["﻿Patient ID"] || "";
+  let id = String(idRaw).trim().replace(/\.0$/, "");
+
+  if (id) {
+    lastId = id; // update last seen ID
+  } else if (lastId) {
+    id = lastId; // carry it down
+  }
+
+  if (id === patientId) {
+    filteredRows.push(r);
+  }
 });
+
+console.log(`🔎 Found ${filteredRows.length} rows for Patient ID=${patientId}`);
+console.log(filteredRows);
+
 
 
 if (filteredRows.length > 0) {
