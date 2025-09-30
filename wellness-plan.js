@@ -387,13 +387,14 @@ function getPatientBlock(rows, patientId) {
       result.push(r);
 
     } else if (insideBlock && !id) {
-      // only keep if row has *some* data (Meds/Supp, Category, etc.)
+      // Only keep if this row has some data in other columns (beyond Patient ID)
       const hasData = r.some((cell, ci) => ci > 1 && String(cell || "").trim() !== "");
       if (hasData) {
         console.log(`➡️ Row ${idx + 2}: continuing block (blank ID, but has data)`, r);
         result.push(r);
       } else {
-        console.log(`⚪ Row ${idx + 2}: blank ID and no data → skip`);
+        console.log(`⚪ Row ${idx + 2}: blank ID with no data → stopping block`);
+        insideBlock = false;
       }
 
     } else if (insideBlock && id && id !== patientId) {
@@ -405,6 +406,7 @@ function getPatientBlock(rows, patientId) {
   console.log(`✅ getPatientBlock: Found ${result.length} rows for Patient ID=${patientId}`);
   return result;
 }
+
 
 
 // ============================
