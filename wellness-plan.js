@@ -1,5 +1,5 @@
 // ============================
-// WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED)
+// WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED, FIXED)
 // ============================
 
 const root = getComputedStyle(document.documentElement);
@@ -12,22 +12,53 @@ function cssVar(name) {
 // --- Provider-specific public CSVs ---
 const PROVIDERS = {
   pj: {
-    // Joe’s published sheet CSV
     wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv"
   },
   pb: {
-    // Bryan’s published sheet CSV
     wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRV9VSxPY8Sy_v7mq_dDOYTRSIr0aWqbj7FH9ATxJJs8IsqTeZkmSTJcv7MyIjrI_fzmRY7qdZjEJZb/pub?gid=0&single=true&output=csv"
   }
 };
 
-// --- Shared reference tabs (CSV exports) ---
 const TABS = {
-  meds:       "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1442071508&single=true&output=csv",
-  lifestyle:  "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1970185497&single=true&output=csv",
-  bodycomp:   "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1795189157&single=true&output=csv",
-  toconsider: "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1041049772&single=true&output=csv"
+  meds:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
+  lifestyle:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
+  bodycomp:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
+  toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv"
 };
+
+
+
+
+// ============================
+// CSV FETCH + PARSER
+// ============================
+
+// Safer line parser that handles quoted cells with commas
+function parseCsvLine(line) {
+  const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
+  const matches = [];
+  line.replace(regex, (m) => {
+    matches.push(m.replace(/^"|"$/g, "")); // strip wrapping quotes
+  });
+  return matches;
+}
+
+async function fetchCsv(url) {
+  const text = await fetch(url).then(r => r.text());
+  const [headerLine, ...lines] = text.trim().split("\n");
+  const headers = parseCsvLine(headerLine);
+  return lines.map(line => {
+    const cells = parseCsvLine(line);
+    const obj = {};
+    headers.forEach((h, i) => (obj[h] = cells[i] || ""));
+    return obj;
+  });
+}
+
+
+
+
+
 
 // ============================
 // RESOURCE LINKS
@@ -106,17 +137,7 @@ function normalizeCellText(text) {
   return text.replace(/(\r\n|\r|\n)/g, "<br>").replace(/&lt;br&gt;/g, "<br>");
 }
 
-async function fetchCsv(url) {
-  const text = await fetch(url).then(r => r.text());
-  const [headerLine, ...lines] = text.trim().split("\n");
-  const headers = headerLine.split(",").map(h => h.trim());
-  return lines.map(line => {
-    const cells = line.split(",").map(c => c.trim());
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = cells[i] || "");
-    return obj;
-  });
-}
+
 
 // ============================
 // Inject Patient Data
