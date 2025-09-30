@@ -67,52 +67,48 @@ async function fetchCsv(url) {
   });
 }
 
-// ============================
-// RESOURCE LINKS
-// ============================
-[
-  ["dynamicFullscriptLink", "--fullscript-url", "fullscriptText", "--fullscript-text", "fullscriptNote", "--fullscript-note"],
-  ["dynamicAddOnsLink", "--treatment-addons-url", "addonsText", "--addons-text", "addonsNote", "--addons-note"],
-  ["dynamicStandardsLink", "--basic-standards-url", "standardsText", "--standards-text", "standardsNote", "--standards-note"],
-  ["dynamicCoachingLink", "--health-coaching-url", "dynamicCoachingLink", "--coaching-text", "coachingNote", "--coaching-note"],
-  ["dynamicFollowUpLink", "--followup-url", "followupText", "--followup-text", null, null],
-].forEach(([aId, hrefVar, textId, textVar, noteId, noteVar]) => {
-  const link = document.getElementById(aId);
-  const textEl = document.getElementById(textId);
-  const noteEl = noteId ? document.getElementById(noteId) : null;
+function injectResourceLinksAndTitles() {
+  console.log("🔗 Injecting resource links & titles");
 
-  const href = cssVar(hrefVar);
-  const text = cssVar(textVar);
-  const note = noteVar ? cssVar(noteVar) : "";
+  // Resource links
+  [
+    ["dynamicFullscriptLink", "--fullscript-url", "fullscriptText", "--fullscript-text", "fullscriptNote", "--fullscript-note"],
+    ["dynamicAddOnsLink", "--treatment-addons-url", "addonsText", "--addons-text", "addonsNote", "--addons-note"],
+    ["dynamicStandardsLink", "--basic-standards-url", "standardsText", "--standards-text", "standardsNote", "--standards-note"],
+    ["dynamicCoachingLink", "--health-coaching-url", "dynamicCoachingLink", "--coaching-text", "coachingNote", "--coaching-note"],
+    ["dynamicFollowUpLink", "--followup-url", "followupText", "--followup-text", null, null],
+  ].forEach(([aId, hrefVar, textId, textVar, noteId, noteVar]) => {
+    const link = document.getElementById(aId);
+    const textEl = document.getElementById(textId);
+    const noteEl = noteId ? document.getElementById(noteId) : null;
 
-  if (link && href) link.href = href;
-  if (textEl && text) textEl.textContent = text;
-  if (noteEl && note) noteEl.textContent = note;
-});
+    const href = cssVar(hrefVar);
+    const text = cssVar(textVar);
+    const note = noteVar ? cssVar(noteVar) : "";
 
-// ============================
-// Apply CSS TEXT Vars
-// ============================
-function setTextIfAvailable(selector, cssVarName, fallback) {
-  const el = document.querySelector(selector);
-  if (el) el.textContent = cssVar(cssVarName) || fallback;
+    if (link && href) link.href = href;
+    if (textEl && text) textEl.textContent = text;
+    if (noteEl && note) noteEl.textContent = note;
+  });
+
+  // Titles & intro
+  setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
+  setTextIfAvailable(".title-summary", "--title-summary", "Summary");
+  setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Habits");
+  setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
+
+  const intro = document.querySelector(".intro-text");
+  if (intro) intro.textContent = cssVar("--intro-message");
+
+  ["dynamicTopBtn1", "dynamicTopBtn2"].forEach((id, i) => {
+    const btn = document.getElementById(id);
+    if (btn) {
+      btn.textContent = cssVar(`--top-btn${i+1}-text`);
+      btn.href = cssVar(`--top-btn${i+1}-url`);
+    }
+  });
 }
 
-setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
-setTextIfAvailable(".title-summary", "--title-summary", "Summary");
-setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Habits");
-setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
-
-const intro = document.querySelector(".intro-text");
-if (intro) intro.textContent = cssVar("--intro-message");
-
-["dynamicTopBtn1", "dynamicTopBtn2"].forEach((id, i) => {
-  const btn = document.getElementById(id);
-  if (btn) {
-    btn.textContent = cssVar(`--top-btn${i+1}-text`);
-    btn.href = cssVar(`--top-btn${i+1}-url`);
-  }
-});
 
 // ============================
 // Remove target="_blank"
@@ -397,6 +393,9 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
 
 
+
+
+
 // ============================
 // Find contiguous block of rows for a patient ID (with detailed logging)
 // ============================
@@ -460,31 +459,51 @@ function getPatientBlock(rows, patientId) {
 // Load Patient Data
 // ============================
 function getProviderAndPatientIdFromUrl() {
-  const parts=window.location.pathname.split("/").filter(Boolean);
-  const providerCode=parts[0]; const patientId=parts.pop();
-  return {providerCode,patientId};
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const providerCode = parts[0];
+  const patientId = parts.pop();
+  return { providerCode, patientId };
 }
 
 async function loadPatientData() {
-  const start=performance.now();
+  const start = performance.now();
   try {
-    const {providerCode,patientId}=getProviderAndPatientIdFromUrl();
-    const provider=PROVIDERS[providerCode];
-    if(!provider) return console.error("❌ Unknown provider:",providerCode);
+    const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
+    const provider = PROVIDERS[providerCode];
+    if (!provider) return console.error("❌ Unknown provider:", providerCode);
+
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
-    const [patientRows,medsData,lifestyleData,bodyCompData,toConsiderData]=await Promise.all([
-      fetchCsv(provider.wellness), fetchCsv(TABS.meds), fetchCsv(TABS.lifestyle), fetchCsv(TABS.bodycomp), fetchCsv(TABS.toconsider),
+
+    const [patientRows, medsData, lifestyleData, bodyCompData, toConsiderData] = await Promise.all([
+      fetchCsv(provider.wellness),
+      fetchCsv(TABS.meds),
+      fetchCsv(TABS.lifestyle),
+      fetchCsv(TABS.bodycomp),
+      fetchCsv(TABS.toconsider),
     ]);
-    if(patientRows.length>0){
-      console.log("Headers from CSV:",Object.keys(patientRows[0]));
-      console.log("First 10 Patient IDs:",patientRows.slice(0,10).map(r=>getIdField(r)));
-    } else {console.warn("⚠️ CSV returned no rows at all");}
-    const patientBlock=getPatientBlock(patientRows,patientId);
-    if(patientBlock.length>0){injectPatientData(patientBlock,lifestyleData,medsData,bodyCompData,toConsiderData);}
-    else {console.warn(`⚠️ No rows found for Patient ID=${patientId}`);}
-    console.log(`✅ Total load time: ${(performance.now()-start).toFixed(2)} ms`);
-  } catch(err){console.error("❌ Error in loadPatientData:",err);}
+
+    if (patientRows.length > 0) {
+      console.log("Headers from CSV:", Object.keys(patientRows[0]));
+      console.log("First 10 Patient IDs:", patientRows.slice(0, 10).map(r => getIdField(r)));
+    } else {
+      console.warn("⚠️ CSV returned no rows at all");
+    }
+
+    const patientBlock = getPatientBlock(patientRows, patientId);
+
+    if (patientBlock.length > 0) {
+      injectPatientData(patientBlock, lifestyleData, medsData, bodyCompData, toConsiderData);
+      injectResourceLinksAndTitles(); // 👈 new line
+    } else {
+      console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
+    }
+
+    console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
+  } catch (err) {
+    console.error("❌ Error in loadPatientData:", err);
+  }
 }
+
 
 // ============================
 // Bootstrap with retry
