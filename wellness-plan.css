@@ -714,26 +714,26 @@ html, body {
 }
 
 /* --------------------------------
-   FIXED THEMING BY ID (more reliable
-   than nth-of-type so order doesn't matter)
+   FIXED THEMING BY ID (overrides generic goals-list li)
    -------------------------------- */
 #visitTimeline li {
-  background-color: #eef1f8;
-  border-left-color: #6b93ff;
-  color: #6b93ff;
+  background-color: #eef1f8 !important;
+  border-left-color: #6b93ff !important;
+  color: #6b93ff !important;
 }
 
 #bodyComp li {
-  background-color: #e7fafa;
-  border-left-color: #00a5b5;
-  color: #00a5b5;
+  background-color: #e7fafa !important;
+  border-left-color: #00a5b5 !important;
+  color: #00a5b5 !important;
 }
 
 #targetGoals li {
-  background-color: #f4efff;
-  border-left-color: #b86bff;
-  color: #b86bff;
+  background-color: #f4efff !important;
+  border-left-color: #b86bff !important;
+  color: #b86bff !important;
 }
+
 
 
 /* Nth-section color themes */
