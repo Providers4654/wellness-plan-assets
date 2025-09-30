@@ -288,25 +288,27 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Lifestyle Tips ---
-  const lifestyleBlock=document.getElementById("lifestyleTips");
-  if(lifestyleBlock){
-    const selectedTips=(getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"])||"")
-      .split(",").map(t=>t.trim()).filter(Boolean);
-    console.log("Lifestyle tips:",selectedTips);
+// --- Lifestyle Tips ---
+const lifestyleBlock=document.getElementById("lifestyleTips");
+if(lifestyleBlock){
+  const selectedTips=(getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"])||"")
+    .split(",").map(t=>t.trim()).filter(Boolean);
+  console.log("Lifestyle tips:",selectedTips);
 
-if (selectedTips.length > 0) {
-  let html = "";
-  selectedTips.forEach(tipName => {
-    const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
-    if (tipInfo) {
-      html += `<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
-    }
-  });
-  lifestyleBlock.innerHTML = html;
-} else {
-  lifestyleBlock.innerHTML = "";
-}
+  if (selectedTips.length > 0) {
+    let html = "";
+    selectedTips.forEach(tipName => {
+      const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+      if (tipInfo) {
+        html += `<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
+      }
+    });
+    lifestyleBlock.innerHTML = html;
+  } else {
+    lifestyleBlock.innerHTML = "";
+  }
+} // <-- this closing brace was missing
+
 
 
   // --- Body Comp ---
