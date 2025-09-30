@@ -375,16 +375,37 @@ if (targetGoalsList && targetTitle) {
 // Find contiguous block of rows for a patient ID
 // ============================
 function getPatientBlock(rows, patientId) {
-  const result=[]; let insideBlock=false;
-  rows.forEach((r,idx)=>{
-    const id=(getIdField(r)||"").trim().replace(/\.0$/,"");
-    if(id===patientId){console.log(`▶️ Row ${idx+2}: START block for ${patientId}`,r); insideBlock=true; result.push(r);}
-    else if(insideBlock&&!id){console.log(`➡️ Row ${idx+2}: continuing block (blank ID)`,r); result.push(r);}
-    else if(insideBlock&&id&&id!==patientId){console.log(`⛔ Row ${idx+2}: hit new patient (${id}), stopping`); insideBlock=false;}
+  const result = [];
+  let insideBlock = false;
+
+  rows.forEach((r, idx) => {
+    const id = (getIdField(r) || "").trim().replace(/\.0$/, "");
+
+    if (id === patientId) {
+      console.log(`▶️ Row ${idx + 2}: START block for ${patientId}`, r);
+      insideBlock = true;
+      result.push(r);
+
+    } else if (insideBlock && !id) {
+      // only keep if row has *some* data (Meds/Supp, Category, etc.)
+      const hasData = r.some((cell, ci) => ci > 1 && String(cell || "").trim() !== "");
+      if (hasData) {
+        console.log(`➡️ Row ${idx + 2}: continuing block (blank ID, but has data)`, r);
+        result.push(r);
+      } else {
+        console.log(`⚪ Row ${idx + 2}: blank ID and no data → skip`);
+      }
+
+    } else if (insideBlock && id && id !== patientId) {
+      console.log(`⛔ Row ${idx + 2}: hit new patient (${id}), stopping`);
+      insideBlock = false;
+    }
   });
+
   console.log(`✅ getPatientBlock: Found ${result.length} rows for Patient ID=${patientId}`);
   return result;
 }
+
 
 // ============================
 // Load Patient Data
