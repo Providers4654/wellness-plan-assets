@@ -166,6 +166,23 @@ function getField(row, keys) {
   return "";
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // --- Inject Patient Data ---
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
   if (!rows || rows.length === 0) {
@@ -179,16 +196,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const patientMeta = rows[0];
   console.log("Using patientMeta for meta fields:", patientMeta);
 
-  // --- Section Titles ---
-  const visitTitle = document.getElementById("visitTimelineTitle");
-  if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
-
-  const bodyCompTitle = document.getElementById("bodyCompTitle");
-  if (bodyCompTitle) bodyCompTitle.textContent = cssVar("--bodycomp-title");
-
-  const targetTitle = document.getElementById("targetTitle");
-  if (targetTitle) targetTitle.textContent = cssVar("--target-title");
-
   // --- Collect meds/supps ---
   const medsByCategory = { Daily:{meds:[],supps:[]}, Evening:{meds:[],supps:[]}, Weekly:{meds:[],supps:[]}, PRN:{meds:[],supps:[]} };
 
@@ -196,14 +203,21 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     console.log(`Processing row ${idx}:`, r);
 
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
-    if (!med) return;
+    if (!med) {
+      console.log(`⚪ Row ${idx}: skipping (no Meds/Supp)`);
+      return;
+    }
 
     const dose = getField(r, ["Dose", "Dosing"]) || "";
     const cat  = (getField(r, ["Category", "Cat"]) || "").trim();
+    console.log(`➡️ Row ${idx}: Med="${med}", Dose="${dose}", Cat="${cat}"`);
 
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
-    if (medInfo) blurb = medInfo["Blurb"] || "";
+    if (medInfo) {
+      blurb = medInfo["Blurb"] || "";
+      console.log(`   ↳ Found medInfo for "${med}" → blurb length=${blurb.length}`);
+    }
 
     const medHtml = `
       <li class="med-row">
@@ -218,22 +232,36 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
       else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
       else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
+      else console.log(`⚠️ Row ${idx}: Supplement with unknown category "${cat}"`);
     } else if (medsByCategory[cat]) {
       medsByCategory[cat].meds.push(medHtml);
+    } else {
+      console.log(`⚠️ Row ${idx}: Category "${cat}" not in [Daily, Evening, Weekly, PRN]`);
     }
   });
+
+  console.log("📦 Final medsByCategory:", JSON.stringify(medsByCategory, null, 2));
 
   Object.entries(medsByCategory).forEach(([cat,{meds,supps}])=>{
     const listId={Daily:"dailyMeds",Evening:"eveningMeds",Weekly:"weeklyMeds",PRN:"prnMeds"}[cat];
     const blockId={Daily:"dailyBlock",Evening:"eveningBlock",Weekly:"weeklyBlock",PRN:"prnBlock"}[cat];
     const block=document.getElementById(blockId);
     const list=document.getElementById(listId);
-    if(!list||!block) return;
-    if(meds.length>0||supps.length>0){
+
+    if (!list || !block) {
+      console.log(`⚠️ Missing DOM block for ${cat}`);
+      return;
+    }
+
+    if (meds.length>0||supps.length>0){
+      console.log(`➡️ Rendering ${cat}: ${meds.length} meds, ${supps.length} supps`);
       let html=meds.join("");
       if(supps.length>0) html+=`<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
       list.innerHTML=html;
-    } else { block.remove(); }
+    } else {
+      console.log(`❌ ${cat} empty → removing block`);
+      block.remove();
+    }
   });
 
   // --- To Consider ---
@@ -369,6 +397,19 @@ if (targetGoalsList && targetTitle) {
 
   console.groupEnd();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // ============================
