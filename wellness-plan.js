@@ -353,39 +353,47 @@ async function loadPatientData() {
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
     const provider = PROVIDERS[providerCode];
-    if (!provider) return console.error("❌ Unknown provider:", providerCode);
-
-    console.log(`📋 Loading patient=${patientId}, provider=${providerCode}`);
-
-    // 1️⃣ Fetch only patient rows first
-    const patientUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
-    const bundle = await fetch(patientUrl).then(r => r.json());
-
-    console.log("🧾 Patient rows:", bundle.patientRows);
-    if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
-      injectPatientData(bundle.patientRows, [], [], [], []); // render immediately
+    if (!provider) {
+      console.error("❌ Unknown provider code:", providerCode);
+      return;
     }
 
-    // 2️⃣ In parallel, fetch reference tabs
-    const tabs = ["Medication Info", "Lifestyle Tips", "Body Comp", "To Consider"];
-    const tabCalls = tabs.map(tab =>
-      fetch(`${provider.wellness}?tab=${encodeURIComponent(tab)}&cb=${Date.now()}`).then(r => r.json())
-    );
+    console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    const [meds, lifestyle, bodycomp, toconsider] = await Promise.all(tabCalls);
+    // ⚡ fast bundle (patient rows only)
+    const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
+    const bundle = await fetch(bundleUrl).then(r => r.json());
 
-    console.log("📚 Meds:", meds);
-    console.log("🏃 Lifestyle:", lifestyle);
-    console.log("📊 Body comp:", bodycomp);
-    console.log("💡 To consider:", toconsider);
+    console.log("🧾 Patient rows:", bundle.patientRows);
 
-    // 3️⃣ Update UI with extras
-    injectPatientData(bundle.patientRows, lifestyle, meds, bodycomp, toconsider);
+    if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
+      // Render immediately with just patient rows
+      injectPatientData(bundle.patientRows, [], [], [], []);
+    } else {
+      console.warn(`⚠️ No patient data returned for ID=${patientId}`);
+    }
+
+    // 🚀 Lazy load reference blurbs in parallel
+    Promise.all([
+      fetch(TABS.meds).then(r => r.json()).catch(() => []),
+      fetch(TABS.lifestyle).then(r => r.json()).catch(() => []),
+      fetch(TABS.bodycomp).then(r => r.json()).catch(() => []),
+      fetch(TABS.toconsider).then(r => r.json()).catch(() => [])
+    ]).then(([meds, lifestyle, bodycomp, toconsider]) => {
+      console.log("📚 Meds data (lazy):", meds);
+      console.log("🏃 Lifestyle data (lazy):", lifestyle);
+      console.log("📊 Body comp data (lazy):", bodycomp);
+      console.log("💡 To consider data (lazy):", toconsider);
+
+      // Update blurbs after patient plan is already visible
+      injectPatientData(bundle.patientRows, lifestyle, meds, bodycomp, toconsider);
+    });
 
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
