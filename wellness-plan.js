@@ -27,11 +27,12 @@ const PROVIDERS = {
 
 // --- Shared reference tabs (via API instead of CSV) ---
 const TABS = {
-  meds:       "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=meds",
-  lifestyle:  "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=lifestyle",
-  bodycomp:   "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=bodycomp",
-  toconsider: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=toconsider"
+  meds:       "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Medication Info",
+  lifestyle:  "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Lifestyle Tips",
+  bodycomp:   "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Body Comp",
+  toconsider: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=To Consider"
 };
+
 
 
 // ============================
