@@ -91,19 +91,25 @@ if (topBtn2) {
 document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute("target"));
 
 // ============================
-// Info Icon Toggles
+// Info Icon + Name Toggles
 // ============================
 document.addEventListener("click", e => {
-  if (!e.target.classList.contains("info-icon")) return;
-  const row = e.target.closest(".med-row");
+  const medNameEl = e.target.closest(".med-name"); 
+  if (!medNameEl) return; // only react to clicks inside .med-name
+
+  const row = medNameEl.closest(".med-row");
   const content = row?.querySelector(".learn-more-content");
   if (!content) return;
 
+  // Close others
   document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
     if (openContent !== content) openContent.classList.remove("expanded");
   });
+
+  // Toggle this one
   content.classList.toggle("expanded");
 });
+
 
 // ============================
 // Helpers
