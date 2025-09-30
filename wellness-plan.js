@@ -380,11 +380,13 @@ async function loadPatientData() {
     }
 
     // ✅ Normalize header variations + ID formatting
-    const filteredRows = patientRows.filter(r => {
-      const idRaw = r["Patient ID"] || r["﻿Patient ID"] || r["Patient ID"] || "";
-      const id = String(idRaw).trim().replace(/\.0$/, ""); // strip trailing .0
-      return id == patientId;
-    });
+const filteredRows = patientRows.filter(r => {
+  // normalize header variations (with/without BOM)
+  const idRaw = r["Patient ID"] || r["﻿Patient ID"] || r["ID"] || "";
+  const id = String(idRaw).trim().replace(/\.0$/, ""); // also strips trailing .0 if ever exported
+  return id === patientId;
+});
+
 
     if (filteredRows.length > 0) {
       injectPatientData(filteredRows, lifestyleData, medsData, bodyCompData, toConsiderData);
