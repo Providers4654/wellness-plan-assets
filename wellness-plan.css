@@ -491,6 +491,27 @@ html, body {
 
 
 /* ============================
+   Make med-name tappable
+   ============================ */
+.med-name {
+  cursor: pointer;             /* shows hand cursor on hover */
+  user-select: none;           /* avoid accidental text highlight */
+  padding: 4px 2px;            /* small touch-friendly area */
+  border-radius: 4px;          /* subtle rounded highlight zone */
+  transition: background 0.2s ease;
+}
+
+.med-name:hover {
+  background: rgba(0,0,0,0.05); /* faint gray highlight on hover */
+}
+
+
+
+
+
+
+
+/* ============================
    SECTION BUBBLES (normalized spacing)
    ============================ */
 .wellness-plan .wellness-bubble {
