@@ -338,18 +338,18 @@ if (targetGoalsList && targetTitle) {
   console.log("Target Goals:", goals);
 
   if (goals) {
-    // Split by commas/newlines if you want multiple goals
     const items = goals.split(/[,;\n]/).map(g => g.trim()).filter(Boolean);
     let html = "";
-items.forEach(g => {
-  html += `<li><strong>${normalizeCellText(g)}</strong></li>`;
-});
+    items.forEach(g => {
+      html += `<li><span class="editable"><strong>${normalizeCellText(g)}</strong></span></li>`;
+    });
     targetGoalsList.innerHTML = html;
   } else {
     if (targetTitle) targetTitle.remove();
     targetGoalsList.remove();
   }
 }
+
 
 
   console.groupEnd();
