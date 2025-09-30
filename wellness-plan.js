@@ -273,63 +273,79 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     } else toConsiderBlock.style.display="none";
   }
 
-  // --- Visit Timeline ---
-  const visitTimelineList=document.getElementById("visitTimeline");
-  if(visitTimelineList){
-    const prev=getField(patientMeta, ["Previous Visit","Prev Visit"])||"";
-    const next=getField(patientMeta, ["Next Visit","Follow-Up"])||"";
-    console.log("Visit timeline:",{prev,next});
-    if(prev||next){
-      visitTimelineList.innerHTML=`${prev?`<li><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</li>`:""}${next?`<li><strong>${cssVar("--visit-next-label")}</strong> ${next}</li>`:""}`;
-    } else {
-      const vtTitle=document.getElementById("visitTimelineTitle");
-      if(vtTitle)vtTitle.remove();
-      visitTimelineList.remove();
-    }
+// --- Visit Timeline ---
+const visitTimelineList = document.getElementById("visitTimeline");
+if (visitTimelineList) {
+  const prev = getField(patientMeta, ["Previous Visit","Prev Visit"]) || "";
+  const next = getField(patientMeta, ["Next Visit","Follow-Up"]) || "";
+  console.log("Visit timeline:", { prev, next });
+
+  if (prev || next) {
+    let html = "";
+    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${normalizeCellText(prev)}</span></li>`;
+    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${normalizeCellText(next)}</span></li>`;
+    visitTimelineList.innerHTML = html;
+  } else {
+    const vtTitle = document.getElementById("visitTimelineTitle");
+    if (vtTitle) vtTitle.remove();
+    visitTimelineList.remove();
   }
+}
+
 
 // --- Lifestyle Tips ---
-const lifestyleBlock=document.getElementById("lifestyleTips");
-if(lifestyleBlock){
-  const selectedTips=(getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"])||"")
-    .split(",").map(t=>t.trim()).filter(Boolean);
-  console.log("Lifestyle tips:",selectedTips);
+const lifestyleBlock = document.getElementById("lifestyleTips");
+if (lifestyleBlock) {
+  const selectedTips = (getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"]) || "")
+    .split(",")
+    .map(t => t.trim())
+    .filter(Boolean);
+  console.log("Lifestyle tips:", selectedTips);
 
   if (selectedTips.length > 0) {
     let html = "";
     selectedTips.forEach(tipName => {
       const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
       if (tipInfo) {
-        html += `<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
+        html += `
+          <li>
+            <span class="editable">
+              <strong>${tipInfo["Tip"]}:</strong><br>
+              ${normalizeCellText(tipInfo["Blurb"])}
+            </span>
+          </li>
+        `;
       }
     });
     lifestyleBlock.innerHTML = html;
   } else {
     lifestyleBlock.innerHTML = "";
   }
-} // <-- this closing brace was missing
+}
 
 
 
-  // --- Body Comp ---
-  const bodyCompList=document.getElementById("bodyComp");
-  if(bodyCompList&&bodyCompTitle){
-    const key=(getField(patientMeta, ["Body Comp","Body Composition"])||"").trim();
-    console.log("Body Comp key:",key);
-    if(key){
-      const compRow=bodyCompData.find(b=>(b["State"]||"").trim()===key);
-      let html="";
-      if(compRow&&compRow["Blurb"]){
-        html=`<li>${normalizeCellText(compRow["Blurb"])}</li>`;
-      } else {
-        html=`<li>${normalizeCellText(key)}</li>`;
-      }
-      bodyCompList.innerHTML=html;
+// --- Body Comp ---
+const bodyCompList = document.getElementById("bodyComp");
+if (bodyCompList && bodyCompTitle) {
+  const key = (getField(patientMeta, ["Body Comp","Body Composition"]) || "").trim();
+  console.log("Body Comp key:", key);
+
+  if (key) {
+    const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+    let html = "";
+    if (compRow && compRow["Blurb"]) {
+      html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
     } else {
-      if(bodyCompTitle)bodyCompTitle.remove();
-      bodyCompList.remove();
+      html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
     }
+    bodyCompList.innerHTML = html;
+  } else {
+    if (bodyCompTitle) bodyCompTitle.remove();
+    bodyCompList.remove();
   }
+}
+
 
 // --- Target Goals ---
 const targetGoalsList = document.getElementById("targetGoals");
