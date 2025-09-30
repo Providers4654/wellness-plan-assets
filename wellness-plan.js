@@ -353,42 +353,40 @@ async function loadPatientData() {
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
     const provider = PROVIDERS[providerCode];
-    if (!provider) {
-      console.error("❌ Unknown provider code:", providerCode);
-      return;
-    }
+    if (!provider) return console.error("❌ Unknown provider:", providerCode);
 
-    console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
+    console.log(`📋 Loading patient=${patientId}, provider=${providerCode}`);
 
-    // ✅ Use new bundle endpoint
-    const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
-    const bundle = await fetch(bundleUrl).then(r => r.json());
+    // 1️⃣ Fetch only patient rows first
+    const patientUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
+    const bundle = await fetch(patientUrl).then(r => r.json());
 
-    // 👇 Add this to inspect the raw object
-    console.log("🗂 Full bundle JSON:", bundle);
-
-    // ✅ Existing logs
     console.log("🧾 Patient rows:", bundle.patientRows);
-    console.log("📚 Meds data:", bundle.meds);
-    console.log("🏃 Lifestyle data:", bundle.lifestyle);
-    console.log("📊 Body comp data:", bundle.bodycomp);
-    console.log("💡 To consider data:", bundle.toconsider);
-
     if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
-      injectPatientData(
-        bundle.patientRows,
-        bundle.lifestyle,
-        bundle.meds,
-        bundle.bodycomp,
-        bundle.toconsider
-      );
-    } else {
-      console.warn(`⚠️ No patient data returned for ID=${patientId}`);
+      injectPatientData(bundle.patientRows, [], [], [], []); // render immediately
     }
+
+    // 2️⃣ In parallel, fetch reference tabs
+    const tabs = ["Medication Info", "Lifestyle Tips", "Body Comp", "To Consider"];
+    const tabCalls = tabs.map(tab =>
+      fetch(`${provider.wellness}?tab=${encodeURIComponent(tab)}&cb=${Date.now()}`).then(r => r.json())
+    );
+
+    const [meds, lifestyle, bodycomp, toconsider] = await Promise.all(tabCalls);
+
+    console.log("📚 Meds:", meds);
+    console.log("🏃 Lifestyle:", lifestyle);
+    console.log("📊 Body comp:", bodycomp);
+    console.log("💡 To consider:", toconsider);
+
+    // 3️⃣ Update UI with extras
+    injectPatientData(bundle.patientRows, lifestyle, meds, bodycomp, toconsider);
+
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
