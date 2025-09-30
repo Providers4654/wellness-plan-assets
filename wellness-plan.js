@@ -1,39 +1,33 @@
 // ============================
-// WELLNESS PLAN DYNAMIC JS (FIXED & CLEANED)
+// WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED)
 // ============================
 
 const root = getComputedStyle(document.documentElement);
 
-// ✅ add this helper back
+// ✅ Helper for CSS vars
 function cssVar(name) {
   return root.getPropertyValue(name).trim();
 }
 
-// --- Provider-specific Wellness APIs ---
+// --- Provider-specific public CSVs ---
 const PROVIDERS = {
   pj: {
-    // Joe’s API (points to Joe's Wellness Plans sheet)
-    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec"
+    // Joe’s published sheet CSV
+    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv"
   },
   pb: {
-    // Bryan’s API (points to Bryan's Wellness Plans sheet)
-    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec"
+    // Bryan’s published sheet CSV
+    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRV9VSxPY8Sy_v7mq_dDOYTRSIr0aWqbj7FH9ATxJJs8IsqTeZkmSTJcv7MyIjrI_fzmRY7qdZjEJZb/pub?gid=0&single=true&output=csv"
   }
-  // add more providers later (pk, pm, etc.)
 };
 
-
-
-
-// --- Shared reference tabs (via API instead of CSV) ---
+// --- Shared reference tabs (CSV exports) ---
 const TABS = {
-  meds:       "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Medication Info",
-  lifestyle:  "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Lifestyle Tips",
-  bodycomp:   "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=Body Comp",
-  toconsider: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=To Consider"
+  meds:       "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1442071508&single=true&output=csv",
+  lifestyle:  "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1970185497&single=true&output=csv",
+  bodycomp:   "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1795189157&single=true&output=csv",
+  toconsider: "https://docs.google.com/spreadsheets/d/1uou4K55HgBYTk_i5Ymyz9P333KMyuYhF9SfG-YRWVDM/pub?gid=1041049772&single=true&output=csv"
 };
-
-
 
 // ============================
 // RESOURCE LINKS
@@ -74,16 +68,13 @@ setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
 const intro = document.querySelector(".intro-text");
 if (intro) intro.textContent = cssVar("--intro-message");
 
-const topBtn1 = document.getElementById("dynamicTopBtn1");
-if (topBtn1) {
-  topBtn1.textContent = cssVar("--top-btn1-text");
-  topBtn1.href = cssVar("--top-btn1-url");
-}
-const topBtn2 = document.getElementById("dynamicTopBtn2");
-if (topBtn2) {
-  topBtn2.textContent = cssVar("--top-btn2-text");
-  topBtn2.href = cssVar("--top-btn2-url");
-}
+["dynamicTopBtn1", "dynamicTopBtn2"].forEach((id, i) => {
+  const btn = document.getElementById(id);
+  if (btn) {
+    btn.textContent = cssVar(`--top-btn${i+1}-text`);
+    btn.href = cssVar(`--top-btn${i+1}-url`);
+  }
+});
 
 // ============================
 // Remove target="_blank"
@@ -95,21 +86,17 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute("
 // ============================
 document.addEventListener("click", e => {
   const medNameEl = e.target.closest(".med-name"); 
-  if (!medNameEl) return; // only react to clicks inside .med-name
-
+  if (!medNameEl) return;
   const row = medNameEl.closest(".med-row");
   const content = row?.querySelector(".learn-more-content");
   if (!content) return;
 
-  // Close others
   document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
     if (openContent !== content) openContent.classList.remove("expanded");
   });
 
-  // Toggle this one
   content.classList.toggle("expanded");
 });
-
 
 // ============================
 // Helpers
@@ -119,8 +106,17 @@ function normalizeCellText(text) {
   return text.replace(/(\r\n|\r|\n)/g, "<br>").replace(/&lt;br&gt;/g, "<br>");
 }
 
-
-
+async function fetchCsv(url) {
+  const text = await fetch(url).then(r => r.text());
+  const [headerLine, ...lines] = text.trim().split("\n");
+  const headers = headerLine.split(",").map(h => h.trim());
+  return lines.map(line => {
+    const cells = line.split(",").map(c => c.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = cells[i] || "");
+    return obj;
+  });
+}
 
 // ============================
 // Inject Patient Data
@@ -176,7 +172,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // Inject standard meds
+  // Inject meds into DOM
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds" }[cat];
     const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock" }[cat];
@@ -206,11 +202,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
     if (meds.length > 0) {
       let html = "";
-
-      // Define your desired order
       const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-
-      // Group meds by category
       const grouped = {};
       meds.forEach(med => {
         const info = toConsiderData.find(r => r["Medication"].trim() === med);
@@ -220,7 +212,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
         grouped[category].push(info);
       });
 
-      // Render in forced order
       CATEGORY_ORDER.forEach(category => {
         if (grouped[category]) {
           html += `<li class="to-consider-subtitle">${category}</li>`;
@@ -236,7 +227,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
         }
       });
 
-      // Render any extra categories not in the predefined order
       Object.keys(grouped).forEach(category => {
         if (!CATEGORY_ORDER.includes(category)) {
           html += `<li class="to-consider-subtitle">${category}</li>`;
@@ -259,26 +249,24 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-// Visit timeline
-const visitTimelineList = document.getElementById("visitTimeline");
-if (visitTimelineList) {
-  const firstRow = rows[0];
-  const prev = firstRow["Previous Visit"] || "";
-  const next = firstRow["Next Visit"] || "";
+  // Visit timeline
+  const visitTimelineList = document.getElementById("visitTimeline");
+  if (visitTimelineList) {
+    const firstRow = rows[0];
+    const prev = firstRow["Previous Visit"] || "";
+    const next = firstRow["Next Visit"] || "";
 
-  if (prev || next) {
-    visitTimelineList.innerHTML = `
-      ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
-      ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
-    `;
-  } else {
-    const vtTitle = document.getElementById("visitTimelineTitle");
-    if (vtTitle) vtTitle.remove();
-    visitTimelineList.remove();
+    if (prev || next) {
+      visitTimelineList.innerHTML = `
+        ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
+        ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
+      `;
+    } else {
+      const vtTitle = document.getElementById("visitTimelineTitle");
+      if (vtTitle) vtTitle.remove();
+      visitTimelineList.remove();
+    }
   }
-}
-
-
 
   // Lifestyle tips
   const lifestyleBlock = document.getElementById("lifestyleTips");
@@ -333,90 +321,49 @@ if (visitTimelineList) {
   }
 }
 
-
-
-
 // ============================
 // Load Patient Data
 // ============================
 
-// --- Parse provider + patient ID from URL ---
-// Example: /pj/test-patient/999 → { providerCode: "pj", patientId: "999" }
 function getProviderAndPatientIdFromUrl() {
   const parts = window.location.pathname.split("/").filter(Boolean);
-  const providerCode = parts[0];   // "pj" or "pb"
-  const patientId = parts.pop();   // last segment (the ID)
+  const providerCode = parts[0];
+  const patientId = parts.pop();
   return { providerCode, patientId };
 }
 
-
-
-
-
-
-
 async function loadPatientData() {
-  const start = performance.now(); // ⏱️ Start timer
+  const start = performance.now();
 
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
     const provider = PROVIDERS[providerCode];
-    if (!provider) {
-      console.error("❌ Unknown provider code:", providerCode);
-      return;
-    }
+    if (!provider) return console.error("❌ Unknown provider:", providerCode);
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    const fetchStart = performance.now();
-  const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&provider=${providerCode}`;
-    const bundle = await fetch(bundleUrl).then(r => r.json());
-    const fetchEnd = performance.now();
-    console.log(`⏱️ Fetch time: ${(fetchEnd - fetchStart).toFixed(2)} ms`);
+    const [patientRows, medsData, lifestyleData, bodyCompData, toConsiderData] = await Promise.all([
+      fetchCsv(provider.wellness),
+      fetchCsv(TABS.meds),
+      fetchCsv(TABS.lifestyle),
+      fetchCsv(TABS.bodycomp),
+      fetchCsv(TABS.toconsider),
+    ]);
 
-    const parseStart = performance.now();
-    console.log("🧾 Patient rows:", bundle.patientRows);
-    const parseEnd = performance.now();
-    console.log(`⏱️ Data parse/log time: ${(parseEnd - parseStart).toFixed(2)} ms`);
+    const filteredRows = patientRows.filter(r => String(r["Patient ID"]).trim() === patientId);
 
-    if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
-      const injectStart = performance.now();
-      injectPatientData(
-        bundle.patientRows,
-        bundle.lifestyle,
-        bundle.meds,
-        bundle.bodycomp,
-        bundle.toconsider
-      );
-      const injectEnd = performance.now();
-      console.log(`⏱️ DOM inject time: ${(injectEnd - injectStart).toFixed(2)} ms`);
+    if (filteredRows.length > 0) {
+      injectPatientData(filteredRows, lifestyleData, medsData, bodyCompData, toConsiderData);
     } else {
-      console.warn(`⚠️ No patient data returned for ID=${patientId}`);
+      console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
     }
 
-    const end = performance.now();
-    console.log(`✅ Total load time: ${(end - start).toFixed(2)} ms`);
+    console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
 
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ============================
 // Bootstrap
