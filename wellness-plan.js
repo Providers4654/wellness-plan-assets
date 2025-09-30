@@ -350,6 +350,7 @@ function getProviderAndPatientIdFromUrl() {
 
 
 async function loadPatientData() {
+  const start = performance.now(); // ⏱️ start timer
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
     const provider = PROVIDERS[providerCode];
@@ -360,9 +361,11 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    // ✅ Include provider in querystring
     const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&provider=${providerCode}&cb=${Date.now()}`;
     const bundle = await fetch(bundleUrl).then(r => r.json());
+
+    const mid = performance.now();
+    console.log(`⏱️ Fetch time: ${(mid - start).toFixed(2)} ms`);
 
     console.log("🧾 Patient rows:", bundle.patientRows);
 
@@ -377,10 +380,15 @@ async function loadPatientData() {
     } else {
       console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
+
+    const end = performance.now();
+    console.log(`✅ Total load time: ${(end - start).toFixed(2)} ms`);
+
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
