@@ -32,13 +32,28 @@ const TABS = {
 
 // Safer line parser that handles quoted cells with commas
 function parseCsvLine(line) {
-  const regex = /(".*?"|[^",\s]+)(?=\s*,|\s*$)/g;
-  const matches = [];
-  line.replace(regex, (m) => {
-    matches.push(m.replace(/^"|"$/g, "")); // strip wrapping quotes
-  });
-  return matches;
+  const cells = [];
+  let current = "";
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"' && line[i + 1] === '"') {
+      current += '"'; // escaped quote
+      i++;
+    } else if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      cells.push(current.trim());
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  cells.push(current.trim());
+  return cells;
 }
+
 
 async function fetchCsv(url) {
   const text = await fetch(url).then(r => r.text());
@@ -139,9 +154,28 @@ function getIdField(row) {
   );
 }
 
-// ============================
-// Inject Patient Data (multi-row support + logging)
-// ============================
+
+function getField(row, keys) {
+  for (const key of keys) {
+    if (row[key] !== undefined && row[key] !== "") {
+      return row[key];
+    }
+  }
+  return "";
+}
+
+
+// --- Flexible field getter ---
+function getField(row, keys) {
+  for (const key of keys) {
+    if (row[key] !== undefined && row[key] !== "") {
+      return row[key];
+    }
+  }
+  return "";
+}
+
+// --- Inject Patient Data ---
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
   if (!rows || rows.length === 0) {
     console.warn("⚠️ injectPatientData called with no rows");
@@ -169,10 +203,13 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
   rows.forEach((r, idx) => {
     console.log(`Processing row ${idx}:`, r);
-    const med = r["Meds/Supp"];
+
+    const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
-    const dose = r["Dose"] || "";
-    const cat = (r["Category"] || "").trim();
+
+    const dose = getField(r, ["Dose", "Dosing"]) || "";
+    const cat  = (getField(r, ["Category", "Cat"]) || "").trim();
+
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
@@ -208,55 +245,114 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     } else { block.remove(); }
   });
 
-  // --- Meta fields ---
+  // --- To Consider ---
   const toConsiderList=document.getElementById("toConsider");
   const toConsiderBlock=document.getElementById("toConsiderBlock");
   if(toConsiderList&&toConsiderBlock){
-    const meds=(patientMeta["To Consider"]||"").split(",").map(t=>t.trim()).filter(Boolean);
+    const meds=(getField(patientMeta, ["To Consider","Consider"])||"")
+      .split(",").map(t=>t.trim()).filter(Boolean);
     console.log("Parsed To Consider meds:", meds);
+
     if(meds.length>0){
       let html=""; const CATEGORY_ORDER=["Hormones","Peptides","Medications"]; const grouped={};
-      meds.forEach(med=>{const info=toConsiderData.find(r=>r["Medication"].trim()===med);if(!info)return;const category=(info["Category"]||"").trim()||"Other";if(!grouped[category])grouped[category]=[];grouped[category].push(info);});
-      CATEGORY_ORDER.forEach(cat=>{if(grouped[cat]){html+=`<li class="to-consider-subtitle">${cat}</li>`;grouped[cat].forEach(info=>{html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;});}});
-      Object.keys(grouped).forEach(cat=>{if(!CATEGORY_ORDER.includes(cat)){html+=`<li class="to-consider-subtitle">${cat}</li>`;grouped[cat].forEach(info=>{html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;});}});
+      meds.forEach(med=>{
+        const info=toConsiderData.find(r=>r["Medication"].trim()===med);
+        if(!info) return;
+        const category=(info["Category"]||"").trim()||"Other";
+        if(!grouped[category]) grouped[category]=[];
+        grouped[category].push(info);
+      });
+      CATEGORY_ORDER.forEach(cat=>{
+        if(grouped[cat]){
+          html+=`<li class="to-consider-subtitle">${cat}</li>`;
+          grouped[cat].forEach(info=>{
+            html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;
+          });
+        }
+      });
+      Object.keys(grouped).forEach(cat=>{
+        if(!CATEGORY_ORDER.includes(cat)){
+          html+=`<li class="to-consider-subtitle">${cat}</li>`;
+          grouped[cat].forEach(info=>{
+            html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;
+          });
+        }
+      });
       toConsiderList.innerHTML=html; toConsiderBlock.style.display="block";
     } else toConsiderBlock.style.display="none";
   }
 
+  // --- Visit Timeline ---
   const visitTimelineList=document.getElementById("visitTimeline");
   if(visitTimelineList){
-    const prev=patientMeta["Previous Visit"]||""; const next=patientMeta["Next Visit"]||"";
+    const prev=getField(patientMeta, ["Previous Visit","Prev Visit"])||"";
+    const next=getField(patientMeta, ["Next Visit","Follow-Up"])||"";
     console.log("Visit timeline:",{prev,next});
-    if(prev||next){visitTimelineList.innerHTML=`${prev?`<li><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</li>`:""}${next?`<li><strong>${cssVar("--visit-next-label")}</strong> ${next}</li>`:""}`;}
-    else {const vtTitle=document.getElementById("visitTimelineTitle"); if(vtTitle)vtTitle.remove(); visitTimelineList.remove();}
+    if(prev||next){
+      visitTimelineList.innerHTML=`${prev?`<li><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</li>`:""}${next?`<li><strong>${cssVar("--visit-next-label")}</strong> ${next}</li>`:""}`;
+    } else {
+      const vtTitle=document.getElementById("visitTimelineTitle");
+      if(vtTitle)vtTitle.remove();
+      visitTimelineList.remove();
+    }
   }
 
+  // --- Lifestyle Tips ---
   const lifestyleBlock=document.getElementById("lifestyleTips");
   if(lifestyleBlock){
-    const selectedTips=(patientMeta["Lifestyle Tips"]||"").split(",").map(t=>t.trim()).filter(Boolean);
+    const selectedTips=(getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"])||"")
+      .split(",").map(t=>t.trim()).filter(Boolean);
     console.log("Lifestyle tips:",selectedTips);
+
     if(selectedTips.length>0){
-      let html="<ul>"; selectedTips.forEach(tipName=>{const tipInfo=lifestyleData.find(r=>r["Tip"].trim()===tipName); if(tipInfo){html+=`<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;}});
-      html+="</ul>"; lifestyleBlock.innerHTML=html;
+      let html="<ul>";
+      selectedTips.forEach(tipName=>{
+        const tipInfo=lifestyleData.find(r=>r["Tip"].trim()===tipName);
+        if(tipInfo){
+          html+=`<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
+        }
+      });
+      html+="</ul>";
+      lifestyleBlock.innerHTML=html;
     } else lifestyleBlock.innerHTML="";
   }
 
+  // --- Body Comp ---
   const bodyCompList=document.getElementById("bodyComp");
   if(bodyCompList&&bodyCompTitle){
-    const key=(patientMeta["Body Comp"]||"").trim();
+    const key=(getField(patientMeta, ["Body Comp","Body Composition"])||"").trim();
     console.log("Body Comp key:",key);
-    if(key){const compRow=bodyCompData.find(b=>(b["State"]||"").trim()===key); let html=""; if(compRow&&compRow["Blurb"]){html=`<li>${normalizeCellText(compRow["Blurb"])}</li>`;} else {html=`<li>${normalizeCellText(key)}</li>`;} bodyCompList.innerHTML=html;}
-    else {if(bodyCompTitle)bodyCompTitle.remove(); bodyCompList.remove();}
+    if(key){
+      const compRow=bodyCompData.find(b=>(b["State"]||"").trim()===key);
+      let html="";
+      if(compRow&&compRow["Blurb"]){
+        html=`<li>${normalizeCellText(compRow["Blurb"])}</li>`;
+      } else {
+        html=`<li>${normalizeCellText(key)}</li>`;
+      }
+      bodyCompList.innerHTML=html;
+    } else {
+      if(bodyCompTitle)bodyCompTitle.remove();
+      bodyCompList.remove();
+    }
   }
 
+  // --- Target Goals ---
   const targetGoalsList=document.getElementById("targetGoals");
   if(targetGoalsList&&targetTitle){
-    const goals=patientMeta["Target Goals"]||""; console.log("Target Goals:",goals);
-    if(goals){targetGoalsList.innerHTML=`<li>${goals}</li>`;} else {if(targetTitle)targetTitle.remove(); targetGoalsList.remove();}
+    const goals=getField(patientMeta, ["Target Goals","Goals"])||"";
+    console.log("Target Goals:",goals);
+    if(goals){
+      targetGoalsList.innerHTML=`<li>${goals}</li>`;
+    } else {
+      if(targetTitle)targetTitle.remove();
+      targetGoalsList.remove();
+    }
   }
 
   console.groupEnd();
 }
+
 
 // ============================
 // Find contiguous block of rows for a patient ID
