@@ -264,148 +264,142 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-// --- To Consider ---
-const toConsiderList = document.getElementById("toConsider");
-const toConsiderBlock = document.getElementById("toConsiderBlock");
-if (toConsiderList && toConsiderBlock) {
-  const meds = rows
-    .map(r => getField(r, ["To Consider", "Consider"]))
-    .join(",")
-    .split(",")
-    .map(t => t.trim())
-    .filter(Boolean);
+  // --- To Consider ---
+  const toConsiderList = document.getElementById("toConsider");
+  const toConsiderBlock = document.getElementById("toConsiderBlock");
+  if (toConsiderList && toConsiderBlock) {
+    const meds = rows
+      .map(r => getField(r, ["To Consider", "Consider"]))
+      .join(",")
+      .split(",")
+      .map(t => t.trim())
+      .filter(Boolean);
 
-  console.log("Parsed To Consider meds (all rows):", meds);
+    console.log("Parsed To Consider meds (all rows):", meds);
 
-  if (meds.length > 0) {
-    let html = "";
-    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-    const grouped = {};
+    if (meds.length > 0) {
+      let html = "";
+      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
+      const grouped = {};
 
-    meds.forEach(med => {
-      const info = toConsiderData.find(r => r["Medication"].trim() === med);
-      if (info) {
-        const category = (info["Category"] || "").trim() || "Other";
-        if (!grouped[category]) grouped[category] = [];
-        grouped[category].push(info);
-      } else {
-        // Free-text custom entry
-        if (!grouped["Custom"]) grouped["Custom"] = [];
-        grouped["Custom"].push({ Medication: med, Blurb: "" });
-      }
-    });
+      meds.forEach(med => {
+        const info = toConsiderData.find(r => r["Medication"].trim() === med);
+        if (info) {
+          const category = (info["Category"] || "").trim() || "Other";
+          if (!grouped[category]) grouped[category] = [];
+          grouped[category].push(info);
+        } else {
+          if (!grouped["Custom"]) grouped["Custom"] = [];
+          grouped["Custom"].push({ Medication: med, Blurb: "" });
+        }
+      });
 
-    CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
-      if (grouped[cat]) {
-        html += `<li class="to-consider-subtitle">${cat}</li>`;
-        grouped[cat].forEach(info => {
+      CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
+        if (grouped[cat]) {
+          html += `<li class="to-consider-subtitle">${cat}</li>`;
+          grouped[cat].forEach(info => {
+            html += `
+              <li class="to-consider-row">
+                <div><strong>${info["Medication"]}</strong></div>
+                <div>${normalizeCellText(info["Blurb"] || "")}</div>
+              </li>`;
+          });
+        }
+      });
+
+      toConsiderList.innerHTML = html;
+      toConsiderBlock.style.display = "block";
+    } else {
+      toConsiderBlock.style.display = "none";
+    }
+  }
+
+  // --- Lifestyle Tips ---
+  const lifestyleBlock = document.getElementById("lifestyleTips");
+  if (lifestyleBlock) {
+    const selectedTips = rows
+      .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
+      .filter(Boolean)
+      .map(v => v.trim());
+
+    console.log("Lifestyle tips (all rows):", selectedTips);
+
+    if (selectedTips.length > 0) {
+      let html = "";
+      selectedTips.forEach(tipName => {
+        const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+        if (tipInfo) {
           html += `
-            <li class="to-consider-row">
-              <div><strong>${info["Medication"]}</strong></div>
-              <div>${normalizeCellText(info["Blurb"] || "")}</div>
+            <li>
+              <span class="editable">
+                <strong>${tipInfo["Tip"]}:</strong><br>
+                ${normalizeCellText(tipInfo["Blurb"])}
+              </span>
             </li>`;
-        });
-      }
-    });
-
-    toConsiderList.innerHTML = html;
-    toConsiderBlock.style.display = "block";
-  } else {
-    toConsiderBlock.style.display = "none";
+        } else {
+          html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
+        }
+      });
+      lifestyleBlock.innerHTML = html;
+    } else {
+      lifestyleBlock.innerHTML = "";
+    }
   }
-}
 
+  // --- Body Comp ---
+  const bodyCompList = document.getElementById("bodyComp");
+  if (bodyCompList && bodyCompTitle) {
+    const keys = rows
+      .map(r => getField(r, ["Body Comp","Body Composition"]))
+      .filter(Boolean)
+      .map(v => v.trim());
 
-// --- Lifestyle Tips ---
-const lifestyleBlock = document.getElementById("lifestyleTips");
-if (lifestyleBlock) {
-  const selectedTips = rows
-    .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
-    .filter(Boolean)
-    .map(v => v.trim());
+    console.log("Body Comp keys (all rows):", keys);
 
-  console.log("Lifestyle tips (all rows):", selectedTips);
-
-  if (selectedTips.length > 0) {
-    let html = "";
-    selectedTips.forEach(tipName => {
-      const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
-      if (tipInfo) {
-        html += `
-          <li>
-            <span class="editable">
-              <strong>${tipInfo["Tip"]}:</strong><br>
-              ${normalizeCellText(tipInfo["Blurb"])}
-            </span>
-          </li>`;
-      } else {
-        html += `
-          <li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
-      }
-    });
-    lifestyleBlock.innerHTML = html;
-  } else {
-    lifestyleBlock.innerHTML = "";
+    if (keys.length > 0) {
+      let html = "";
+      keys.forEach(key => {
+        const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+        if (compRow && compRow["Blurb"]) {
+          html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+        } else {
+          html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+        }
+      });
+      bodyCompList.innerHTML = html;
+    } else {
+      if (bodyCompTitle) bodyCompTitle.remove();
+      bodyCompList.remove();
+    }
   }
-}
 
+  // --- Target Goals ---
+  const targetGoalsList = document.getElementById("targetGoals");
+  if (targetGoalsList && targetTitle) {
+    const allGoals = rows
+      .map(r => getField(r, ["Target Goals","Goals"]))
+      .join(",")
+      .split(/[,;\n]/)
+      .map(g => g.trim())
+      .filter(Boolean);
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
-if (bodyCompList && bodyCompTitle) {
-  const keys = rows
-    .map(r => getField(r, ["Body Comp","Body Composition"]))
-    .filter(Boolean)
-    .map(v => v.trim());
+    console.log("Target Goals (all rows):", allGoals);
 
-  console.log("Body Comp keys (all rows):", keys);
-
-  if (keys.length > 0) {
-    let html = "";
-    keys.forEach(key => {
-      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-      if (compRow && compRow["Blurb"]) {
-        html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
-      } else {
-        html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-      }
-    });
-    bodyCompList.innerHTML = html;
-  } else {
-    if (bodyCompTitle) bodyCompTitle.remove();
-    bodyCompList.remove();
+    if (allGoals.length > 0) {
+      let html = "";
+      allGoals.forEach(g => {
+        html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
+      });
+      targetGoalsList.innerHTML = html;
+    } else {
+      if (targetTitle) targetTitle.remove();
+      targetGoalsList.remove();
+    }
   }
-}
-
-
-// --- Target Goals ---
-const targetGoalsList = document.getElementById("targetGoals");
-if (targetGoalsList && targetTitle) {
-  const allGoals = rows
-    .map(r => getField(r, ["Target Goals","Goals"]))
-    .join(",")
-    .split(/[,;\n]/)
-    .map(g => g.trim())
-    .filter(Boolean);
-
-  console.log("Target Goals (all rows):", allGoals);
-
-  if (allGoals.length > 0) {
-    let html = "";
-    allGoals.forEach(g => {
-      html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
-    });
-    targetGoalsList.innerHTML = html;
-  } else {
-    if (targetTitle) targetTitle.remove();
-    targetGoalsList.remove();
-  }
-}
-
-
 
   console.groupEnd();
 }
+
 
 
 
