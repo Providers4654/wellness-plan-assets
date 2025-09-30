@@ -113,6 +113,16 @@ function normalizeCellText(text) {
   return text.replace(/(\r\n|\r|\n)/g, "<br>").replace(/&lt;br&gt;/g, "<br>");
 }
 
+
+
+
+console.log("🧾 Patient rows:", bundle.patientRows);
+console.log("📚 Meds data:", bundle.meds);
+console.log("🏃 Lifestyle data:", bundle.lifestyle);
+console.log("📊 Body comp data:", bundle.bodycomp);
+console.log("💡 To consider data:", bundle.toconsider);
+
+
 // ============================
 // Inject Patient Data
 // ============================
