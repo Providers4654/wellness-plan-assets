@@ -350,7 +350,8 @@ function getProviderAndPatientIdFromUrl() {
 
 
 async function loadPatientData() {
-  const start = performance.now(); // ⏱️ start timer
+  const start = performance.now(); // ⏱️ Start timer
+
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
     const provider = PROVIDERS[providerCode];
@@ -361,15 +362,19 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
+    const fetchStart = performance.now();
     const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&provider=${providerCode}&cb=${Date.now()}`;
     const bundle = await fetch(bundleUrl).then(r => r.json());
+    const fetchEnd = performance.now();
+    console.log(`⏱️ Fetch time: ${(fetchEnd - fetchStart).toFixed(2)} ms`);
 
-    const mid = performance.now();
-    console.log(`⏱️ Fetch time: ${(mid - start).toFixed(2)} ms`);
-
+    const parseStart = performance.now();
     console.log("🧾 Patient rows:", bundle.patientRows);
+    const parseEnd = performance.now();
+    console.log(`⏱️ Data parse/log time: ${(parseEnd - parseStart).toFixed(2)} ms`);
 
     if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
+      const injectStart = performance.now();
       injectPatientData(
         bundle.patientRows,
         bundle.lifestyle,
@@ -377,6 +382,8 @@ async function loadPatientData() {
         bundle.bodycomp,
         bundle.toconsider
       );
+      const injectEnd = performance.now();
+      console.log(`⏱️ DOM inject time: ${(injectEnd - injectStart).toFixed(2)} ms`);
     } else {
       console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
