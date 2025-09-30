@@ -371,6 +371,41 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
 
 
+
+
+
+// ============================
+// Find contiguous block of rows for a patient ID
+// ============================
+function getPatientBlock(rows, patientId) {
+  const result = [];
+  let insideBlock = false;
+
+  rows.forEach((r, idx) => {
+    const idRaw = (r["Patient ID"] || r["﻿Patient ID"] || "").trim().replace(/\.0$/, "");
+    const id = idRaw;
+
+    if (id === patientId) {
+      console.log(`▶️ Row ${idx+2}: START of block for ${patientId}`, r); // +2 because row 1 = headers
+      insideBlock = true;
+      result.push(r);
+    } else if (insideBlock && !id) {
+      console.log(`➡️ Row ${idx+2}: continuing block (blank Patient ID)`, r);
+      result.push(r);
+    } else if (insideBlock && id && id !== patientId) {
+      console.log(`⛔ Row ${idx+2}: hit new patient (${id}), stopping block`);
+      insideBlock = false;
+    }
+  });
+
+  console.log(`✅ getPatientBlock: Found ${result.length} rows for Patient ID=${patientId}`);
+  return result;
+}
+
+
+
+
+
 // ============================
 // Load Patient Data
 // ============================
@@ -408,36 +443,15 @@ async function loadPatientData() {
       console.warn("⚠️ CSV returned no rows at all");
     }
 
-    // ✅ Normalize header variations + ID formatting
-const filteredRows = [];
-let lastId = null;
+// ✅ Use block-based lookup instead of carry-down IDs
+const patientBlock = getPatientBlock(patientRows, patientId);
 
-patientRows.forEach((r, idx) => {
-  let idRaw = r["Patient ID"] || r["﻿Patient ID"] || "";
-  let id = String(idRaw).trim().replace(/\.0$/, "");
-
-  if (id) {
-    lastId = id; // update last seen ID
-  } else if (lastId) {
-    id = lastId; // carry it down
-  }
-
-  if (id === patientId) {
-    filteredRows.push(r);
-  }
-});
-
-console.log(`🔎 Found ${filteredRows.length} rows for Patient ID=${patientId}`);
-console.log(filteredRows);
-
-
-
-if (filteredRows.length > 0) {
-  // Pass *all rows* for that patient
-  injectPatientData(filteredRows, lifestyleData, medsData, bodyCompData, toConsiderData);
+if (patientBlock.length > 0) {
+  injectPatientData(patientBlock, lifestyleData, medsData, bodyCompData, toConsiderData);
 } else {
   console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
 }
+
 
 
     console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
