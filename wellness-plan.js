@@ -357,29 +357,20 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    // ✅ No provider param — backend only expects ?id=...
-    const wellnessUrl = `${provider.wellness}?id=${patientId}&cb=${Date.now()}`;
+    // ✅ Use new bundle endpoint
+    const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
+    const bundle = await fetch(bundleUrl).then(r => r.json());
 
-    const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
-      fetch(wellnessUrl).then(r => r.json()),
-      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.json()),
-      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.json()),
-      fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.json()),
-      fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.json())
-    ]);
+    console.log("[Wellness Plan API Bundle]", bundle);
 
-    // 🔍 Detailed debug logs
-    console.group("📊 Wellness Plan API Responses");
-    console.log("🟢 Wellness Data (patient rows):", wellnessRes);
-    console.log("🟣 Lifestyle Data (reference):", lifestyleRes);
-    console.log("🔵 Meds Data (reference):", medsRes);
-    console.log("🟠 Body Comp Data (reference):", bodyCompRes);
-    console.log("🟡 To Consider Data (reference):", toConsiderRes);
-    console.groupEnd();
-
-    if (Array.isArray(wellnessRes) && wellnessRes.length > 0) {
-      // ✅ Corrected order
-      injectPatientData(wellnessRes, lifestyleRes, medsRes, bodyCompRes, toConsiderRes);
+    if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
+      injectPatientData(
+        bundle.patientRows,
+        bundle.lifestyle,
+        bundle.meds,
+        bundle.bodycomp,
+        bundle.toconsider
+      );
     } else {
       console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
@@ -387,6 +378,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
