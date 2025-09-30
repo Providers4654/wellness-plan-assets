@@ -364,7 +364,10 @@ async function loadPatientData() {
     const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
     const bundle = await fetch(bundleUrl).then(r => r.json());
 
-    // ✅ Move logs here (bundle is now defined)
+    // 👇 Add this to inspect the raw object
+    console.log("🗂 Full bundle JSON:", bundle);
+
+    // ✅ Existing logs
     console.log("🧾 Patient rows:", bundle.patientRows);
     console.log("📚 Meds data:", bundle.meds);
     console.log("🏃 Lifestyle data:", bundle.lifestyle);
@@ -386,6 +389,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
