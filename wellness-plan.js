@@ -12,13 +12,16 @@ function cssVar(name) {
 // --- Provider-specific Wellness APIs ---
 const PROVIDERS = {
   pj: {
+    // Joe’s API (points to Joe's Wellness Plans sheet)
     wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec"
   },
   pb: {
+    // Bryan’s API (points to Bryan's Wellness Plans sheet)
     wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec"
   }
   // add more providers later (pk, pm, etc.)
 };
+
 
 
 
