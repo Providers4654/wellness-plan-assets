@@ -357,7 +357,7 @@ if (targetGoalsList && targetTitle) {
     const items = goals.split(/[,;\n]/).map(g => g.trim()).filter(Boolean);
     let html = "";
     items.forEach(g => {
-      html += `<li><span class="editable"><strong>${normalizeCellText(g)}</strong></span></li>`;
+      html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
     });
     targetGoalsList.innerHTML = html;
   } else {
@@ -365,7 +365,6 @@ if (targetGoalsList && targetTitle) {
     targetGoalsList.remove();
   }
 }
-
 
 
   console.groupEnd();
