@@ -370,7 +370,7 @@ async function loadPatientData() {
     console.log("WellnessData response:", wellnessRes);
 
     if (Array.isArray(wellnessRes) && wellnessRes.length > 0) {
-      injectPatientData(wellnessRes, lifestyleRes, medsRes, bodyCompRes, toConsiderRes);
+      injectPatientData(wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes);
     } else {
       console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
