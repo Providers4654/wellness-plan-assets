@@ -361,7 +361,8 @@ async function loadPatientData() {
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
     // ⚡ fast bundle (patient rows only)
-    const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
+    const bundleUrl = `${provider.wellness}?provider=${providerCode}&id=${patientId}&cb=${Date.now()}`;
+
     const bundle = await fetch(bundleUrl).then(r => r.json());
 
     console.log("🧾 Patient rows:", bundle.patientRows);
