@@ -353,7 +353,8 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    const wellnessUrl = `${provider.wellness}?provider=${providerCode}&id=${patientId}&cb=${Date.now()}`;
+    // ✅ No provider param — backend only expects ?id=...
+    const wellnessUrl = `${provider.wellness}?id=${patientId}&cb=${Date.now()}`;
 
     const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
       fetch(wellnessUrl).then(r => r.json()),
@@ -363,24 +364,18 @@ async function loadPatientData() {
       fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.json())
     ]);
 
-    const wellnessData = wellnessRes;
-    const medsData = medsRes;
-    const lifestyleData = lifestyleRes;
-    const bodyCompData = bodyCompRes;
-    const toConsiderData = toConsiderRes;
+    console.log("WellnessData response:", wellnessRes);
 
-    // 👇 Debug log
-    console.log("WellnessData response:", wellnessData);
-
-    if (Array.isArray(wellnessData) && wellnessData.length > 0) {
-      injectPatientData(wellnessData, lifestyleData, medsData, bodyCompData, toConsiderData);
+    if (Array.isArray(wellnessRes) && wellnessRes.length > 0) {
+      injectPatientData(wellnessRes, lifestyleRes, medsRes, bodyCompRes, toConsiderRes);
     } else {
-      console.warn(`⚠️ No patient data returned for provider=${providerCode}, id=${patientId}`);
+      console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
