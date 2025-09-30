@@ -268,11 +268,14 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 const toConsiderList = document.getElementById("toConsider");
 const toConsiderBlock = document.getElementById("toConsiderBlock");
 if (toConsiderList && toConsiderBlock) {
-  const meds = (getField(patientMeta, ["To Consider", "Consider"]) || "")
+  const meds = rows
+    .map(r => getField(r, ["To Consider", "Consider"]))
+    .join(",")
     .split(",")
     .map(t => t.trim())
     .filter(Boolean);
-  console.log("Parsed To Consider meds:", meds);
+
+  console.log("Parsed To Consider meds (all rows):", meds);
 
   if (meds.length > 0) {
     let html = "";
@@ -281,33 +284,25 @@ if (toConsiderList && toConsiderBlock) {
 
     meds.forEach(med => {
       const info = toConsiderData.find(r => r["Medication"].trim() === med);
-      if (!info) return;
-      const category = (info["Category"] || "").trim() || "Other";
-      if (!grouped[category]) grouped[category] = [];
-      grouped[category].push(info);
+      if (info) {
+        const category = (info["Category"] || "").trim() || "Other";
+        if (!grouped[category]) grouped[category] = [];
+        grouped[category].push(info);
+      } else {
+        // Free-text custom entry
+        if (!grouped["Custom"]) grouped["Custom"] = [];
+        grouped["Custom"].push({ Medication: med, Blurb: "" });
+      }
     });
 
-    CATEGORY_ORDER.forEach(cat => {
+    CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
       if (grouped[cat]) {
         html += `<li class="to-consider-subtitle">${cat}</li>`;
         grouped[cat].forEach(info => {
           html += `
             <li class="to-consider-row">
               <div><strong>${info["Medication"]}</strong></div>
-              <div>${info["Blurb"] || ""}</div>
-            </li>`;
-        });
-      }
-    });
-
-    Object.keys(grouped).forEach(cat => {
-      if (!CATEGORY_ORDER.includes(cat)) {
-        html += `<li class="to-consider-subtitle">${cat}</li>`;
-        grouped[cat].forEach(info => {
-          html += `
-            <li class="to-consider-row">
-              <div><strong>${info["Medication"]}</strong></div>
-              <div>${info["Blurb"] || ""}</div>
+              <div>${normalizeCellText(info["Blurb"] || "")}</div>
             </li>`;
         });
       }
@@ -321,34 +316,15 @@ if (toConsiderList && toConsiderBlock) {
 }
 
 
-// --- Visit Timeline ---
-const visitTimelineList = document.getElementById("visitTimeline");
-if (visitTimelineList) {
-  const prev = getField(patientMeta, ["Previous Visit","Prev Visit"]) || "";
-  const next = getField(patientMeta, ["Next Visit","Follow-Up"]) || "";
-  console.log("Visit timeline:", { prev, next });
-
-  if (prev || next) {
-    let html = "";
-    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${normalizeCellText(prev)}</span></li>`;
-    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${normalizeCellText(next)}</span></li>`;
-    visitTimelineList.innerHTML = html;
-  } else {
-    const vtTitle = document.getElementById("visitTimelineTitle");
-    if (vtTitle) vtTitle.remove();
-    visitTimelineList.remove();
-  }
-}
-
-
 // --- Lifestyle Tips ---
 const lifestyleBlock = document.getElementById("lifestyleTips");
 if (lifestyleBlock) {
-  const selectedTips = (getField(patientMeta, ["Lifestyle Tips","Lifestyle/Type"]) || "")
-    .split(",")
-    .map(t => t.trim())
-    .filter(Boolean);
-  console.log("Lifestyle tips:", selectedTips);
+  const selectedTips = rows
+    .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
+    .filter(Boolean)
+    .map(v => v.trim());
+
+  console.log("Lifestyle tips (all rows):", selectedTips);
 
   if (selectedTips.length > 0) {
     let html = "";
@@ -361,8 +337,10 @@ if (lifestyleBlock) {
               <strong>${tipInfo["Tip"]}:</strong><br>
               ${normalizeCellText(tipInfo["Blurb"])}
             </span>
-          </li>
-        `;
+          </li>`;
+      } else {
+        html += `
+          <li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
       }
     });
     lifestyleBlock.innerHTML = html;
@@ -372,21 +350,26 @@ if (lifestyleBlock) {
 }
 
 
-
 // --- Body Comp ---
 const bodyCompList = document.getElementById("bodyComp");
 if (bodyCompList && bodyCompTitle) {
-  const key = (getField(patientMeta, ["Body Comp","Body Composition"]) || "").trim();
-  console.log("Body Comp key:", key);
+  const keys = rows
+    .map(r => getField(r, ["Body Comp","Body Composition"]))
+    .filter(Boolean)
+    .map(v => v.trim());
 
-  if (key) {
-    const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+  console.log("Body Comp keys (all rows):", keys);
+
+  if (keys.length > 0) {
     let html = "";
-    if (compRow && compRow["Blurb"]) {
-      html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
-    } else {
-      html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-    }
+    keys.forEach(key => {
+      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+      if (compRow && compRow["Blurb"]) {
+        html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+      } else {
+        html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+      }
+    });
     bodyCompList.innerHTML = html;
   } else {
     if (bodyCompTitle) bodyCompTitle.remove();
@@ -398,13 +381,18 @@ if (bodyCompList && bodyCompTitle) {
 // --- Target Goals ---
 const targetGoalsList = document.getElementById("targetGoals");
 if (targetGoalsList && targetTitle) {
-  const goals = getField(patientMeta, ["Target Goals","Goals"]) || "";
-  console.log("Target Goals:", goals);
+  const allGoals = rows
+    .map(r => getField(r, ["Target Goals","Goals"]))
+    .join(",")
+    .split(/[,;\n]/)
+    .map(g => g.trim())
+    .filter(Boolean);
 
-  if (goals) {
-    const items = goals.split(/[,;\n]/).map(g => g.trim()).filter(Boolean);
+  console.log("Target Goals (all rows):", allGoals);
+
+  if (allGoals.length > 0) {
     let html = "";
-    items.forEach(g => {
+    allGoals.forEach(g => {
       html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
     });
     targetGoalsList.innerHTML = html;
@@ -413,6 +401,7 @@ if (targetGoalsList && targetTitle) {
     targetGoalsList.remove();
   }
 }
+
 
 
   console.groupEnd();
