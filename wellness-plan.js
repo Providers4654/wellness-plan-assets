@@ -182,7 +182,6 @@ function getField(row, keys) {
 
 
 
-
 // --- Inject Patient Data ---
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
   if (!rows || rows.length === 0) {
@@ -196,9 +195,8 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const patientMeta = rows[0];
   console.log("Using patientMeta for meta fields:", patientMeta);
 
-  // --- Collect meds/supps ---
+  // --- Collect meds/supps (unchanged) ---
   const medsByCategory = { Daily:{meds:[],supps:[]}, Evening:{meds:[],supps:[]}, Weekly:{meds:[],supps:[]}, PRN:{meds:[],supps:[]} };
-
   rows.forEach((r, idx) => {
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
@@ -233,7 +231,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const blockId={Daily:"dailyBlock",Evening:"eveningBlock",Weekly:"weeklyBlock",PRN:"prnBlock"}[cat];
     const block=document.getElementById(blockId);
     const list=document.getElementById(listId);
-
     if (!list || !block) return;
 
     if (meds.length>0||supps.length>0){
@@ -245,22 +242,31 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // --- To Consider (row-based only) ---
+  // --- Hybrid Parser Helper ---
+  function parseHybridValues(rows, fieldNames) {
+    const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
+    const values = [];
+    rawValues.forEach(val => {
+      if (val.includes("<") || val.includes(">")) {
+        values.push(val.trim()); // custom HTML → keep whole
+      } else {
+        val.split(",").map(v => v.trim()).forEach(v => { if (v) values.push(v); });
+      }
+    });
+    return values;
+  }
+
+  // --- To Consider ---
   const toConsiderList = document.getElementById("toConsider");
   const toConsiderBlock = document.getElementById("toConsiderBlock");
   if (toConsiderList && toConsiderBlock) {
-    const meds = rows
-      .map(r => getField(r, ["To Consider", "Consider"]))
-      .filter(Boolean)
-      .map(v => v.trim());
-
+    const meds = parseHybridValues(rows, ["To Consider","Consider"]);
     console.log("Parsed To Consider meds (all rows):", meds);
 
     if (meds.length > 0) {
       let html = "";
       const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
       const grouped = {};
-
       meds.forEach(med => {
         const info = toConsiderData.find(r => r["Medication"].trim() === med);
         if (info) {
@@ -272,7 +278,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
           grouped["Custom"].push({ Medication: med, Blurb: "" });
         }
       });
-
       CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
         if (grouped[cat]) {
           html += `<li class="to-consider-subtitle">${cat}</li>`;
@@ -285,7 +290,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
           });
         }
       });
-
       toConsiderList.innerHTML = html;
       toConsiderBlock.style.display = "block";
     } else {
@@ -293,19 +297,14 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Lifestyle Tips (row-based only) ---
+  // --- Lifestyle Tips ---
   const lifestyleBlock = document.getElementById("lifestyleTips");
   if (lifestyleBlock) {
-    const selectedTips = rows
-      .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
-      .filter(Boolean)
-      .map(v => v.trim());
-
-    console.log("Lifestyle tips (all rows):", selectedTips);
-
-    if (selectedTips.length > 0) {
+    const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"]);
+    console.log("Lifestyle tips (all rows):", tips);
+    if (tips.length > 0) {
       let html = "";
-      selectedTips.forEach(tipName => {
+      tips.forEach(tipName => {
         const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
         if (tipInfo) {
           html += `
@@ -320,9 +319,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
         }
       });
       lifestyleBlock.innerHTML = html;
-    } else {
-      lifestyleBlock.innerHTML = "";
-    }
+    } else lifestyleBlock.innerHTML = "";
   }
 
   // --- Visit Timeline (row 1 only) ---
@@ -330,7 +327,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   if (visitTimelineList) {
     const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
     const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
-
     if (prev || next) {
       let html = "";
       if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
@@ -343,16 +339,11 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Body Comp (row-based only) ---
+  // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList && bodyCompTitle) {
-    const keys = rows
-      .map(r => getField(r, ["Body Comp","Body Composition"]))
-      .filter(Boolean)
-      .map(v => v.trim());
-
+    const keys = parseHybridValues(rows, ["Body Comp","Body Composition"]);
     console.log("Body Comp keys (all rows):", keys);
-
     if (keys.length > 0) {
       let html = "";
       keys.forEach(key => {
@@ -370,16 +361,11 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Target Goals (row-based only) ---
+  // --- Target Goals ---
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList && targetTitle) {
-    const allGoals = rows
-      .map(r => getField(r, ["Target Goals","Goals"]))
-      .filter(Boolean)
-      .map(v => v.trim());
-
+    const allGoals = parseHybridValues(rows, ["Target Goals","Goals"]);
     console.log("Target Goals (all rows):", allGoals);
-
     if (allGoals.length > 0) {
       let html = "";
       allGoals.forEach(g => {
