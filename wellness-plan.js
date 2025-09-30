@@ -314,37 +314,42 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Lifestyle Tips ---
-  const lifestyleBlock = document.getElementById("lifestyleTips");
-  if (lifestyleBlock) {
-    const selectedTips = rows
-      .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
-      .filter(Boolean)
-      .map(v => v.trim());
+// --- Lifestyle Tips ---
+const lifestyleBlock = document.getElementById("lifestyleTips");
+if (lifestyleBlock) {
+  // Gather all rows' values and split them into individual tips
+  const selectedTips = rows
+    .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
+    .filter(Boolean)
+    .flatMap(val => val.split(",").map(v => v.trim())) // split each row by comma
+    .filter(Boolean);
 
-    console.log("Lifestyle tips (all rows):", selectedTips);
+  console.log("Lifestyle tips (all rows):", selectedTips);
 
-    if (selectedTips.length > 0) {
-      let html = "";
-      selectedTips.forEach(tipName => {
-        const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
-        if (tipInfo) {
-          html += `
-            <li>
-              <span class="editable">
-                <strong>${tipInfo["Tip"]}:</strong><br>
-                ${normalizeCellText(tipInfo["Blurb"])}
-              </span>
-            </li>`;
-        } else {
-          html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
-        }
-      });
-      lifestyleBlock.innerHTML = html;
-    } else {
-      lifestyleBlock.innerHTML = "";
-    }
+  if (selectedTips.length > 0) {
+    let html = "";
+    selectedTips.forEach(tipName => {
+      const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+      if (tipInfo) {
+        // Render library tip with blurb
+        html += `
+          <li>
+            <span class="editable">
+              <strong>${tipInfo["Tip"]}:</strong><br>
+              ${normalizeCellText(tipInfo["Blurb"])}
+            </span>
+          </li>`;
+      } else {
+        // Render free-text custom entry
+        html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
+      }
+    });
+    lifestyleBlock.innerHTML = html;
+  } else {
+    lifestyleBlock.innerHTML = "";
   }
+}
+
 
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
