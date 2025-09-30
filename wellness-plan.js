@@ -369,7 +369,7 @@ async function loadPatientData() {
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
     const fetchStart = performance.now();
-    const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&provider=${providerCode}&cb=${Date.now()}`;
+  const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&provider=${providerCode}`;
     const bundle = await fetch(bundleUrl).then(r => r.json());
     const fetchEnd = performance.now();
     console.log(`⏱️ Fetch time: ${(fetchEnd - fetchStart).toFixed(2)} ms`);
