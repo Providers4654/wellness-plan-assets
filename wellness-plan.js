@@ -155,15 +155,6 @@ function getIdField(row) {
 }
 
 
-function getField(row, keys) {
-  for (const key of keys) {
-    if (row[key] !== undefined && row[key] !== "") {
-      return row[key];
-    }
-  }
-  return "";
-}
-
 
 // --- Flexible field getter ---
 function getField(row, keys) {
@@ -304,18 +295,19 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       .split(",").map(t=>t.trim()).filter(Boolean);
     console.log("Lifestyle tips:",selectedTips);
 
-    if(selectedTips.length>0){
-      let html="<ul>";
-      selectedTips.forEach(tipName=>{
-        const tipInfo=lifestyleData.find(r=>r["Tip"].trim()===tipName);
-        if(tipInfo){
-          html+=`<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
-        }
-      });
-      html+="</ul>";
-      lifestyleBlock.innerHTML=html;
-    } else lifestyleBlock.innerHTML="";
-  }
+if (selectedTips.length > 0) {
+  let html = "";
+  selectedTips.forEach(tipName => {
+    const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+    if (tipInfo) {
+      html += `<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;
+    }
+  });
+  lifestyleBlock.innerHTML = html;
+} else {
+  lifestyleBlock.innerHTML = "";
+}
+
 
   // --- Body Comp ---
   const bodyCompList=document.getElementById("bodyComp");
@@ -337,18 +329,26 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-  // --- Target Goals ---
-  const targetGoalsList=document.getElementById("targetGoals");
-  if(targetGoalsList&&targetTitle){
-    const goals=getField(patientMeta, ["Target Goals","Goals"])||"";
-    console.log("Target Goals:",goals);
-    if(goals){
-      targetGoalsList.innerHTML=`<li>${goals}</li>`;
-    } else {
-      if(targetTitle)targetTitle.remove();
-      targetGoalsList.remove();
-    }
+// --- Target Goals ---
+const targetGoalsList = document.getElementById("targetGoals");
+if (targetGoalsList && targetTitle) {
+  const goals = getField(patientMeta, ["Target Goals","Goals"]) || "";
+  console.log("Target Goals:", goals);
+
+  if (goals) {
+    // Split by commas/newlines if you want multiple goals
+    const items = goals.split(/[,;\n]/).map(g => g.trim()).filter(Boolean);
+    let html = "";
+    items.forEach(g => {
+      html += `<li>${normalizeCellText(g)}</li>`;
+    });
+    targetGoalsList.innerHTML = html;
+  } else {
+    if (targetTitle) targetTitle.remove();
+    targetGoalsList.remove();
   }
+}
+
 
   console.groupEnd();
 }
