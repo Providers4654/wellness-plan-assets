@@ -26,9 +26,6 @@ const TABS = {
   toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv"
 };
 
-
-
-
 // ============================
 // CSV FETCH + PARSER
 // ============================
@@ -54,11 +51,6 @@ async function fetchCsv(url) {
     return obj;
   });
 }
-
-
-
-
-
 
 // ============================
 // RESOURCE LINKS
@@ -137,7 +129,15 @@ function normalizeCellText(text) {
   return text.replace(/(\r\n|\r|\n)/g, "<br>").replace(/&lt;br&gt;/g, "<br>");
 }
 
-
+// Normalize header names (strip hidden chars, unify variations)
+function getIdField(row) {
+  return (
+    row["Patient ID"] ||
+    row["﻿Patient ID"] ||
+    row["ID"] ||
+    ""
+  );
+}
 
 // ============================
 // Inject Patient Data (multi-row support + logging)
@@ -151,7 +151,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   console.group("🧾 InjectPatientData Debug");
   console.log("Full patient rows:", rows);
 
-  // Meta fields (Lifestyle, Body Comp, Visits, Goals) only come from first row
   const patientMeta = rows[0];
   console.log("Using patientMeta for meta fields:", patientMeta);
 
@@ -165,35 +164,22 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  // -----------------
-  // Collect ALL meds/supps across all rows
-  // -----------------
-  const medsByCategory = {
-    Daily: { meds: [], supps: [] },
-    Evening: { meds: [], supps: [] },
-    Weekly: { meds: [], supps: [] },
-    PRN: { meds: [], supps: [] }
-  };
+  // --- Collect meds/supps ---
+  const medsByCategory = { Daily:{meds:[],supps:[]}, Evening:{meds:[],supps:[]}, Weekly:{meds:[],supps:[]}, PRN:{meds:[],supps:[]} };
 
   rows.forEach((r, idx) => {
     console.log(`Processing row ${idx}:`, r);
-
     const med = r["Meds/Supp"];
     if (!med) return;
-
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
-
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
     const medHtml = `
       <li class="med-row">
-        <div class="med-name">
-          <strong>${med}</strong>
-          ${blurb ? `<span class="info-icon" title="More info">i</span>` : ""}
-        </div>
+        <div class="med-name"><strong>${med}</strong>${blurb ? `<span class="info-icon">i</span>` : ""}</div>
         <div class="dose">${dose}</div>
         ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
       </li>
@@ -209,268 +195,116 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // Inject meds into DOM
-  Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
-    const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds" }[cat];
-    const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock" }[cat];
-    const block = document.getElementById(blockId);
-    const list = document.getElementById(listId);
-
-    if (!list || !block) return;
-
-    if (meds.length > 0 || supps.length > 0) {
-      let html = meds.join("");
-      if (supps.length > 0) html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-      list.innerHTML = html;
-    } else {
-      block.remove();
-    }
+  Object.entries(medsByCategory).forEach(([cat,{meds,supps}])=>{
+    const listId={Daily:"dailyMeds",Evening:"eveningMeds",Weekly:"weeklyMeds",PRN:"prnMeds"}[cat];
+    const blockId={Daily:"dailyBlock",Evening:"eveningBlock",Weekly:"weeklyBlock",PRN:"prnBlock"}[cat];
+    const block=document.getElementById(blockId);
+    const list=document.getElementById(listId);
+    if(!list||!block) return;
+    if(meds.length>0||supps.length>0){
+      let html=meds.join("");
+      if(supps.length>0) html+=`<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
+      list.innerHTML=html;
+    } else { block.remove(); }
   });
 
-  // -----------------
-  // Meta fields (first row only)
-  // -----------------
-
-  // To Consider
-  const toConsiderList = document.getElementById("toConsider");
-  const toConsiderBlock = document.getElementById("toConsiderBlock");
-  if (toConsiderList && toConsiderBlock) {
-    const meds = (patientMeta["To Consider"] || "")
-      .split(",")
-      .map(t => t.trim())
-      .filter(Boolean);
-
+  // --- Meta fields ---
+  const toConsiderList=document.getElementById("toConsider");
+  const toConsiderBlock=document.getElementById("toConsiderBlock");
+  if(toConsiderList&&toConsiderBlock){
+    const meds=(patientMeta["To Consider"]||"").split(",").map(t=>t.trim()).filter(Boolean);
     console.log("Parsed To Consider meds:", meds);
-
-    if (meds.length > 0) {
-      let html = "";
-      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-      const grouped = {};
-
-      meds.forEach(med => {
-        const info = toConsiderData.find(r => r["Medication"].trim() === med);
-        if (!info) return;
-        const category = (info["Category"] || "").trim() || "Other";
-        if (!grouped[category]) grouped[category] = [];
-        grouped[category].push(info);
-      });
-
-      CATEGORY_ORDER.forEach(category => {
-        if (grouped[category]) {
-          html += `<li class="to-consider-subtitle">${category}</li>`;
-          grouped[category].forEach(info => {
-            html += `
-              <li class="to-consider-row">
-                <div class="to-consider-name">${info["Medication"]}</div>
-                <div class="to-consider-blurb">${info["Blurb"] || ""}</div>
-              </li>
-            `;
-          });
-        }
-      });
-
-      Object.keys(grouped).forEach(category => {
-        if (!CATEGORY_ORDER.includes(category)) {
-          html += `<li class="to-consider-subtitle">${category}</li>`;
-          grouped[category].forEach(info => {
-            html += `
-              <li class="to-consider-row">
-                <div class="to-consider-name">${info["Medication"]}</div>
-                <div class="to-consider-blurb">${info["Blurb"] || ""}</div>
-              </li>
-            `;
-          });
-        }
-      });
-
-      toConsiderList.innerHTML = html;
-      toConsiderBlock.style.display = "block";
-    } else {
-      toConsiderBlock.style.display = "none";
-    }
+    if(meds.length>0){
+      let html=""; const CATEGORY_ORDER=["Hormones","Peptides","Medications"]; const grouped={};
+      meds.forEach(med=>{const info=toConsiderData.find(r=>r["Medication"].trim()===med);if(!info)return;const category=(info["Category"]||"").trim()||"Other";if(!grouped[category])grouped[category]=[];grouped[category].push(info);});
+      CATEGORY_ORDER.forEach(cat=>{if(grouped[cat]){html+=`<li class="to-consider-subtitle">${cat}</li>`;grouped[cat].forEach(info=>{html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;});}});
+      Object.keys(grouped).forEach(cat=>{if(!CATEGORY_ORDER.includes(cat)){html+=`<li class="to-consider-subtitle">${cat}</li>`;grouped[cat].forEach(info=>{html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;});}});
+      toConsiderList.innerHTML=html; toConsiderBlock.style.display="block";
+    } else toConsiderBlock.style.display="none";
   }
 
-  // Visit timeline
-  const visitTimelineList = document.getElementById("visitTimeline");
-  if (visitTimelineList) {
-    const prev = patientMeta["Previous Visit"] || "";
-    const next = patientMeta["Next Visit"] || "";
-    console.log("Visit timeline:", { prev, next });
-
-    if (prev || next) {
-      visitTimelineList.innerHTML = `
-        ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
-        ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
-      `;
-    } else {
-      const vtTitle = document.getElementById("visitTimelineTitle");
-      if (vtTitle) vtTitle.remove();
-      visitTimelineList.remove();
-    }
+  const visitTimelineList=document.getElementById("visitTimeline");
+  if(visitTimelineList){
+    const prev=patientMeta["Previous Visit"]||""; const next=patientMeta["Next Visit"]||"";
+    console.log("Visit timeline:",{prev,next});
+    if(prev||next){visitTimelineList.innerHTML=`${prev?`<li><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</li>`:""}${next?`<li><strong>${cssVar("--visit-next-label")}</strong> ${next}</li>`:""}`;}
+    else {const vtTitle=document.getElementById("visitTimelineTitle"); if(vtTitle)vtTitle.remove(); visitTimelineList.remove();}
   }
 
-  // Lifestyle tips
-  const lifestyleBlock = document.getElementById("lifestyleTips");
-  if (lifestyleBlock) {
-    const selectedTips = (patientMeta["Lifestyle Tips"] || "").split(",").map(t => t.trim()).filter(Boolean);
-    console.log("Lifestyle tips:", selectedTips);
-
-    if (selectedTips.length > 0) {
-      let html = '<ul class="lifestyle-tips-list">';
-      selectedTips.forEach(tipName => {
-        const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
-        if (tipInfo) {
-          html += `<li><span class="editable"><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</span></li>`;
-        }
-      });
-      html += "</ul>";
-      lifestyleBlock.innerHTML = html;
-    } else {
-      lifestyleBlock.innerHTML = "";
-    }
+  const lifestyleBlock=document.getElementById("lifestyleTips");
+  if(lifestyleBlock){
+    const selectedTips=(patientMeta["Lifestyle Tips"]||"").split(",").map(t=>t.trim()).filter(Boolean);
+    console.log("Lifestyle tips:",selectedTips);
+    if(selectedTips.length>0){
+      let html="<ul>"; selectedTips.forEach(tipName=>{const tipInfo=lifestyleData.find(r=>r["Tip"].trim()===tipName); if(tipInfo){html+=`<li><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</li>`;}});
+      html+="</ul>"; lifestyleBlock.innerHTML=html;
+    } else lifestyleBlock.innerHTML="";
   }
 
-  // Body Comp
-  const bodyCompList = document.getElementById("bodyComp");
-  if (bodyCompList && bodyCompTitle) {
-    const key = (patientMeta["Body Comp"] || "").trim();
-    console.log("Body Comp key:", key);
-
-    if (key) {
-      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-      let html = "";
-      if (compRow && compRow["Blurb"]) {
-        html = `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
-      } else {
-        html = `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-      }
-      bodyCompList.innerHTML = html;
-    } else {
-      if (bodyCompTitle) bodyCompTitle.remove();
-      bodyCompList.remove();
-    }
+  const bodyCompList=document.getElementById("bodyComp");
+  if(bodyCompList&&bodyCompTitle){
+    const key=(patientMeta["Body Comp"]||"").trim();
+    console.log("Body Comp key:",key);
+    if(key){const compRow=bodyCompData.find(b=>(b["State"]||"").trim()===key); let html=""; if(compRow&&compRow["Blurb"]){html=`<li>${normalizeCellText(compRow["Blurb"])}</li>`;} else {html=`<li>${normalizeCellText(key)}</li>`;} bodyCompList.innerHTML=html;}
+    else {if(bodyCompTitle)bodyCompTitle.remove(); bodyCompList.remove();}
   }
 
-  // Target goals
-  const targetGoalsList = document.getElementById("targetGoals");
-  if (targetGoalsList && targetTitle) {
-    const goals = patientMeta["Target Goals"] || "";
-    console.log("Target Goals:", goals);
-
-    if (goals) {
-      targetGoalsList.innerHTML = `<li><span class="editable">${goals}</span></li>`;
-    } else {
-      if (targetTitle) targetTitle.remove();
-      targetGoalsList.remove();
-    }
+  const targetGoalsList=document.getElementById("targetGoals");
+  if(targetGoalsList&&targetTitle){
+    const goals=patientMeta["Target Goals"]||""; console.log("Target Goals:",goals);
+    if(goals){targetGoalsList.innerHTML=`<li>${goals}</li>`;} else {if(targetTitle)targetTitle.remove(); targetGoalsList.remove();}
   }
 
   console.groupEnd();
 }
 
-
-
-
-
-
-
 // ============================
 // Find contiguous block of rows for a patient ID
 // ============================
 function getPatientBlock(rows, patientId) {
-  const result = [];
-  let insideBlock = false;
-
-  rows.forEach((r, idx) => {
-    const idRaw = (r["Patient ID"] || r["﻿Patient ID"] || "").trim().replace(/\.0$/, "");
-    const id = idRaw;
-
-    if (id === patientId) {
-      console.log(`▶️ Row ${idx+2}: START of block for ${patientId}`, r); // +2 because row 1 = headers
-      insideBlock = true;
-      result.push(r);
-    } else if (insideBlock && !id) {
-      console.log(`➡️ Row ${idx+2}: continuing block (blank Patient ID)`, r);
-      result.push(r);
-    } else if (insideBlock && id && id !== patientId) {
-      console.log(`⛔ Row ${idx+2}: hit new patient (${id}), stopping block`);
-      insideBlock = false;
-    }
+  const result=[]; let insideBlock=false;
+  rows.forEach((r,idx)=>{
+    const id=(getIdField(r)||"").trim().replace(/\.0$/,"");
+    if(id===patientId){console.log(`▶️ Row ${idx+2}: START block for ${patientId}`,r); insideBlock=true; result.push(r);}
+    else if(insideBlock&&!id){console.log(`➡️ Row ${idx+2}: continuing block (blank ID)`,r); result.push(r);}
+    else if(insideBlock&&id&&id!==patientId){console.log(`⛔ Row ${idx+2}: hit new patient (${id}), stopping`); insideBlock=false;}
   });
-
   console.log(`✅ getPatientBlock: Found ${result.length} rows for Patient ID=${patientId}`);
   return result;
 }
 
-
-
-
-
 // ============================
 // Load Patient Data
 // ============================
-
 function getProviderAndPatientIdFromUrl() {
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  const providerCode = parts[0];
-  const patientId = parts.pop();
-  return { providerCode, patientId };
+  const parts=window.location.pathname.split("/").filter(Boolean);
+  const providerCode=parts[0]; const patientId=parts.pop();
+  return {providerCode,patientId};
 }
 
 async function loadPatientData() {
-  const start = performance.now();
-
+  const start=performance.now();
   try {
-    const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
-    const provider = PROVIDERS[providerCode];
-    if (!provider) return console.error("❌ Unknown provider:", providerCode);
-
+    const {providerCode,patientId}=getProviderAndPatientIdFromUrl();
+    const provider=PROVIDERS[providerCode];
+    if(!provider) return console.error("❌ Unknown provider:",providerCode);
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
-
-    const [patientRows, medsData, lifestyleData, bodyCompData, toConsiderData] = await Promise.all([
-      fetchCsv(provider.wellness),
-      fetchCsv(TABS.meds),
-      fetchCsv(TABS.lifestyle),
-      fetchCsv(TABS.bodycomp),
-      fetchCsv(TABS.toconsider),
+    const [patientRows,medsData,lifestyleData,bodyCompData,toConsiderData]=await Promise.all([
+      fetchCsv(provider.wellness), fetchCsv(TABS.meds), fetchCsv(TABS.lifestyle), fetchCsv(TABS.bodycomp), fetchCsv(TABS.toconsider),
     ]);
-
-    // 🔎 Debug: log headers + first few IDs
-    if (patientRows.length > 0) {
-      console.log("Headers from CSV:", Object.keys(patientRows[0]));
-      console.log("First 10 Patient IDs:", patientRows.slice(0, 10).map(r => r["Patient ID"] || r["﻿Patient ID"] || Object.values(r)[0]));
-    } else {
-      console.warn("⚠️ CSV returned no rows at all");
-    }
-
-// ✅ Use block-based lookup instead of carry-down IDs
-const patientBlock = getPatientBlock(patientRows, patientId);
-
-if (patientBlock.length > 0) {
-  injectPatientData(patientBlock, lifestyleData, medsData, bodyCompData, toConsiderData);
-} else {
-  console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
+    if(patientRows.length>0){
+      console.log("Headers from CSV:",Object.keys(patientRows[0]));
+      console.log("First 10 Patient IDs:",patientRows.slice(0,10).map(r=>getIdField(r)));
+    } else {console.warn("⚠️ CSV returned no rows at all");}
+    const patientBlock=getPatientBlock(patientRows,patientId);
+    if(patientBlock.length>0){injectPatientData(patientBlock,lifestyleData,medsData,bodyCompData,toConsiderData);}
+    else {console.warn(`⚠️ No rows found for Patient ID=${patientId}`);}
+    console.log(`✅ Total load time: ${(performance.now()-start).toFixed(2)} ms`);
+  } catch(err){console.error("❌ Error in loadPatientData:",err);}
 }
-
-
-
-    console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
-
-  } catch (err) {
-    console.error("❌ Error in loadPatientData:", err);
-  }
-}
-
 
 // ============================
 // Bootstrap
 // ============================
-function bootstrapWellnessPlan() {
-  loadPatientData();
-}
-
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", bootstrapWellnessPlan);
-} else {
-  bootstrapWellnessPlan();
-}
+function bootstrapWellnessPlan(){loadPatientData();}
+if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",bootstrapWellnessPlan);} else {bootstrapWellnessPlan();}
