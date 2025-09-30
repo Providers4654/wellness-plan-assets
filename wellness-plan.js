@@ -522,7 +522,42 @@ async function loadPatientData() {
 }
 
 // ============================
-// Bootstrap
+// Bootstrap with retry
 // ============================
-function bootstrapWellnessPlan(){loadPatientData();}
-if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",bootstrapWellnessPlan);} else {bootstrapWellnessPlan();}
+
+function bootstrapWellnessPlanSafe(attempt = 1) {
+  try {
+    console.log(`🚀 bootstrapWellnessPlanSafe attempt ${attempt}`);
+    loadPatientData();
+
+    // Check for key DOM blocks that should exist
+    const requiredEls = [
+      document.getElementById("toConsiderBlock"),
+      document.getElementById("dynamicFullscriptLink"),
+      document.getElementById("dynamicAddOnsLink"),
+      document.getElementById("dynamicStandardsLink"),
+      document.getElementById("dynamicCoachingLink"),
+      document.getElementById("dynamicFollowUpLink"),
+    ];
+
+    const missing = requiredEls.filter(el => !el);
+    if (missing.length > 0 && attempt < 3) {
+      console.warn(`⚠️ Missing ${missing.length} critical elements. Retrying in 200ms...`);
+      setTimeout(() => bootstrapWellnessPlanSafe(attempt + 1), 200);
+    } else if (missing.length === 0) {
+      console.log("✅ All critical blocks loaded on attempt", attempt);
+    } else {
+      console.warn("❌ Some elements never appeared:", missing);
+    }
+  } catch (err) {
+    console.error("❌ bootstrapWellnessPlanSafe failed:", err);
+  }
+}
+
+// Ensure DOM is ready before firing
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => bootstrapWellnessPlanSafe());
+} else {
+  bootstrapWellnessPlanSafe();
+}
+
