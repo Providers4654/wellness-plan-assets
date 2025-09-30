@@ -116,13 +116,6 @@ function normalizeCellText(text) {
 
 
 
-console.log("🧾 Patient rows:", bundle.patientRows);
-console.log("📚 Meds data:", bundle.meds);
-console.log("🏃 Lifestyle data:", bundle.lifestyle);
-console.log("📊 Body comp data:", bundle.bodycomp);
-console.log("💡 To consider data:", bundle.toconsider);
-
-
 // ============================
 // Inject Patient Data
 // ============================
@@ -371,7 +364,12 @@ async function loadPatientData() {
     const bundleUrl = `${provider.wellness}?bundle=1&id=${patientId}&cb=${Date.now()}`;
     const bundle = await fetch(bundleUrl).then(r => r.json());
 
-    console.log("[Wellness Plan API Bundle]", bundle);
+    // ✅ Move logs here (bundle is now defined)
+    console.log("🧾 Patient rows:", bundle.patientRows);
+    console.log("📚 Meds data:", bundle.meds);
+    console.log("🏃 Lifestyle data:", bundle.lifestyle);
+    console.log("📊 Body comp data:", bundle.bodycomp);
+    console.log("💡 To consider data:", bundle.toconsider);
 
     if (Array.isArray(bundle.patientRows) && bundle.patientRows.length > 0) {
       injectPatientData(
@@ -388,6 +386,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
