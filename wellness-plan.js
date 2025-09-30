@@ -67,6 +67,19 @@ async function fetchCsv(url) {
   });
 }
 
+
+// ============================
+// Apply CSS TEXT Vars
+// ============================
+function setTextIfAvailable(selector, cssVarName, fallback) {
+  const el = document.querySelector(selector);
+  if (el) {
+    el.textContent = cssVar(cssVarName) || fallback;
+  }
+}
+
+
+
 function injectResourceLinksAndTitles() {
   console.log("🔗 Injecting resource links & titles");
 
