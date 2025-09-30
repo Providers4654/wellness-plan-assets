@@ -371,7 +371,11 @@ async function loadPatientData() {
       fetchCsv(TABS.toconsider),
     ]);
 
-    const filteredRows = patientRows.filter(r => String(r["Patient ID"]).trim() === patientId);
+    const filteredRows = patientRows.filter(r => {
+  const id = String(r["Patient ID"] || "").trim();
+  return id == patientId; // loose compare handles 299 vs 299.0
+});
+
 
     if (filteredRows.length > 0) {
       injectPatientData(filteredRows, lifestyleData, medsData, bodyCompData, toConsiderData);
