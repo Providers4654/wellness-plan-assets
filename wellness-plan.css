@@ -3,38 +3,36 @@
    ============================ */
 :root {
   /* Section titles */
-  --title-plan: "📋 Personalized Wellness Plan";
-  --title-summary: "💊 Treatment Summary";
-  --title-supplements: "Supplements";
-  --title-lifestyle: "🏃 Lifestyle & Health Habits";
-  --title-goals: "🎯 Goals & Follow-Up";
+  --title-plan: 📋 Personalized Wellness Plan;
+  --title-summary: 💊 Treatment Summary;
+  --title-supplements: Supplements;
+  --title-lifestyle: 🏃 Lifestyle & Health Habits;
+  --title-goals: 🎯 Goals & Follow-Up;
 
   /* Intro message */
-  --intro-message: "This personalized wellness plan reflects your latest treatment and goals.";
+  --intro-message: This personalized wellness plan reflects your latest treatment and goals.;
 
- 
   /* Resource URLs */
-  --treatment-addons-url: "https://www.mtnhlth.com/treatment-add-ons";
-   
-  --standards-text: "🔗 Basic HLTH Standards";
-  --basic-standards-url: "https://www.mtnhlth.com/basic-hlth-standards";
-  --standards-note: "We update this page regularly.";
+  --treatment-addons-url: https://www.mtnhlth.com/treatment-add-ons;
 
-  --coaching-text: "Schedule a free consultation with our HLTH Coach";
-  --health-coaching-url: "https://www.mtnhlth.com/health-coaching";
-  --coaching-note: "Need help implementing these habits?";
-   
-  --followup-url: "https://www.mtnhlth.com/follow-up-visit";
-  --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
-  --needle27g-url: "https://www.amazon.com/dp/B084ZBY221?ref=cm_sw_r_cso_cp_apin_dp_VSZ0KWD3YANMCVE8GC8N";
-  --subq-video-url: "https://youtu.be/fMEZdNodGM0?si=zrkKpmLsN8N_eB8A";
-  --alcohol-pads-url: "https://www.amazon.com/s?k=alcohol+pads&crid=1JALMM5EAHOVG&sprefix=alcohol+pads%2Caps%2C127&ref=nb_sb_noss_1";
+  --standards-text: 🔗 Basic HLTH Standards;
+  --basic-standards-url: https://www.mtnhlth.com/basic-hlth-standards;
+  --standards-note: We update this page regularly.;
+
+  --coaching-text: Schedule a free consultation with our HLTH Coach;
+  --health-coaching-url: https://www.mtnhlth.com/health-coaching;
+  --coaching-note: Need help implementing these habits?;
+
+  --followup-url: https://www.mtnhlth.com/follow-up-visit;
+  --fullscript-url: https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true;
+  --needle27g-url: https://www.amazon.com/dp/B084ZBY221?ref=cm_sw_r_cso_cp_apin_dp_VSZ0KWD3YANMCVE8GC8N;
+  --subq-video-url: https://youtu.be/fMEZdNodGM0?si=zrkKpmLsN8N_eB8A;
+  --alcohol-pads-url: https://www.amazon.com/s?k=alcohol+pads&crid=1JALMM5EAHOVG&sprefix=alcohol+pads%2Caps%2C127&ref=nb_sb_noss_1;
 
   /* Layout spacing */
   --header-height: 100px; /* height of custom header (adjust as needed) */
 
-
-   /* === Block Theme Colors === */
+  /* === Block Theme Colors === */
   --daily-color:   #FFD54F;
   --evening-color: #b39ddb;
   --weekly-color:  #81C784;
@@ -45,40 +43,36 @@
   --weekly-bg:     #e8f5e9;
   --prn-bg:        #f5f5f5;
 
-
   /* Top buttons */
-  --top-btn1-text: "MTN HLTH Website";
-  --top-btn1-url: "https://www.mtnhlth.com";
-  --top-btn2-text: "Patient Portal";
-  --top-btn2-url: "https://mtnhlthclient.md-hq.com";
+  --top-btn1-text: MTN HLTH Website;
+  --top-btn1-url: https://www.mtnhlth.com;
+  --top-btn2-text: Patient Portal;
+  --top-btn2-url: https://mtnhlthclient.md-hq.com;
 
   /* Resource links */
-  --fullscript-text: "🔗 Order Supplements";
-  --fullscript-url: "https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true";
-  --fullscript-note: "Personalized recommendations, shipped directly to you — at a discounted price.";
+  --fullscript-text: 🔗 Order Supplements;
+  --fullscript-url: https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true;
+  --fullscript-note: Personalized recommendations, shipped directly to you — at a discounted price.;
 
-  --addons-text: "🔗 Optional Add-On Therapies";
-  --addons-url: "https://www.mtnhlth.com/treatment-add-ons";
-  --addons-note: "These can be added to support energy, metabolism, recovery, and more.";
+  --addons-text: 🔗 Optional Add-On Therapies;
+  --addons-url: https://www.mtnhlth.com/treatment-add-ons;
+  --addons-note: These can be added to support energy, metabolism, recovery, and more.;
 
-   
   /* Visit Timeline labels */
-  --visit-timeline-title: "Visit Timeline";
-  --visit-prev-label: "Previous visit:";
-  --visit-next-label: "Next visit:";
+  --visit-timeline-title: Visit Timeline;
+  --visit-prev-label: Previous visit:;
+  --visit-next-label: Next visit:;
 
   /* Body Composition section */
-  --bodycomp-title: "Body Composition Analysis";
+  --bodycomp-title: Body Composition Analysis;
 
   /* Target Goals section */
-  --target-title: "Target Goals";
+  --target-title: Target Goals;
 
-
-   
-  --followup-text: "📅 Schedule Follow-Up Visit";
-  --followup-url: "https://www.mtnhlth.com/follow-up-visit";
-
+  --followup-text: 📅 Schedule Follow-Up Visit;
+  --followup-url: https://www.mtnhlth.com/follow-up-visit;
 }
+
 
 
 
