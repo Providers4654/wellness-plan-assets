@@ -337,7 +337,6 @@ function getProviderAndPatientIdFromUrl() {
 }
 
 
-
 async function loadPatientData() {
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
@@ -363,7 +362,12 @@ async function loadPatientData() {
     const bodyCompData = bodyCompRes;
     const toConsiderData = toConsiderRes;
 
-    const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
+    // 👇 ADD THIS LINE
+    console.log("WellnessData response:", wellnessData);
+
+    const patientRows = Array.isArray(wellnessData)
+      ? wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim())
+      : [];
 
     if (patientRows.length > 0) {
       injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
