@@ -4,6 +4,11 @@
 
 const root = getComputedStyle(document.documentElement);
 
+// ✅ add this helper back
+function cssVar(name) {
+  return root.getPropertyValue(name).trim();
+}
+
 // --- Provider-specific Wellness APIs ---
 const PROVIDERS = {
   pj: {
