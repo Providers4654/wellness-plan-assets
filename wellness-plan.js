@@ -351,6 +351,32 @@ if (lifestyleBlock) {
 }
 
 
+// --- Visit Timeline ---
+const visitTimelineList = document.getElementById("visitTimeline");
+if (visitTimelineList) {
+  // Always use the very first row for these
+  const prev = normalizeCellText(
+    getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || ""
+  );
+  const next = normalizeCellText(
+    getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || ""
+  );
+
+  console.log("Visit timeline (row 1 only):", { prev, next });
+
+  if (prev || next) {
+    let html = "";
+    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
+    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+    visitTimelineList.innerHTML = html;
+  } else {
+    const vtTitle = document.getElementById("visitTimelineTitle");
+    if (vtTitle) vtTitle.remove();
+    visitTimelineList.remove();
+  }
+}
+
+
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList && bodyCompTitle) {
