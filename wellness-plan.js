@@ -341,9 +341,9 @@ if (targetGoalsList && targetTitle) {
     // Split by commas/newlines if you want multiple goals
     const items = goals.split(/[,;\n]/).map(g => g.trim()).filter(Boolean);
     let html = "";
-    items.forEach(g => {
-      html += `<li>${normalizeCellText(g)}</li>`;
-    });
+items.forEach(g => {
+  html += `<li><strong>${normalizeCellText(g)}</strong></li>`;
+});
     targetGoalsList.innerHTML = html;
   } else {
     if (targetTitle) targetTitle.remove();
