@@ -264,42 +264,62 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // --- To Consider ---
-  const toConsiderList=document.getElementById("toConsider");
-  const toConsiderBlock=document.getElementById("toConsiderBlock");
-  if(toConsiderList&&toConsiderBlock){
-    const meds=(getField(patientMeta, ["To Consider","Consider"])||"")
-      .split(",").map(t=>t.trim()).filter(Boolean);
-    console.log("Parsed To Consider meds:", meds);
+// --- To Consider ---
+const toConsiderList = document.getElementById("toConsider");
+const toConsiderBlock = document.getElementById("toConsiderBlock");
+if (toConsiderList && toConsiderBlock) {
+  const meds = (getField(patientMeta, ["To Consider", "Consider"]) || "")
+    .split(",")
+    .map(t => t.trim())
+    .filter(Boolean);
+  console.log("Parsed To Consider meds:", meds);
 
-    if(meds.length>0){
-      let html=""; const CATEGORY_ORDER=["Hormones","Peptides","Medications"]; const grouped={};
-      meds.forEach(med=>{
-        const info=toConsiderData.find(r=>r["Medication"].trim()===med);
-        if(!info) return;
-        const category=(info["Category"]||"").trim()||"Other";
-        if(!grouped[category]) grouped[category]=[];
-        grouped[category].push(info);
-      });
-      CATEGORY_ORDER.forEach(cat=>{
-        if(grouped[cat]){
-          html+=`<li class="to-consider-subtitle">${cat}</li>`;
-          grouped[cat].forEach(info=>{
-            html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;
-          });
-        }
-      });
-      Object.keys(grouped).forEach(cat=>{
-        if(!CATEGORY_ORDER.includes(cat)){
-          html+=`<li class="to-consider-subtitle">${cat}</li>`;
-          grouped[cat].forEach(info=>{
-            html+=`<li class="to-consider-row"><div>${info["Medication"]}</div><div>${info["Blurb"]||""}</div></li>`;
-          });
-        }
-      });
-      toConsiderList.innerHTML=html; toConsiderBlock.style.display="block";
-    } else toConsiderBlock.style.display="none";
+  if (meds.length > 0) {
+    let html = "";
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
+    const grouped = {};
+
+    meds.forEach(med => {
+      const info = toConsiderData.find(r => r["Medication"].trim() === med);
+      if (!info) return;
+      const category = (info["Category"] || "").trim() || "Other";
+      if (!grouped[category]) grouped[category] = [];
+      grouped[category].push(info);
+    });
+
+    CATEGORY_ORDER.forEach(cat => {
+      if (grouped[cat]) {
+        html += `<li class="to-consider-subtitle">${cat}</li>`;
+        grouped[cat].forEach(info => {
+          html += `
+            <li class="to-consider-row">
+              <div><strong>${info["Medication"]}</strong></div>
+              <div>${info["Blurb"] || ""}</div>
+            </li>`;
+        });
+      }
+    });
+
+    Object.keys(grouped).forEach(cat => {
+      if (!CATEGORY_ORDER.includes(cat)) {
+        html += `<li class="to-consider-subtitle">${cat}</li>`;
+        grouped[cat].forEach(info => {
+          html += `
+            <li class="to-consider-row">
+              <div><strong>${info["Medication"]}</strong></div>
+              <div>${info["Blurb"] || ""}</div>
+            </li>`;
+        });
+      }
+    });
+
+    toConsiderList.innerHTML = html;
+    toConsiderBlock.style.display = "block";
+  } else {
+    toConsiderBlock.style.display = "none";
   }
+}
+
 
 // --- Visit Timeline ---
 const visitTimelineList = document.getElementById("visitTimeline");
