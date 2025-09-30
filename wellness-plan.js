@@ -140,9 +140,11 @@ function normalizeCellText(text) {
 
 
 // ============================
-// Inject Patient Data
+// Inject Patient Data (fixed to handle multi-row patients)
 // ============================
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
+  if (!rows || rows.length === 0) return;
+
   // Section titles
   const visitTitle = document.getElementById("visitTimelineTitle");
   if (visitTitle) visitTitle.textContent = cssVar("--visit-timeline-title");
@@ -153,7 +155,9 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const targetTitle = document.getElementById("targetTitle");
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
-  // Group meds (Daily/Evening/Weekly/PRN)
+  // -----------------
+  // Collect ALL meds/supps
+  // -----------------
   const medsByCategory = {
     Daily: { meds: [], supps: [] },
     Evening: { meds: [], supps: [] },
@@ -210,13 +214,16 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  // --- To Consider ---
+  // -----------------
+  // Meta fields → use ONLY the first row
+  // -----------------
+  const patientMeta = rows[0] || {};
+
+  // To Consider
   const toConsiderList = document.getElementById("toConsider");
   const toConsiderBlock = document.getElementById("toConsiderBlock");
-
   if (toConsiderList && toConsiderBlock) {
-    const firstRow = rows[0];
-    const meds = (firstRow["To Consider"] || "")
+    const meds = (patientMeta["To Consider"] || "")
       .split(",")
       .map(t => t.trim())
       .filter(Boolean);
@@ -237,11 +244,10 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
         if (grouped[category]) {
           html += `<li class="to-consider-subtitle">${category}</li>`;
           grouped[category].forEach(info => {
-            const blurb = info["Blurb"] || "";
             html += `
               <li class="to-consider-row">
                 <div class="to-consider-name">${info["Medication"]}</div>
-                <div class="to-consider-blurb">${blurb}</div>
+                <div class="to-consider-blurb">${info["Blurb"] || ""}</div>
               </li>
             `;
           });
@@ -252,11 +258,10 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
         if (!CATEGORY_ORDER.includes(category)) {
           html += `<li class="to-consider-subtitle">${category}</li>`;
           grouped[category].forEach(info => {
-            const blurb = info["Blurb"] || "";
             html += `
               <li class="to-consider-row">
                 <div class="to-consider-name">${info["Medication"]}</div>
-                <div class="to-consider-blurb">${blurb}</div>
+                <div class="to-consider-blurb">${info["Blurb"] || ""}</div>
               </li>
             `;
           });
@@ -273,10 +278,8 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   // Visit timeline
   const visitTimelineList = document.getElementById("visitTimeline");
   if (visitTimelineList) {
-    const firstRow = rows[0];
-    const prev = firstRow["Previous Visit"] || "";
-    const next = firstRow["Next Visit"] || "";
-
+    const prev = patientMeta["Previous Visit"] || "";
+    const next = patientMeta["Next Visit"] || "";
     if (prev || next) {
       visitTimelineList.innerHTML = `
         ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
@@ -292,8 +295,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   // Lifestyle tips
   const lifestyleBlock = document.getElementById("lifestyleTips");
   if (lifestyleBlock) {
-    const firstRow = rows[0];
-    const selectedTips = (firstRow["Lifestyle Tips"] || "").split(",").map(t => t.trim()).filter(Boolean);
+    const selectedTips = (patientMeta["Lifestyle Tips"] || "").split(",").map(t => t.trim()).filter(Boolean);
     if (selectedTips.length > 0) {
       let html = '<ul class="lifestyle-tips-list">';
       selectedTips.forEach(tipName => {
@@ -312,9 +314,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   // Body Comp
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList && bodyCompTitle) {
-    const firstRow = rows[0];
-    const key = (firstRow["Body Comp"] || "").trim();
-
+    const key = (patientMeta["Body Comp"] || "").trim();
     if (key) {
       const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
       let html = "";
@@ -333,14 +333,15 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   // Target goals
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList && targetTitle) {
-    if (rows[0]["Target Goals"]) {
-      targetGoalsList.innerHTML = `<li><span class="editable">${rows[0]["Target Goals"]}</span></li>`;
+    if (patientMeta["Target Goals"]) {
+      targetGoalsList.innerHTML = `<li><span class="editable">${patientMeta["Target Goals"]}</span></li>`;
     } else {
       if (targetTitle) targetTitle.remove();
       targetGoalsList.remove();
     }
   }
 }
+
 
 // ============================
 // Load Patient Data
