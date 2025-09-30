@@ -367,10 +367,18 @@ async function loadPatientData() {
       fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.json())
     ]);
 
-    console.log("WellnessData response:", wellnessRes);
+    // 🔍 Detailed debug logs
+    console.group("📊 Wellness Plan API Responses");
+    console.log("🟢 Wellness Data (patient rows):", wellnessRes);
+    console.log("🟣 Lifestyle Data (reference):", lifestyleRes);
+    console.log("🔵 Meds Data (reference):", medsRes);
+    console.log("🟠 Body Comp Data (reference):", bodyCompRes);
+    console.log("🟡 To Consider Data (reference):", toConsiderRes);
+    console.groupEnd();
 
     if (Array.isArray(wellnessRes) && wellnessRes.length > 0) {
-      injectPatientData(wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes);
+      // ✅ Corrected order
+      injectPatientData(wellnessRes, lifestyleRes, medsRes, bodyCompRes, toConsiderRes);
     } else {
       console.warn(`⚠️ No patient data returned for ID=${patientId}`);
     }
@@ -378,6 +386,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 
