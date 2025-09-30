@@ -713,27 +713,6 @@ html, body {
   color: var(--color-subheading);
 }
 
-/* --------------------------------
-   FIXED THEMING BY ID (overrides generic goals-list li)
-   -------------------------------- */
-#visitTimeline li {
-  background-color: #eef1f8 !important;
-  border-left-color: #6b93ff !important;
-  color: #6b93ff !important;
-}
-
-#bodyComp li {
-  background-color: #e7fafa !important;
-  border-left-color: #00a5b5 !important;
-  color: #00a5b5 !important;
-}
-
-#targetGoals li {
-  background-color: #f4efff !important;
-  border-left-color: #b86bff !important;
-  color: #b86bff !important;
-}
-
 
 
 /* Nth-section color themes */
