@@ -371,11 +371,20 @@ async function loadPatientData() {
       fetchCsv(TABS.toconsider),
     ]);
 
-    const filteredRows = patientRows.filter(r => {
-  const id = String(r["Patient ID"] || "").trim();
-  return id == patientId; // loose compare handles 299 vs 299.0
-});
+    // 🔎 Debug: log headers + first few IDs
+    if (patientRows.length > 0) {
+      console.log("Headers from CSV:", Object.keys(patientRows[0]));
+      console.log("First 10 Patient IDs:", patientRows.slice(0, 10).map(r => r["Patient ID"] || r["﻿Patient ID"] || Object.values(r)[0]));
+    } else {
+      console.warn("⚠️ CSV returned no rows at all");
+    }
 
+    // ✅ Normalize header variations + ID formatting
+    const filteredRows = patientRows.filter(r => {
+      const idRaw = r["Patient ID"] || r["﻿Patient ID"] || r["Patient ID"] || "";
+      const id = String(idRaw).trim().replace(/\.0$/, ""); // strip trailing .0
+      return id == patientId;
+    });
 
     if (filteredRows.length > 0) {
       injectPatientData(filteredRows, lifestyleData, medsData, bodyCompData, toConsiderData);
@@ -389,6 +398,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 // ============================
 // Bootstrap
