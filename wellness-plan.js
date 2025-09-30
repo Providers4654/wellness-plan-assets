@@ -4,34 +4,27 @@
 
 const root = getComputedStyle(document.documentElement);
 
-// --- Provider-specific Wellness sheets ---
+// --- Provider-specific Wellness APIs ---
 const PROVIDERS = {
   pj: {
-    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv", // Joe
+    // Joe’s API (already deployed)
+    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?patients=all"
   },
   pb: {
-    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vRV9VSxPY8Sy_v7mq_dDOYTRSIr0aWqbj7FH9ATxJJs8IsqTeZkmSTJcv7MyIjrI_fzmRY7qdZjEJZb/pub?gid=0&single=true&output=csv", // Bryan
+    // Bryan’s API (new one you just gave me)
+    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec?patients=all"
   }
   // add more providers later (pk, pm, etc.)
 };
 
-// --- Shared reference tabs (same for all providers) ---
+// --- Shared reference tabs (via API instead of CSV) ---
 const TABS = {
-  meds:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
-  lifestyle:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
-  bodycomp:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
-  toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv"
+  meds:       "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=meds",
+  lifestyle:  "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=lifestyle",
+  bodycomp:   "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=bodycomp",
+  toconsider: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?tab=toconsider"
 };
 
-
-// --- Helper: Read CSS vars safely
-function cssVar(name) {
-  let val = root.getPropertyValue(name).trim();
-  if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-    val = val.slice(1, -1);
-  }
-  return val;
-}
 
 // ============================
 // RESOURCE LINKS
@@ -254,13 +247,11 @@ if (visitTimelineList) {
   const firstRow = rows[0];
   const prev = firstRow["Previous Visit"] || "";
   const next = firstRow["Next Visit"] || "";
-  const freq = firstRow["F/U Freq (Days)"] || "";
 
-  if (prev || next || freq) {
+  if (prev || next) {
     visitTimelineList.innerHTML = `
       ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
       ${next ? `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>` : ""}
-      ${freq ? `<li><span class="editable"><strong>Follow-up Frequency:</strong> ${freq} days</span></li>` : ""}
     `;
   } else {
     const vtTitle = document.getElementById("visitTimelineTitle");
@@ -268,6 +259,7 @@ if (visitTimelineList) {
     visitTimelineList.remove();
   }
 }
+
 
 
   // Lifestyle tips
@@ -323,40 +315,6 @@ if (visitTimelineList) {
   }
 }
 
-// ============================
-// CSV Helpers
-// ============================
-function csvToJSON(csv) {
-  const rows = [];
-  const lines = csv.split("\n");
-  const headers = parseCSVLine(lines.shift()).map(h => h.replace(/\uFEFF/g, "").trim());
-
-  lines.forEach(line => {
-    if (!line.trim()) return;
-    let values = parseCSVLine(line);
-    while (values.length < headers.length) values.push("");
-    while (values.length > headers.length) values = values.slice(0, headers.length);
-
-    const obj = {};
-    headers.forEach((h, i) => obj[h] = (values[i] || "").trim());
-    rows.push(obj);
-  });
-  return rows;
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let cur = "", inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    if (char === '"' && line[i + 1] === '"') { cur += '"'; i++; }
-    else if (char === '"') inQuotes = !inQuotes;
-    else if (char === "," && !inQuotes) { result.push(cur); cur = ""; }
-    else cur += char;
-  }
-  result.push(cur);
-  return result;
-}
 
 
 
@@ -384,22 +342,21 @@ async function loadPatientData() {
       return;
     }
 
-
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
     const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
-      fetch(provider.wellness + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.text()),
-      fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.text())
+      fetch(provider.wellness + "&cb=" + Date.now()).then(r => r.json()),
+      fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.json()),
+      fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.json()),
+      fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.json()),
+      fetch(TABS.toconsider + "&cb=" + Date.now()).then(r => r.json())
     ]);
 
-    const wellnessData = csvToJSON(wellnessRes);
-    const medsData = csvToJSON(medsRes);
-    const lifestyleData = csvToJSON(lifestyleRes);
-    const bodyCompData = csvToJSON(bodyCompRes);
-    const toConsiderData = csvToJSON(toConsiderRes);
+    const wellnessData = wellnessRes;
+    const medsData = medsRes;
+    const lifestyleData = lifestyleRes;
+    const bodyCompData = bodyCompRes;
+    const toConsiderData = toConsiderRes;
 
     const patientRows = wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim());
 
@@ -412,6 +369,7 @@ async function loadPatientData() {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 // ============================
