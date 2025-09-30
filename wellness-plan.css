@@ -713,6 +713,29 @@ html, body {
   color: var(--color-subheading);
 }
 
+/* --------------------------------
+   FIXED THEMING BY ID (more reliable
+   than nth-of-type so order doesn't matter)
+   -------------------------------- */
+#visitTimeline li {
+  background-color: #eef1f8;
+  border-left-color: #6b93ff;
+  color: #6b93ff;
+}
+
+#bodyComp li {
+  background-color: #e7fafa;
+  border-left-color: #00a5b5;
+  color: #00a5b5;
+}
+
+#targetGoals li {
+  background-color: #f4efff;
+  border-left-color: #b86bff;
+  color: #b86bff;
+}
+
+
 /* Nth-section color themes */
 .wellness-plan .goals-subheader:nth-of-type(1),
 .wellness-plan .goals-list:nth-of-type(1) li strong { color: #6b93ff; }
