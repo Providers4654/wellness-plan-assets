@@ -200,24 +200,15 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const medsByCategory = { Daily:{meds:[],supps:[]}, Evening:{meds:[],supps:[]}, Weekly:{meds:[],supps:[]}, PRN:{meds:[],supps:[]} };
 
   rows.forEach((r, idx) => {
-    console.log(`Processing row ${idx}:`, r);
-
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
-    if (!med) {
-      console.log(`⚪ Row ${idx}: skipping (no Meds/Supp)`);
-      return;
-    }
+    if (!med) return;
 
     const dose = getField(r, ["Dose", "Dosing"]) || "";
     const cat  = (getField(r, ["Category", "Cat"]) || "").trim();
-    console.log(`➡️ Row ${idx}: Med="${med}", Dose="${dose}", Cat="${cat}"`);
 
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
-    if (medInfo) {
-      blurb = medInfo["Blurb"] || "";
-      console.log(`   ↳ Found medInfo for "${med}" → blurb length=${blurb.length}`);
-    }
+    if (medInfo) blurb = medInfo["Blurb"] || "";
 
     const medHtml = `
       <li class="med-row">
@@ -232,15 +223,10 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
       else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
       else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
-      else console.log(`⚠️ Row ${idx}: Supplement with unknown category "${cat}"`);
     } else if (medsByCategory[cat]) {
       medsByCategory[cat].meds.push(medHtml);
-    } else {
-      console.log(`⚠️ Row ${idx}: Category "${cat}" not in [Daily, Evening, Weekly, PRN]`);
     }
   });
-
-  console.log("📦 Final medsByCategory:", JSON.stringify(medsByCategory, null, 2));
 
   Object.entries(medsByCategory).forEach(([cat,{meds,supps}])=>{
     const listId={Daily:"dailyMeds",Evening:"eveningMeds",Weekly:"weeklyMeds",PRN:"prnMeds"}[cat];
@@ -248,32 +234,25 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const block=document.getElementById(blockId);
     const list=document.getElementById(listId);
 
-    if (!list || !block) {
-      console.log(`⚠️ Missing DOM block for ${cat}`);
-      return;
-    }
+    if (!list || !block) return;
 
     if (meds.length>0||supps.length>0){
-      console.log(`➡️ Rendering ${cat}: ${meds.length} meds, ${supps.length} supps`);
       let html=meds.join("");
       if(supps.length>0) html+=`<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
       list.innerHTML=html;
     } else {
-      console.log(`❌ ${cat} empty → removing block`);
       block.remove();
     }
   });
 
-  // --- To Consider ---
+  // --- To Consider (row-based only) ---
   const toConsiderList = document.getElementById("toConsider");
   const toConsiderBlock = document.getElementById("toConsiderBlock");
   if (toConsiderList && toConsiderBlock) {
     const meds = rows
       .map(r => getField(r, ["To Consider", "Consider"]))
-      .join(",")
-      .split(",")
-      .map(t => t.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .map(v => v.trim());
 
     console.log("Parsed To Consider meds (all rows):", meds);
 
@@ -314,70 +293,57 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   }
 
-// --- Lifestyle Tips ---
-const lifestyleBlock = document.getElementById("lifestyleTips");
-if (lifestyleBlock) {
-  // Gather all rows' values and split them into individual tips
-  const selectedTips = rows
-    .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
-    .filter(Boolean)
-    .flatMap(val => val.split(",").map(v => v.trim())) // split each row by comma
-    .filter(Boolean);
+  // --- Lifestyle Tips (row-based only) ---
+  const lifestyleBlock = document.getElementById("lifestyleTips");
+  if (lifestyleBlock) {
+    const selectedTips = rows
+      .map(r => getField(r, ["Lifestyle Tips","Lifestyle/Type"]))
+      .filter(Boolean)
+      .map(v => v.trim());
 
-  console.log("Lifestyle tips (all rows):", selectedTips);
+    console.log("Lifestyle tips (all rows):", selectedTips);
 
-  if (selectedTips.length > 0) {
-    let html = "";
-    selectedTips.forEach(tipName => {
-      const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
-      if (tipInfo) {
-        // Render library tip with blurb
-        html += `
-          <li>
-            <span class="editable">
-              <strong>${tipInfo["Tip"]}:</strong><br>
-              ${normalizeCellText(tipInfo["Blurb"])}
-            </span>
-          </li>`;
-      } else {
-        // Render free-text custom entry
-        html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
-      }
-    });
-    lifestyleBlock.innerHTML = html;
-  } else {
-    lifestyleBlock.innerHTML = "";
+    if (selectedTips.length > 0) {
+      let html = "";
+      selectedTips.forEach(tipName => {
+        const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+        if (tipInfo) {
+          html += `
+            <li>
+              <span class="editable">
+                <strong>${tipInfo["Tip"]}:</strong><br>
+                ${normalizeCellText(tipInfo["Blurb"])}
+              </span>
+            </li>`;
+        } else {
+          html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
+        }
+      });
+      lifestyleBlock.innerHTML = html;
+    } else {
+      lifestyleBlock.innerHTML = "";
+    }
   }
-}
 
+  // --- Visit Timeline (row 1 only) ---
+  const visitTimelineList = document.getElementById("visitTimeline");
+  if (visitTimelineList) {
+    const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
+    const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
 
-// --- Visit Timeline ---
-const visitTimelineList = document.getElementById("visitTimeline");
-if (visitTimelineList) {
-  // Always use the very first row for these
-  const prev = normalizeCellText(
-    getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || ""
-  );
-  const next = normalizeCellText(
-    getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || ""
-  );
-
-  console.log("Visit timeline (row 1 only):", { prev, next });
-
-  if (prev || next) {
-    let html = "";
-    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
-    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
-    visitTimelineList.innerHTML = html;
-  } else {
-    const vtTitle = document.getElementById("visitTimelineTitle");
-    if (vtTitle) vtTitle.remove();
-    visitTimelineList.remove();
+    if (prev || next) {
+      let html = "";
+      if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
+      if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+      visitTimelineList.innerHTML = html;
+    } else {
+      const vtTitle = document.getElementById("visitTimelineTitle");
+      if (vtTitle) vtTitle.remove();
+      visitTimelineList.remove();
+    }
   }
-}
 
-
-  // --- Body Comp ---
+  // --- Body Comp (row-based only) ---
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList && bodyCompTitle) {
     const keys = rows
@@ -404,15 +370,13 @@ if (visitTimelineList) {
     }
   }
 
-  // --- Target Goals ---
+  // --- Target Goals (row-based only) ---
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList && targetTitle) {
     const allGoals = rows
       .map(r => getField(r, ["Target Goals","Goals"]))
-      .join(",")
-      .split(/[,;\n]/)
-      .map(g => g.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .map(v => v.trim());
 
     console.log("Target Goals (all rows):", allGoals);
 
@@ -430,6 +394,7 @@ if (visitTimelineList) {
 
   console.groupEnd();
 }
+
 
 
 
