@@ -12,13 +12,14 @@ function cssVar(name) {
 // --- Provider-specific Wellness APIs ---
 const PROVIDERS = {
   pj: {
-    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?provider=pj&patients=all"
+    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec"
   },
   pb: {
-    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec?provider=pb&patients=all"
+    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec"
   }
   // add more providers later (pk, pm, etc.)
 };
+
 
 
 // --- Shared reference tabs (via API instead of CSV) ---
@@ -336,6 +337,11 @@ function getProviderAndPatientIdFromUrl() {
 }
 
 
+
+
+
+
+
 async function loadPatientData() {
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
@@ -347,8 +353,10 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
+    const wellnessUrl = `${provider.wellness}?provider=${providerCode}&id=${patientId}&cb=${Date.now()}`;
+
     const [wellnessRes, medsRes, lifestyleRes, bodyCompRes, toConsiderRes] = await Promise.all([
-      fetch(provider.wellness + "&cb=" + Date.now()).then(r => r.json()),
+      fetch(wellnessUrl).then(r => r.json()),
       fetch(TABS.meds + "&cb=" + Date.now()).then(r => r.json()),
       fetch(TABS.lifestyle + "&cb=" + Date.now()).then(r => r.json()),
       fetch(TABS.bodycomp + "&cb=" + Date.now()).then(r => r.json()),
@@ -361,22 +369,23 @@ async function loadPatientData() {
     const bodyCompData = bodyCompRes;
     const toConsiderData = toConsiderRes;
 
-    // 👇 ADD THIS LINE
+    // 👇 Debug log
     console.log("WellnessData response:", wellnessData);
 
-    const patientRows = Array.isArray(wellnessData)
-      ? wellnessData.filter(r => (r["Patient ID"] || "").trim() === patientId.trim())
-      : [];
-
-    if (patientRows.length > 0) {
-      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
+    if (Array.isArray(wellnessData) && wellnessData.length > 0) {
+      injectPatientData(wellnessData, lifestyleData, medsData, bodyCompData, toConsiderData);
     } else {
-      console.warn("⚠️ No patient found for ID:", patientId);
+      console.warn(`⚠️ No patient data returned for provider=${providerCode}, id=${patientId}`);
     }
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
+
+
+
+
 
 
 
