@@ -151,8 +151,9 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   console.group("🧾 InjectPatientData Debug");
   console.log("Full patient rows:", rows);
 
-  const patientMeta = rows[0] || {};
-  console.log("Using patientMeta (first row) for meta fields:", patientMeta);
+  // Meta fields (Lifestyle, Body Comp, Visits, Goals) only come from first row
+  const patientMeta = rows[0];
+  console.log("Using patientMeta for meta fields:", patientMeta);
 
   // --- Section Titles ---
   const visitTitle = document.getElementById("visitTimelineTitle");
@@ -165,7 +166,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   if (targetTitle) targetTitle.textContent = cssVar("--target-title");
 
   // -----------------
-  // Collect ALL meds/supps
+  // Collect ALL meds/supps across all rows
   // -----------------
   const medsByCategory = {
     Daily: { meds: [], supps: [] },
@@ -175,11 +176,10 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   };
 
   rows.forEach((r, idx) => {
+    console.log(`Processing row ${idx}:`, r);
+
     const med = r["Meds/Supp"];
-    if (!med) {
-      console.log(`Row ${idx} has no Meds/Supp, skipping`, r);
-      return;
-    }
+    if (!med) return;
 
     const dose = r["Dose"] || "";
     const cat = (r["Category"] || "").trim();
@@ -187,8 +187,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
-
-    console.log(`Adding med row #${idx}:`, { med, dose, cat, blurb });
 
     const medHtml = `
       <li class="med-row">
@@ -208,35 +206,29 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
     } else if (medsByCategory[cat]) {
       medsByCategory[cat].meds.push(medHtml);
-    } else {
-      console.warn("⚠️ Unknown category for med:", { med, cat });
     }
   });
 
-  // Inject grouped meds into DOM
+  // Inject meds into DOM
   Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
     const listId = { Daily: "dailyMeds", Evening: "eveningMeds", Weekly: "weeklyMeds", PRN: "prnMeds" }[cat];
     const blockId = { Daily: "dailyBlock", Evening: "eveningBlock", Weekly: "weeklyBlock", PRN: "prnBlock" }[cat];
     const block = document.getElementById(blockId);
     const list = document.getElementById(listId);
-    if (!list || !block) {
-      console.log(`Skipping category ${cat}, no DOM target`);
-      return;
-    }
+
+    if (!list || !block) return;
 
     if (meds.length > 0 || supps.length > 0) {
       let html = meds.join("");
       if (supps.length > 0) html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
       list.innerHTML = html;
-      console.log(`Injected ${cat}:`, { medsCount: meds.length, suppsCount: supps.length });
     } else {
-      console.log(`Removing block for empty category: ${cat}`);
       block.remove();
     }
   });
 
   // -----------------
-  // Meta fields → use ONLY the first row
+  // Meta fields (first row only)
   // -----------------
 
   // To Consider
@@ -247,18 +239,17 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       .split(",")
       .map(t => t.trim())
       .filter(Boolean);
-    console.log("To Consider meds:", meds);
+
+    console.log("Parsed To Consider meds:", meds);
 
     if (meds.length > 0) {
       let html = "";
       const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
       const grouped = {};
+
       meds.forEach(med => {
         const info = toConsiderData.find(r => r["Medication"].trim() === med);
-        if (!info) {
-          console.warn("⚠️ No To Consider info found for:", med);
-          return;
-        }
+        if (!info) return;
         const category = (info["Category"] || "").trim() || "Other";
         if (!grouped[category]) grouped[category] = [];
         grouped[category].push(info);
@@ -305,6 +296,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const prev = patientMeta["Previous Visit"] || "";
     const next = patientMeta["Next Visit"] || "";
     console.log("Visit timeline:", { prev, next });
+
     if (prev || next) {
       visitTimelineList.innerHTML = `
         ${prev ? `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>` : ""}
@@ -321,15 +313,14 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const lifestyleBlock = document.getElementById("lifestyleTips");
   if (lifestyleBlock) {
     const selectedTips = (patientMeta["Lifestyle Tips"] || "").split(",").map(t => t.trim()).filter(Boolean);
-    console.log("Lifestyle tips selected:", selectedTips);
+    console.log("Lifestyle tips:", selectedTips);
+
     if (selectedTips.length > 0) {
       let html = '<ul class="lifestyle-tips-list">';
       selectedTips.forEach(tipName => {
         const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
         if (tipInfo) {
           html += `<li><span class="editable"><strong>${tipInfo["Tip"]}:</strong><br>${normalizeCellText(tipInfo["Blurb"])}</span></li>`;
-        } else {
-          console.warn("⚠️ Lifestyle tip not found:", tipName);
         }
       });
       html += "</ul>";
@@ -343,7 +334,8 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const bodyCompList = document.getElementById("bodyComp");
   if (bodyCompList && bodyCompTitle) {
     const key = (patientMeta["Body Comp"] || "").trim();
-    console.log("Body comp key:", key);
+    console.log("Body Comp key:", key);
+
     if (key) {
       const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
       let html = "";
@@ -362,8 +354,9 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   // Target goals
   const targetGoalsList = document.getElementById("targetGoals");
   if (targetGoalsList && targetTitle) {
-    const goals = patientMeta["Target Goals"];
-    console.log("Target goals:", goals);
+    const goals = patientMeta["Target Goals"] || "";
+    console.log("Target Goals:", goals);
+
     if (goals) {
       targetGoalsList.innerHTML = `<li><span class="editable">${goals}</span></li>`;
     } else {
@@ -374,6 +367,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
   console.groupEnd();
 }
+
 
 
 
