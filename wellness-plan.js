@@ -12,15 +12,14 @@ function cssVar(name) {
 // --- Provider-specific Wellness APIs ---
 const PROVIDERS = {
   pj: {
-    // Joe’s API (already deployed)
-    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?patients=all"
+    wellness: "https://script.google.com/macros/s/AKfycbxkGzJ-26xHu_ta-3pUDi-LN5Op-r4zeJ3InU-H8woHHVKPU8digA1dFHoLVdvNldc/exec?provider=pj&patients=all"
   },
   pb: {
-    // Bryan’s API (new one you just gave me)
-    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec?patients=all"
+    wellness: "https://script.google.com/macros/s/AKfycbwxXJ0eDzxym6iTnzAN3a6lSdlorXQW4rfUkWJ-86zgDGe2S0wtGiEmdfyJ2tqIkQ-d/exec?provider=pb&patients=all"
   }
   // add more providers later (pk, pm, etc.)
 };
+
 
 // --- Shared reference tabs (via API instead of CSV) ---
 const TABS = {
