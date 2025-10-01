@@ -265,46 +265,48 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     return values;
   }
 
-  // --- To Consider ---
-  const toConsiderList = document.getElementById("toConsider");
-  const toConsiderBlock = document.getElementById("toConsiderBlock");
-  if (toConsiderList && toConsiderBlock) {
-    const meds = parseHybridValues(rows, ["To Consider","Consider"]);
-    console.log("Parsed To Consider meds (all rows):", meds);
+// --- To Consider (1st row only) ---
+const toConsiderList = document.getElementById("toConsider");
+const toConsiderBlock = document.getElementById("toConsiderBlock");
+if (toConsiderList && toConsiderBlock) {
+  // ✅ Only grab dropdown/library values from the FIRST row
+  const meds = parseHybridValues([rows[0]], ["To Consider","Consider"]);
+  console.log("Parsed To Consider meds (first row only):", meds);
 
-    if (meds.length > 0) {
-      let html = "";
-      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-      const grouped = {};
-      meds.forEach(med => {
-        const info = toConsiderData.find(r => r["Medication"].trim() === med);
-        if (info) {
-          const category = (info["Category"] || "").trim() || "Other";
-          if (!grouped[category]) grouped[category] = [];
-          grouped[category].push(info);
-        } else {
-          if (!grouped["Custom"]) grouped["Custom"] = [];
-          grouped["Custom"].push({ Medication: med, Blurb: "" });
-        }
-      });
-      CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
-        if (grouped[cat]) {
-          html += `<li class="to-consider-subtitle">${cat}</li>`;
-          grouped[cat].forEach(info => {
-            html += `
-              <li class="to-consider-row">
-                <div><strong>${info["Medication"]}</strong></div>
-                <div>${normalizeCellText(info["Blurb"] || "")}</div>
-              </li>`;
-          });
-        }
-      });
-      toConsiderList.innerHTML = html;
-      toConsiderBlock.style.display = "block";
-    } else {
-      toConsiderBlock.style.display = "none";
-    }
+  if (meds.length > 0) {
+    let html = "";
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
+    const grouped = {};
+
+    meds.forEach(med => {
+      const info = toConsiderData.find(r => r["Medication"].trim() === med);
+      if (info) {
+        const category = (info["Category"] || "").trim() || "Other";
+        if (!grouped[category]) grouped[category] = [];
+        grouped[category].push(info);
+      }
+    });
+
+    CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
+      if (grouped[cat]) {
+        html += `<li class="to-consider-subtitle">${cat}</li>`;
+        grouped[cat].forEach(info => {
+          html += `
+            <li class="to-consider-row">
+              <div><strong>${info["Medication"]}</strong></div>
+              <div>${normalizeCellText(info["Blurb"] || "")}</div>
+            </li>`;
+        });
+      }
+    });
+
+    toConsiderList.innerHTML = html;
+    toConsiderBlock.style.display = "block";
+  } else {
+    toConsiderBlock.style.display = "none";
   }
+}
+
 
   // --- Lifestyle Tips ---
   const lifestyleBlock = document.getElementById("lifestyleTips");
