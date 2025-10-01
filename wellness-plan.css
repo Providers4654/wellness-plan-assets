@@ -524,7 +524,13 @@ html, body {
 }
 
 /* normalize first element inside bubble */
-.wellness-plan .wellness-bubble > *:first-child {
+.wellness-plan .wellness-bubble > *:first-child,
+.wellness-plan .wellness-bubble > h1:first-child,
+.wellness-plan .wellness-bubble > h2:first-child,
+.wellness-plan .wellness-bubble > h3:first-child,
+.wellness-plan .wellness-bubble > h4:first-child,
+.wellness-plan .wellness-bubble > h5:first-child,
+.wellness-plan .wellness-bubble > h6:first-child {
   margin-top: 0 !important;   /* kill inconsistent heading/paragraph margins */
 }
 
@@ -532,6 +538,7 @@ html, body {
 .wellness-plan .wellness-bubble > ul {
   margin-top: 20px;
 }
+
 
 
 
