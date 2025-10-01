@@ -335,9 +335,12 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 const visitTimelineList = document.getElementById("visitTimeline");
 const visitTimelineTitle = document.getElementById("visitTimelineTitle");
 if (visitTimelineList && visitTimelineTitle) {
+  // ✅ Inject the subheader text first
+  visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+
   const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
   const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
-  
+
   if (prev || next) {
     let html = "";
     if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
@@ -353,9 +356,10 @@ if (visitTimelineList && visitTimelineTitle) {
 const bodyCompList = document.getElementById("bodyComp");
 const bodyCompTitle = document.getElementById("bodyCompTitle");
 if (bodyCompList && bodyCompTitle) {
+  // ✅ Inject text
+  bodyCompTitle.textContent = cssVar("--bodycomp-title") || "Body Composition";
+
   const keys = parseHybridValues(rows, ["Body Comp","Body Composition"]);
-  console.log("Body Comp keys (all rows):", keys);
-  
   if (keys.length > 0) {
     let html = "";
     keys.forEach(key => {
@@ -377,9 +381,10 @@ if (bodyCompList && bodyCompTitle) {
 const targetGoalsList = document.getElementById("targetGoals");
 const targetTitle = document.getElementById("targetTitle");
 if (targetGoalsList && targetTitle) {
+  // ✅ Inject text
+  targetTitle.textContent = cssVar("--target-title") || "Target Goals";
+
   const allGoals = parseHybridValues(rows, ["Target Goals","Goals"]);
-  console.log("Target Goals (all rows):", allGoals);
-  
   if (allGoals.length > 0) {
     let html = "";
     allGoals.forEach(g => {
@@ -391,6 +396,7 @@ if (targetGoalsList && targetTitle) {
     targetGoalsList.remove();
   }
 }
+
 
 
   console.groupEnd();
