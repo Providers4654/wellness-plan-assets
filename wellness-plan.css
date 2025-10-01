@@ -542,6 +542,27 @@ html, body {
 
 
 
+
+
+/* ============================
+   LEARN-MORE CONTENT TEXT NORMALIZATION
+   (prevents <strong>/<em> from blowing up in injected blurbs)
+   ============================ */
+.wellness-plan .learn-more-content strong {
+  font-weight: 700;     /* bold, but same size as surrounding text */
+  font-size: 1em;       /* don’t upscale */
+  color: inherit;       /* inherit paragraph color */
+}
+
+.wellness-plan .learn-more-content em {
+  font-style: italic;   /* normal italics */
+  font-size: 1em;       /* match body size */
+  color: inherit;
+}
+
+
+
+
 /* ============================
    Make med-name tappable
    ============================ */
