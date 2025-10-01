@@ -546,17 +546,23 @@ html, body {
 
 /* ============================
    LEARN-MORE CONTENT TEXT NORMALIZATION
-   (prevents <strong>/<em> from blowing up in injected blurbs)
+   (ensures bold/italics only change weight/style, not size)
    ============================ */
+.wellness-plan .learn-more-content {
+  font-size: 14px;        /* 👈 optional: shrink whole blurb slightly */
+  line-height: 1.5;
+  color: #444;
+}
+
 .wellness-plan .learn-more-content strong {
-  font-weight: 700;     /* bold, but same size as surrounding text */
-  font-size: 1em;       /* don’t upscale */
-  color: inherit;       /* inherit paragraph color */
+  font-weight: 700;
+  font-size: inherit;     /* 👈 force same size as parent text */
+  color: inherit;
 }
 
 .wellness-plan .learn-more-content em {
-  font-style: italic;   /* normal italics */
-  font-size: 1em;       /* match body size */
+  font-style: italic;
+  font-size: inherit;     /* 👈 same size as parent text */
   color: inherit;
 }
 
