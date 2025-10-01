@@ -1256,6 +1256,70 @@ html, body {
   }
 
 
+
+
+
+
+
+
+/* ============================
+   MOBILE GLOBAL SCALE-DOWN
+   ============================ */
+@media (max-width: 600px) {
+  /* Shrink base text */
+  .wellness-plan {
+    font-size: 14px !important;   /* down from 16px */
+    line-height: 1.4 !important;
+  }
+
+  /* Header banner */
+  .plan-header .intro-text::before { font-size: 20px !important; }
+  .plan-header .intro-text::after  { font-size: 14px !important; }
+
+  /* Section titles */
+  .wellness-plan .section-title { font-size: 14px !important; }
+
+  /* Med block labels */
+  .wellness-plan .med-time-label {
+    font-size: 15px !important;
+    padding: 6px 10px !important;
+  }
+
+  /* Med list */
+  .wellness-plan .medication-list li { font-size: 13.5px !important; }
+  .wellness-plan .medication-list li strong { font-size: 14px !important; }
+  .wellness-plan .dose { font-size: 13px !important; padding: 5px 8px !important; }
+
+  /* Resource links + notes */
+  .wellness-plan .resource-link a,
+  .wellness-plan .resource-link .resource-note {
+    font-size: 13px !important;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================
    PRINT STYLES: fix cutoffs/missing
    ============================ */
