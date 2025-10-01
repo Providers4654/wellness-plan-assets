@@ -278,6 +278,7 @@ if (toConsiderList && toConsiderBlock) {
     const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
     const grouped = {};
 
+    // group each med by category from the library
     meds.forEach(med => {
       const info = toConsiderData.find(r => r["Medication"].trim() === med);
       if (info) {
@@ -287,17 +288,22 @@ if (toConsiderList && toConsiderBlock) {
       }
     });
 
-    CATEGORY_ORDER.concat(Object.keys(grouped)).forEach(cat => {
-      if (grouped[cat]) {
-        html += `<li class="to-consider-subtitle">${cat}</li>`;
-        grouped[cat].forEach(info => {
-          html += `
-            <li class="to-consider-row">
-              <div><strong>${info["Medication"]}</strong></div>
-              <div>${normalizeCellText(info["Blurb"] || "")}</div>
-            </li>`;
-        });
-      }
+    // ✅ Build a unique ordered list of categories
+    const orderedCats = [
+      ...CATEGORY_ORDER.filter(cat => grouped[cat]),
+      ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
+    ];
+
+    // render categories + their meds
+    orderedCats.forEach(cat => {
+      html += `<li class="to-consider-subtitle">${cat}</li>`;
+      grouped[cat].forEach(info => {
+        html += `
+          <li class="to-consider-row">
+            <div><strong>${info["Medication"]}</strong></div>
+            <div>${normalizeCellText(info["Blurb"] || "")}</div>
+          </li>`;
+      });
     });
 
     toConsiderList.innerHTML = html;
@@ -306,6 +312,7 @@ if (toConsiderList && toConsiderBlock) {
     toConsiderBlock.style.display = "none";
   }
 }
+
 
 
   // --- Lifestyle Tips ---
