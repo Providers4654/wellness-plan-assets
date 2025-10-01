@@ -3,7 +3,6 @@
    ============================ */
 :root {
   /* Section titles */
-  --title-plan: 📋 Personalized Wellness Plan;
   --title-summary: 💊 Treatment Summary;
   --title-supplements: Supplements;
   --title-lifestyle: 🏃 Lifestyle & Health Habits;
@@ -261,6 +260,7 @@ html, body {
 
 
 
+
 /* ============================
    SECTION WRAPPERS & HEADINGS
    ============================ */
@@ -273,17 +273,64 @@ html, body {
 
 
 /* ============================
-   INTRO MESSAGE (Plan Header)
+   PLAN HEADER: hide pill (failsafe if still present)
    ============================ */
+.section-wrapper .title-plan {
+  display: none !important;
+}
 
-.wellness-plan .intro-message::before {
+/* ============================
+   PLAN HEADER: fix spacing now that pill is gone
+   (the 44px top margin on .wellness-bubble was for the pill)
+   ============================ */
+.section-wrapper:first-of-type .wellness-bubble {
+  margin-top: 0 !important;     /* remove pill offset */
+  padding-top: 28px !important; /* add a little breathing room */
+}
+
+/* ============================
+   PLAN HEADER: intro banner (full width of content column)
+   - keeps using --intro-message
+   ============================ */
+.wellness-plan .intro-text {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 48px 32px;
+  margin: 0 auto 56px;           /* space before next section */
+
+  background: linear-gradient(135deg, #f0f8ff, #e6f0fa);
+  border: 2px solid #c7cbd1;
+  border-radius: 20px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+
+  /* smooth entrance (optional) */
+  animation: fadeSlideIn 0.6s ease-out;
+}
+
+/* inject the message text from :root */
+.wellness-plan .intro-text::before {
   content: var(--intro-message);
   display: block;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 18px;
+  line-height: 1.6;
   color: #333;
-  margin: 0; /* keeps spacing consistent */
 }
+
+/* mobile tweak */
+@media (max-width: 600px) {
+  .wellness-plan .intro-text {
+    padding: 36px 20px;
+    margin-bottom: 40px;
+  }
+}
+
+/* simple animation (optional) */
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 
 
 
