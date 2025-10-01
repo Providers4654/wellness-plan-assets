@@ -992,13 +992,28 @@ html, body {
   margin-bottom: 0;
 }
 
-/* Medication name */
-.wellness-plan .medication-list li strong {
+/* ===== MED ROW: name only (not blurbs) ===== */
+.wellness-plan .medication-list li .med-name strong {
   font-size: 15.5px;
   font-weight: 700;
   color: #1a1a1a;
   letter-spacing: 0.4px;
 }
+
+
+/* ===== LEARN-MORE BLURB: keep bold/italics same size ===== */
+.wellness-plan .medication-list li .learn-more-content strong,
+.wellness-plan .learn-more-content strong {
+  font-size: inherit !important;
+  font-weight: 700;
+}
+
+.wellness-plan .medication-list li .learn-more-content em,
+.wellness-plan .learn-more-content em {
+  font-size: inherit !important;
+}
+
+
 
 /* ============================
    DOSE PILLS
