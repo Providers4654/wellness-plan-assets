@@ -228,7 +228,7 @@ if (dose.includes("Note:")) {
   const note = noteParts.join("Note:").trim();
 
 doseHtml = `
-  ${main ? main + "<br><br>" : ""}
+  ${main ? main + "<br>" : ""}
   <span class="dose-note">Note: ${note}</span>
 `;
 
