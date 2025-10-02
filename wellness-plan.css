@@ -1046,20 +1046,21 @@ html, body {
 
 
 /* ============================
-   DOSE NOTE (under dose pills)
+   DOSE NOTE (separate callout)
    ============================ */
 .wellness-plan .dose-note {
   display: block;
   margin-top: 6px;
-  font-size: 12px;             /* smaller than dose text */
+  font-size: 12.5px;        /* smaller than dose pill */
   font-style: italic;
-  color: #1d3557;              /* darker blue for legibility */
-  background: #eaf4ff;         /* faint blue background */
-  padding: 6px 8px;
+  color: #1d3557;           /* darker muted blue */
+  background: #eaf4ff;      /* faint blue background */
+  padding: 6px 10px;
   border-radius: 6px;
-  line-height: 1.4;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04); /* subtle depth */
+  line-height: 1.5;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
+
 
 
 
