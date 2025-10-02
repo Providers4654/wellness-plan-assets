@@ -1000,15 +1000,17 @@ html, body {
 }
 
 
-/* ===== KEEP STRONG TEXT CONSISTENT (dose + learn-more) ===== */
+/* ===== LEARN-MORE BLURB KEEP STRONG/B CONSISTENT (learn-more + dose) ===== */
 .wellness-plan .medication-list li .learn-more-content strong,
 .wellness-plan .learn-more-content strong,
-.wellness-plan .dose strong {
-  font-size: inherit;   /* same size as surrounding text */
-  font-weight: 700;     /* just bold */
-  font-style: normal;   /* no italic override */
-  color: inherit;       /* same color */
+.wellness-plan .medication-list li .dose strong,
+.wellness-plan .medication-list li .dose b {
+  font-size: inherit;    /* same size as surrounding dose text */
+  font-weight: 700;      /* just bold */
+  font-style: inherit;   /* keep the dose’s italic if present */
+  color: inherit;        /* same color as surrounding text */
 }
+
 
 
 .wellness-plan .medication-list li .learn-more-content em,
