@@ -1000,12 +1000,16 @@ html, body {
 }
 
 
-/* ===== LEARN-MORE BLURB: keep bold/italics same size ===== */
+/* ===== KEEP STRONG TEXT CONSISTENT (dose + learn-more) ===== */
 .wellness-plan .medication-list li .learn-more-content strong,
-.wellness-plan .learn-more-content strong {
-  font-size: inherit !important;
-  font-weight: 700;
+.wellness-plan .learn-more-content strong,
+.wellness-plan .dose strong {
+  font-size: inherit;   /* same size as surrounding text */
+  font-weight: 700;     /* just bold */
+  font-style: normal;   /* no italic override */
+  color: inherit;       /* same color */
 }
+
 
 .wellness-plan .medication-list li .learn-more-content em,
 .wellness-plan .learn-more-content em {
