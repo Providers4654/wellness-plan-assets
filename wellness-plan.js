@@ -44,13 +44,13 @@ function parseCsvLine(line) {
     } else if (char === '"') {
       inQuotes = !inQuotes;
     } else if (char === ',' && !inQuotes) {
-       cells.push(current.replace(/^[ \t]+|[ \t]+$/g, ""));
+       cells.push(current.trim());
       current = "";
     } else {
       current += char;
     }
   }
-  cells.push(current.replace(/^[ \t]+|[ \t]+$/g, ""));
+  cells.push(current.trim());
 
   return cells;
 }
