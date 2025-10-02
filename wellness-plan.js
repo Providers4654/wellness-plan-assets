@@ -50,7 +50,8 @@ function parseCsvLine(line) {
       current += char;
     }
   }
-  cells.push(current.trim());
+  cells.push(current.replace(/^[ \t]+|[ \t]+$/g, ""));
+
   return cells;
 }
 
@@ -74,7 +75,7 @@ async function fetchCsv(url) {
 function setTextIfAvailable(selector, cssVarName, fallback) {
   const el = document.querySelector(selector);
   if (el) {
-    el.textContent = cssVar(cssVarName) || fallback;
+    el.innerHTML = normalizeCellText(cssVar(cssVarName) || fallback);
   }
 }
 
@@ -100,8 +101,9 @@ function injectResourceLinksAndTitles() {
     const note = noteVar ? cssVar(noteVar) : "";
 
     if (link && href) link.href = href;
-    if (textEl && text) textEl.textContent = text;
-    if (noteEl && note) noteEl.textContent = note;
+if (textEl && text) textEl.innerHTML = normalizeCellText(text);
+if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
+
   });
 
   // Titles & intro
@@ -111,7 +113,7 @@ function injectResourceLinksAndTitles() {
   setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
 
   const intro = document.querySelector(".intro-text");
-  if (intro) intro.textContent = cssVar("--intro-message");
+  if (intro) intro.innerHTML = normalizeCellText(cssVar("--intro-message"));
 
   ["dynamicTopBtn1", "dynamicTopBtn2"].forEach((id, i) => {
     const btn = document.getElementById(id);
@@ -232,7 +234,6 @@ if (dose.includes("Note:")) {
     </span>
   `;
 }
-
 
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
 
