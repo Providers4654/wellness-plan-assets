@@ -239,7 +239,7 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
-    // --- Build med name (no discontinued logic now) ---
+    // --- Build med name ---
     const medNameHtml = `<strong>${med}</strong>`;
 
     const medHtml = `
@@ -280,38 +280,6 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     }
   });
 
-  console.groupEnd();
-}
-
-
-
-
-    if (cat.includes("Supplement")) {
-      if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
-      else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
-      else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
-      else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
-    } else if (medsByCategory[cat]) {
-      medsByCategory[cat].meds.push(medHtml);
-    }
-  });
-
-  Object.entries(medsByCategory).forEach(([cat,{meds,supps}])=>{
-    const listId={Daily:"dailyMeds",Evening:"eveningMeds",Weekly:"weeklyMeds",PRN:"prnMeds"}[cat];
-    const blockId={Daily:"dailyBlock",Evening:"eveningBlock",Weekly:"weeklyBlock",PRN:"prnBlock"}[cat];
-    const block=document.getElementById(blockId);
-    const list=document.getElementById(listId);
-    if (!list || !block) return;
-
-    if (meds.length>0||supps.length>0){
-      let html=meds.join("");
-      if(supps.length>0) html+=`<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
-      list.innerHTML=html;
-    } else {
-      block.remove();
-    }
-  });
-
   // --- Hybrid Parser Helper ---
   function parseHybridValues(rows, fieldNames) {
     const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
@@ -326,55 +294,49 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     return values;
   }
 
-// --- To Consider (1st row only) ---
-const toConsiderList = document.getElementById("toConsider");
-const toConsiderBlock = document.getElementById("toConsiderBlock");
-if (toConsiderList && toConsiderBlock) {
-  // ✅ Only grab dropdown/library values from the FIRST row
-  const meds = parseHybridValues([rows[0]], ["To Consider","Consider"]);
-  console.log("Parsed To Consider meds (first row only):", meds);
+  // --- To Consider (1st row only) ---
+  const toConsiderList = document.getElementById("toConsider");
+  const toConsiderBlock = document.getElementById("toConsiderBlock");
+  if (toConsiderList && toConsiderBlock) {
+    const meds = parseHybridValues([rows[0]], ["To Consider","Consider"]);
+    console.log("Parsed To Consider meds (first row only):", meds);
 
-  if (meds.length > 0) {
-    let html = "";
-    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-    const grouped = {};
+    if (meds.length > 0) {
+      let html = "";
+      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
+      const grouped = {};
 
-    // group each med by category from the library
-    meds.forEach(med => {
-      const info = toConsiderData.find(r => r["Medication"].trim() === med);
-      if (info) {
-        const category = (info["Category"] || "").trim() || "Other";
-        if (!grouped[category]) grouped[category] = [];
-        grouped[category].push(info);
-      }
-    });
-
-    // ✅ Build a unique ordered list of categories
-    const orderedCats = [
-      ...CATEGORY_ORDER.filter(cat => grouped[cat]),
-      ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
-    ];
-
-    // render categories + their meds
-    orderedCats.forEach(cat => {
-      html += `<li class="to-consider-subtitle">${cat}</li>`;
-      grouped[cat].forEach(info => {
-        html += `
-          <li class="to-consider-row">
-            <div><strong>${info["Medication"]}</strong></div>
-            <div>${normalizeCellText(info["Blurb"] || "")}</div>
-          </li>`;
+      meds.forEach(med => {
+        const info = toConsiderData.find(r => r["Medication"].trim() === med);
+        if (info) {
+          const category = (info["Category"] || "").trim() || "Other";
+          if (!grouped[category]) grouped[category] = [];
+          grouped[category].push(info);
+        }
       });
-    });
 
-    toConsiderList.innerHTML = html;
-    toConsiderBlock.style.display = "block";
-  } else {
-    toConsiderBlock.style.display = "none";
+      const orderedCats = [
+        ...CATEGORY_ORDER.filter(cat => grouped[cat]),
+        ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
+      ];
+
+      orderedCats.forEach(cat => {
+        html += `<li class="to-consider-subtitle">${cat}</li>`;
+        grouped[cat].forEach(info => {
+          html += `
+            <li class="to-consider-row">
+              <div><strong>${info["Medication"]}</strong></div>
+              <div>${normalizeCellText(info["Blurb"] || "")}</div>
+            </li>`;
+        });
+      });
+
+      toConsiderList.innerHTML = html;
+      toConsiderBlock.style.display = "block";
+    } else {
+      toConsiderBlock.style.display = "none";
+    }
   }
-}
-
-
 
   // --- Lifestyle Tips ---
   const lifestyleBlock = document.getElementById("lifestyleTips");
@@ -401,76 +363,72 @@ if (toConsiderList && toConsiderBlock) {
     } else lifestyleBlock.innerHTML = "";
   }
 
-// --- Visit Timeline (row 1 only) ---
-const visitTimelineList = document.getElementById("visitTimeline");
-const visitTimelineTitle = document.getElementById("visitTimelineTitle");
-if (visitTimelineList && visitTimelineTitle) {
-  // ✅ Inject the subheader text first
-  visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+  // --- Visit Timeline (row 1 only) ---
+  const visitTimelineList = document.getElementById("visitTimeline");
+  const visitTimelineTitle = document.getElementById("visitTimelineTitle");
+  if (visitTimelineList && visitTimelineTitle) {
+    visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
 
-  const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
-  const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
+    const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
+    const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
 
-  if (prev || next) {
-    let html = "";
-    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
-    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
-    visitTimelineList.innerHTML = html;
-  } else {
-    visitTimelineTitle.remove();
-    visitTimelineList.remove();
+    if (prev || next) {
+      let html = "";
+      if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
+      if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+      visitTimelineList.innerHTML = html;
+    } else {
+      visitTimelineTitle.remove();
+      visitTimelineList.remove();
+    }
   }
-}
 
-// --- Body Comp ---
-const bodyCompList = document.getElementById("bodyComp");
-const bodyCompTitle = document.getElementById("bodyCompTitle");
-if (bodyCompList && bodyCompTitle) {
-  // ✅ Inject text
-  bodyCompTitle.textContent = cssVar("--bodycomp-title") || "Body Composition";
+  // --- Body Comp ---
+  const bodyCompList = document.getElementById("bodyComp");
+  const bodyCompTitle = document.getElementById("bodyCompTitle");
+  if (bodyCompList && bodyCompTitle) {
+    bodyCompTitle.textContent = cssVar("--bodycomp-title") || "Body Composition";
 
-  const keys = parseHybridValues(rows, ["Body Comp","Body Composition"]);
-  if (keys.length > 0) {
-    let html = "";
-    keys.forEach(key => {
-      const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
-      if (compRow && compRow["Blurb"]) {
-        html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
-      } else {
-        html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-      }
-    });
-    bodyCompList.innerHTML = html;
-  } else {
-    bodyCompTitle.remove();
-    bodyCompList.remove();
+    const keys = parseHybridValues(rows, ["Body Comp","Body Composition"]);
+    if (keys.length > 0) {
+      let html = "";
+      keys.forEach(key => {
+        const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+        if (compRow && compRow["Blurb"]) {
+          html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
+        } else {
+          html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+        }
+      });
+      bodyCompList.innerHTML = html;
+    } else {
+      bodyCompTitle.remove();
+      bodyCompList.remove();
+    }
   }
-}
 
-// --- Target Goals ---
-const targetGoalsList = document.getElementById("targetGoals");
-const targetTitle = document.getElementById("targetTitle");
-if (targetGoalsList && targetTitle) {
-  // ✅ Inject text
-  targetTitle.textContent = cssVar("--target-title") || "Target Goals";
+  // --- Target Goals ---
+  const targetGoalsList = document.getElementById("targetGoals");
+  const targetTitle = document.getElementById("targetTitle");
+  if (targetGoalsList && targetTitle) {
+    targetTitle.textContent = cssVar("--target-title") || "Target Goals";
 
-  const allGoals = parseHybridValues(rows, ["Target Goals","Goals"]);
-  if (allGoals.length > 0) {
-    let html = "";
-    allGoals.forEach(g => {
-      html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
-    });
-    targetGoalsList.innerHTML = html;
-  } else {
-    targetTitle.remove();
-    targetGoalsList.remove();
+    const allGoals = parseHybridValues(rows, ["Target Goals","Goals"]);
+    if (allGoals.length > 0) {
+      let html = "";
+      allGoals.forEach(g => {
+        html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
+      });
+      targetGoalsList.innerHTML = html;
+    } else {
+      targetTitle.remove();
+      targetGoalsList.remove();
+    }
   }
-}
-
-
 
   console.groupEnd();
 }
+
 
 
 
