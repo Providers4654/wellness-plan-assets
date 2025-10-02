@@ -227,12 +227,11 @@ if (dose.includes("Note:")) {
   const main = mainDose.trim();
   const note = noteParts.join("Note:").trim();
 
-  doseHtml = `
-    ${main ? main + "<br>" : ""}
-    <span style="display:block; background-color: #eaf4ff; color: #2a4d69; font-style: italic; padding: 6px 8px; border-radius: 4px; margin-top: 6px;">
-      Note: ${note}
-    </span>
-  `;
+doseHtml = `
+  ${main ? main + "<br><br>" : ""}
+  <span class="dose-note">Note: ${note}</span>
+`;
+
 }
 
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
