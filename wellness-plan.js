@@ -370,12 +370,18 @@ if (toConsiderList && toConsiderBlock) {
           blurb: info["Blurb"] || ""
         });
       } else {
-        // Free text → always goes to "Other"
+        // Free text → parse into name + blurb if colon or dash found
+        let name = med.trim();
+        let blurb = "";
+
+        if (name.includes(":") || name.includes("-")) {
+          const parts = name.split(/[:\-]/); // split on first colon or dash
+          name = parts.shift().trim();
+          blurb = parts.join(":").trim(); // keep rest as blurb
+        }
+
         if (!grouped["Other"]) grouped["Other"] = [];
-        grouped["Other"].push({
-          name: med.trim(),
-          blurb: ""
-        });
+        grouped["Other"].push({ name, blurb });
       }
     });
 
@@ -401,6 +407,7 @@ if (toConsiderList && toConsiderBlock) {
     toConsiderBlock.style.display = "none";
   }
 }
+
 
 
   // --- Lifestyle Tips ---
