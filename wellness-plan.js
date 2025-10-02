@@ -513,6 +513,41 @@ const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
 
 
 
+// --- Other (free text with parsing for colon/dash) ---
+const otherList = document.getElementById("otherItems");
+const otherTitle = document.getElementById("otherTitle");
+
+if (otherList && otherTitle) {
+  otherTitle.textContent = cssVar("--other-title") || "Other";
+
+  const rawOthers = parseHybridValues(rows, ["Other"], []);
+  if (rawOthers.length > 0) {
+    let html = "";
+    rawOthers.forEach(item => {
+      let name = item.trim();
+      let blurb = "";
+
+      // Split on first colon OR dash
+      if (name.includes(":") || name.includes("-")) {
+        const parts = name.split(/[:\-]/);
+        name = parts.shift().trim();
+        blurb = parts.join(":").trim();
+      }
+
+      html += `<li class="other-row"><span class="editable"><strong>${name}</strong>${blurb ? ": " + normalizeCellText(blurb) : ""}</span></li>`;
+    });
+
+    otherList.innerHTML = html;
+    otherTitle.style.display = "block";
+  } else {
+    otherTitle.remove();
+    otherList.remove();
+  }
+}
+
+
+
+
 
 
 
