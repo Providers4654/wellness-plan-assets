@@ -44,7 +44,7 @@ function parseCsvLine(line) {
     } else if (char === '"') {
       inQuotes = !inQuotes;
     } else if (char === ',' && !inQuotes) {
-      cells.push(current.trim());
+       cells.push(current.replace(/^[ \t]+|[ \t]+$/g, ""));
       current = "";
     } else {
       current += char;
