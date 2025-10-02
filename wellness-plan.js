@@ -216,22 +216,23 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
 
-    // --- Dose with Note styling ---
-    let dose = getField(r, ["Dose", "Dosing"]) || "";
-    let doseHtml = dose;
+// --- Dose with Note styling ---
+let dose = getField(r, ["Dose", "Dosing"]) || "";
+let doseHtml = dose;
 
-    if (dose.includes("Note:")) {
-      const [mainDose, ...noteParts] = dose.split(/Note:/);
-      const main = mainDose.trim();
-      const note = noteParts.join("Note:").trim();
+if (dose.includes("Note:")) {
+  const [mainDose, ...noteParts] = dose.split(/Note:/);
+  const main = mainDose.trim();
+  const note = noteParts.join("Note:").trim();
 
-      doseHtml = `
-        ${main ? main + " " : ""}
-        <span style="background-color: #eaf4ff; color: #2a4d69; font-style: italic; padding: 2px 6px; border-radius: 3px;">
-          Note: ${note}
-        </span>
-      `;
-    }
+  doseHtml = `
+    ${main ? main + "<br>" : ""}
+    <span style="display:block; background-color: #eaf4ff; color: #2a4d69; font-style: italic; padding: 6px 8px; border-radius: 4px; margin-top: 6px;">
+      Note: ${note}
+    </span>
+  `;
+}
+
 
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
 
