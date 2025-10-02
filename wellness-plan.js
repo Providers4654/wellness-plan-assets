@@ -210,7 +210,23 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
 
-    const dose = getField(r, ["Dose", "Dosing"]) || "";
+    // --- Dose with Note styling ---
+    let dose = getField(r, ["Dose", "Dosing"]) || "";
+    let doseHtml = dose;
+
+    if (dose.includes("Note:")) {
+      const [mainDose, ...noteParts] = dose.split(/Note:/);
+      const main = mainDose.trim();
+      const note = noteParts.join("Note:").trim();
+
+      doseHtml = `
+        ${main ? main + " " : ""}
+        <span style="background-color: #eaf4ff; color: #2a4d69; font-style: italic; padding: 2px 6px; border-radius: 3px;">
+          Note: ${note}
+        </span>
+      `;
+    }
+
     const cat  = (getField(r, ["Category", "Cat"]) || "").trim();
 
     let blurb = "";
@@ -228,10 +244,13 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const medHtml = `
       <li class="med-row ${isDiscontinued ? "discontinued" : ""}">
         <div class="med-name">${medNameHtml}${blurb ? `<span class="info-icon">i</span>` : ""}</div>
-        <div class="dose">${dose}</div>
+        <div class="dose">${doseHtml}</div>
         ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
       </li>
     `;
+  });
+}
+
 
 
     if (cat.includes("Supplement")) {
