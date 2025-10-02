@@ -44,16 +44,17 @@ function parseCsvLine(line) {
     } else if (char === '"') {
       inQuotes = !inQuotes;
     } else if (char === ',' && !inQuotes) {
-       cells.push(current.trim());
+      cells.push(current);   // no trim here
       current = "";
     } else {
       current += char;
     }
   }
-  cells.push(current.trim());
+  cells.push(current);       // no trim here
 
   return cells;
 }
+
 
 
 async function fetchCsv(url) {
@@ -152,8 +153,13 @@ document.addEventListener("click", e => {
 // ============================
 function normalizeCellText(text) {
   if (!text) return "";
-  return text.replace(/(\r\n|\r|\n)/g, "<br>").replace(/&lt;br&gt;/g, "<br>");
+  return text
+    .trim() // safe to trim here now
+    .replace(/\\n/g, "<br>")        // literal \n
+    .replace(/(\r\n|\r|\n)/g, "<br>") 
+    .replace(/&lt;br&gt;/g, "<br>");
 }
+
 
 // Normalize header names (strip hidden chars, unify variations)
 function getIdField(row) {
@@ -237,7 +243,10 @@ if (dose.includes("Note:")) {
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
 
     let blurb = "";
-    const medInfo = medsData.find(m => m["Medication"] === med);
+    const medInfo = medsData.find(
+  m => (m["Medication"] || "").trim() === med.trim()
+);
+
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
     // --- Build med name ---
@@ -343,7 +352,10 @@ const meds = parseHybridValues([rows[0]], ["To Consider","Consider"], toConsider
       const grouped = {};
 
       meds.forEach(med => {
-        const info = toConsiderData.find(r => r["Medication"].trim() === med);
+        const info = toConsiderData.find(
+  r => (r["Medication"] || "").trim() === med.trim()
+);
+
         if (info) {
           const category = (info["Category"] || "").trim() || "Other";
           if (!grouped[category]) grouped[category] = [];
@@ -384,7 +396,10 @@ const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifest
     if (tips.length > 0) {
       let html = "";
       tips.forEach(tipName => {
-        const tipInfo = lifestyleData.find(r => r["Tip"].trim() === tipName);
+        const tipInfo = lifestyleData.find(
+  r => (r["Tip"] || "").trim() === tipName.trim()
+);
+
         if (tipInfo) {
           html += `
             <li>
@@ -433,7 +448,10 @@ const keys = parseHybridValues(rows, ["Body Comp","Body Composition"], bodyCompK
     if (keys.length > 0) {
       let html = "";
       keys.forEach(key => {
-        const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key);
+        const compRow = bodyCompData.find(
+  b => (b["State"] || "").trim() === key.trim()
+);
+        
         if (compRow && compRow["Blurb"]) {
           html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
         } else {
