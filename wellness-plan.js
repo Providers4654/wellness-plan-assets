@@ -282,24 +282,59 @@ if (dose.includes("Note:")) {
   });
 
   // --- Hybrid Parser Helper ---
-  function parseHybridValues(rows, fieldNames) {
-    const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
-    const values = [];
-    rawValues.forEach(val => {
-      if (val.includes("<") || val.includes(">")) {
-        values.push(val.trim()); // custom HTML → keep whole
-      } else {
-        val.split(",").map(v => v.trim()).forEach(v => { if (v) values.push(v); });
-      }
-    });
-    return values;
-  }
+function parseHybridValues(rows, fieldNames, knownOptions = []) {
+  const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
+  const values = [];
+
+  rawValues.forEach((val, idx) => {
+    if (!val) return;
+
+    console.group(`🔎 parseHybridValues: Row ${idx + 2}`);
+    console.log("Raw value:", JSON.stringify(val));
+
+    // If custom HTML, keep whole
+    if (val.includes("<") || val.includes(">")) {
+      console.log("📌 Detected HTML → keeping as-is");
+      values.push(val.trim());
+      console.groupEnd();
+      return;
+    }
+
+    const cleanVal = val.trim();
+
+    // Try splitting by comma
+    const parts = cleanVal.split(",").map(v => v.trim()).filter(Boolean);
+    const allKnown = parts.length > 1 && parts.every(p => knownOptions.includes(p));
+
+    if (allKnown) {
+      console.log("✅ All parts are KNOWN dropdown items:", parts);
+      values.push(...parts);
+    } else {
+      console.log("↩️ Treating as free-text → splitting only on returns");
+      cleanVal.split(/\r\n|\r|\n/).forEach(v => {
+        const t = v.trim();
+        if (t) {
+          console.log("  ➡️ Added:", t);
+          values.push(t);
+        }
+      });
+    }
+    console.groupEnd();
+  });
+
+  console.log("🎯 Final parsed values:", values);
+  return values;
+}
+
+
 
   // --- To Consider (1st row only) ---
   const toConsiderList = document.getElementById("toConsider");
   const toConsiderBlock = document.getElementById("toConsiderBlock");
   if (toConsiderList && toConsiderBlock) {
-    const meds = parseHybridValues([rows[0]], ["To Consider","Consider"]);
+    const toConsiderKnown = toConsiderData.map(r => (r["Medication"] || "").trim());
+const meds = parseHybridValues([rows[0]], ["To Consider","Consider"], toConsiderKnown);
+
     console.log("Parsed To Consider meds (first row only):", meds);
 
     if (meds.length > 0) {
@@ -342,7 +377,9 @@ if (dose.includes("Note:")) {
   // --- Lifestyle Tips ---
   const lifestyleBlock = document.getElementById("lifestyleTips");
   if (lifestyleBlock) {
-    const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"]);
+    const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
+const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
+
     console.log("Lifestyle tips (all rows):", tips);
     if (tips.length > 0) {
       let html = "";
@@ -390,7 +427,9 @@ if (dose.includes("Note:")) {
   if (bodyCompList && bodyCompTitle) {
     bodyCompTitle.textContent = cssVar("--bodycomp-title") || "Body Composition";
 
-    const keys = parseHybridValues(rows, ["Body Comp","Body Composition"]);
+    const bodyCompKnown = bodyCompData.map(r => (r["State"] || "").trim());
+const keys = parseHybridValues(rows, ["Body Comp","Body Composition"], bodyCompKnown);
+
     if (keys.length > 0) {
       let html = "";
       keys.forEach(key => {
@@ -414,7 +453,9 @@ if (dose.includes("Note:")) {
   if (targetGoalsList && targetTitle) {
     targetTitle.textContent = cssVar("--target-title") || "Target Goals";
 
-    const allGoals = parseHybridValues(rows, ["Target Goals","Goals"]);
+    const goalKnown = []; // no fixed library? leave empty
+const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
+
     if (allGoals.length > 0) {
       let html = "";
       allGoals.forEach(g => {
