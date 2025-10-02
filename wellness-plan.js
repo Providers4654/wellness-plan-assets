@@ -217,13 +217,22 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
+    // ✅ check if this med is marked discontinued
+    const isDiscontinued = cat.toLowerCase().includes("discontinued");
+
+    // build med name HTML depending on status
+    const medNameHtml = isDiscontinued
+      ? `<span style="text-decoration: line-through">${med}</span> <em>(discontinued)</em>`
+      : `<strong>${med}</strong>`;
+
     const medHtml = `
-      <li class="med-row">
-        <div class="med-name"><strong>${med}</strong>${blurb ? `<span class="info-icon">i</span>` : ""}</div>
+      <li class="med-row ${isDiscontinued ? "discontinued" : ""}">
+        <div class="med-name">${medNameHtml}${blurb ? `<span class="info-icon">i</span>` : ""}</div>
         <div class="dose">${dose}</div>
         ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
       </li>
     `;
+
 
     if (cat.includes("Supplement")) {
       if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
