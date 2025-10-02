@@ -344,53 +344,64 @@ function parseHybridValues(rows, fieldNames, knownOptions = []) {
 
 
 
-  // --- To Consider (1st row only) ---
-  const toConsiderList = document.getElementById("toConsider");
-  const toConsiderBlock = document.getElementById("toConsiderBlock");
-  if (toConsiderList && toConsiderBlock) {
-    const toConsiderKnown = toConsiderData.map(r => (r["Medication"] || "").trim());
-const meds = parseHybridValues([rows[0]], ["To Consider","Consider"], toConsiderKnown);
+// --- To Consider (all rows, supports free text) ---
+const toConsiderList = document.getElementById("toConsider");
+const toConsiderBlock = document.getElementById("toConsiderBlock");
+if (toConsiderList && toConsiderBlock) {
+  const toConsiderKnown = toConsiderData.map(r => (r["Medication"] || "").trim());
+  // ✅ now checking all rows, not just rows[0]
+  const meds = parseHybridValues(rows, ["To Consider","Consider"], toConsiderKnown);
 
-    console.log("Parsed To Consider meds (first row only):", meds);
+  console.log("Parsed To Consider meds (all rows):", meds);
 
-    if (meds.length > 0) {
-      let html = "";
-      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications"];
-      const grouped = {};
+  if (meds.length > 0) {
+    let html = "";
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Other"];
+    const grouped = {};
 
-      meds.forEach(med => {
-const info = toConsiderData.find(r => (r["Medication"] || "").trim() === med.trim());
+    meds.forEach(med => {
+      const info = toConsiderData.find(r => (r["Medication"] || "").trim() === med.trim());
 
-
-        if (info) {
-          const category = (info["Category"] || "").trim() || "Other";
-          if (!grouped[category]) grouped[category] = [];
-          grouped[category].push(info);
-        }
-      });
-
-      const orderedCats = [
-        ...CATEGORY_ORDER.filter(cat => grouped[cat]),
-        ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
-      ];
-
-      orderedCats.forEach(cat => {
-        html += `<li class="to-consider-subtitle">${cat}</li>`;
-        grouped[cat].forEach(info => {
-          html += `
-            <li class="to-consider-row">
-              <div><strong>${info["Medication"]}</strong></div>
-              <div>${normalizeCellText(info["Blurb"] || "")}</div>
-            </li>`;
+      if (info) {
+        const category = (info["Category"] || "").trim() || "Other";
+        if (!grouped[category]) grouped[category] = [];
+        grouped[category].push({
+          name: info["Medication"],
+          blurb: info["Blurb"] || ""
         });
-      });
+      } else {
+        // Free text → always goes to "Other"
+        if (!grouped["Other"]) grouped["Other"] = [];
+        grouped["Other"].push({
+          name: med.trim(),
+          blurb: ""
+        });
+      }
+    });
 
-      toConsiderList.innerHTML = html;
-      toConsiderBlock.style.display = "block";
-    } else {
-      toConsiderBlock.style.display = "none";
-    }
+    const orderedCats = [
+      ...CATEGORY_ORDER.filter(cat => grouped[cat]),
+      ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
+    ];
+
+    orderedCats.forEach(cat => {
+      html += `<li class="to-consider-subtitle">${cat}</li>`;
+      grouped[cat].forEach(item => {
+        html += `
+          <li class="to-consider-row">
+            <div><strong>${item.name}</strong></div>
+            <div>${normalizeCellText(item.blurb)}</div>
+          </li>`;
+      });
+    });
+
+    toConsiderList.innerHTML = html;
+    toConsiderBlock.style.display = "block";
+  } else {
+    toConsiderBlock.style.display = "none";
   }
+}
+
 
   // --- Lifestyle Tips ---
   const lifestyleBlock = document.getElementById("lifestyleTips");
