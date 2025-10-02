@@ -204,8 +204,14 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
   const patientMeta = rows[0];
   console.log("Using patientMeta for meta fields:", patientMeta);
 
-  // --- Collect meds/supps (unchanged) ---
-  const medsByCategory = { Daily:{meds:[],supps:[]}, Evening:{meds:[],supps:[]}, Weekly:{meds:[],supps:[]}, PRN:{meds:[],supps:[]} };
+  // --- Collect meds/supps ---
+  const medsByCategory = { 
+    Daily:   { meds: [], supps: [] }, 
+    Evening: { meds: [], supps: [] }, 
+    Weekly:  { meds: [], supps: [] }, 
+    PRN:     { meds: [], supps: [] } 
+  };
+
   rows.forEach((r, idx) => {
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
@@ -227,29 +233,56 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
       `;
     }
 
-    const cat  = (getField(r, ["Category", "Cat"]) || "").trim();
+    const cat = (getField(r, ["Category", "Cat"]) || "").trim();
 
     let blurb = "";
     const medInfo = medsData.find(m => m["Medication"] === med);
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
-    // ✅ check if this med is marked discontinued
-    const isDiscontinued = cat.toLowerCase().includes("discontinued");
-
-    // build med name HTML depending on status
-    const medNameHtml = isDiscontinued
-      ? `<span style="text-decoration: line-through">${med}</span> <em>(discontinued)</em>`
-      : `<strong>${med}</strong>`;
+    // --- Build med name (no discontinued logic now) ---
+    const medNameHtml = `<strong>${med}</strong>`;
 
     const medHtml = `
-      <li class="med-row ${isDiscontinued ? "discontinued" : ""}">
+      <li class="med-row">
         <div class="med-name">${medNameHtml}${blurb ? `<span class="info-icon">i</span>` : ""}</div>
         <div class="dose">${doseHtml}</div>
         ${blurb ? `<div class="learn-more-content">${normalizeCellText(blurb)}</div>` : ""}
       </li>
     `;
+
+    // --- Push into right bucket ---
+    if (cat.includes("Supplement")) {
+      if (cat.startsWith("Daily")) medsByCategory.Daily.supps.push(medHtml);
+      else if (cat.startsWith("Evening")) medsByCategory.Evening.supps.push(medHtml);
+      else if (cat.startsWith("Weekly")) medsByCategory.Weekly.supps.push(medHtml);
+      else if (cat.startsWith("PRN")) medsByCategory.PRN.supps.push(medHtml);
+    } else if (medsByCategory[cat]) {
+      medsByCategory[cat].meds.push(medHtml);
+    }
   });
+
+  // --- Render meds into DOM ---
+  Object.entries(medsByCategory).forEach(([cat, { meds, supps }]) => {
+    const listId  = { Daily:"dailyMeds", Evening:"eveningMeds", Weekly:"weeklyMeds", PRN:"prnMeds" }[cat];
+    const blockId = { Daily:"dailyBlock", Evening:"eveningBlock", Weekly:"weeklyBlock", PRN:"prnBlock" }[cat];
+    const block   = document.getElementById(blockId);
+    const list    = document.getElementById(listId);
+    if (!list || !block) return;
+
+    if (meds.length > 0 || supps.length > 0) {
+      let html = meds.join("");
+      if (supps.length > 0) {
+        html += `<li class="med-subtitle"><span>SUPPLEMENTS</span></li>${supps.join("")}`;
+      }
+      list.innerHTML = html;
+    } else {
+      block.remove();
+    }
+  });
+
+  console.groupEnd();
 }
+
 
 
 
