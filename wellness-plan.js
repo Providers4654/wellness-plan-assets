@@ -508,8 +508,6 @@ const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
     }
   }
 
-  console.groupEnd();
-}
 
 
 
@@ -544,6 +542,17 @@ if (otherList && otherTitle) {
     otherList.remove();
   }
 }
+
+
+
+
+  
+  console.groupEnd();
+}
+
+
+
+
 
 
 
