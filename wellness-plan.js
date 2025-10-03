@@ -356,7 +356,8 @@ if (toConsiderList && toConsiderBlock) {
 
   if (meds.length > 0) {
     let html = "";
-    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Other"];
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Micronutrients", "Other"];
+
     const grouped = {};
 
     meds.forEach(med => {
