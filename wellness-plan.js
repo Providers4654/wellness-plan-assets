@@ -344,47 +344,46 @@ function parseHybridValues(rows, fieldNames, knownOptions = []) {
 
 
 
-// --- To Consider (all rows, supports free text) ---
+// --- To Consider (supports library headers "To Consider Medication" OR "Medication") ---
 const toConsiderList = document.getElementById("toConsider");
 const toConsiderBlock = document.getElementById("toConsiderBlock");
-if (toConsiderList && toConsiderBlock) {
- const toConsiderKnown = toConsiderData.map(
-  r => (r["To Consider Medication"] || r["Medication"] || "").trim()
-);
-  // ✅ now checking all rows, not just rows[0]
-  const meds = parseHybridValues(rows, ["To Consider","Consider"], toConsiderKnown);
 
-  console.log("Parsed To Consider meds (all rows):", meds);
+if (toConsiderList && toConsiderBlock) {
+  // Flexible getter for the library row's name field
+  const getTCName = r => (r["To Consider Medication"] || r["Medication"] || "").trim();
+
+  // Known options from the library (for chip/free-text parsing)
+  const toConsiderKnown = toConsiderData.map(getTCName).filter(Boolean);
+
+  // Read selections from the patient's rows (chips or free text)
+  const meds = parseHybridValues(rows, ["To Consider", "Consider"], toConsiderKnown);
 
   if (meds.length > 0) {
-    let html = "";
-    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Micronutrients", "Other"];
+    // Case-insensitive find against the library
+    const findInfo = (name) => {
+      const target = String(name).trim().toLowerCase();
+      return toConsiderData.find(r => getTCName(r).toLowerCase() === target) || null;
+    };
 
+    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Micronutrients", "Other"];
     const grouped = {};
 
     meds.forEach(med => {
-      const info = toConsiderData.find(r => (r["Medication"] || "").trim() === med.trim());
+      const info = findInfo(med);
 
       if (info) {
         const category = (info["Category"] || "").trim() || "Other";
-        if (!grouped[category]) grouped[category] = [];
-        grouped[category].push({
-          name: info["Medication"],
+        (grouped[category] ||= []).push({
+          name: getTCName(info),
           blurb: info["Blurb"] || ""
         });
       } else {
-        // Free text → parse into name + blurb if colon or dash found
-        let name = med.trim();
+        // Free text → split "Name: blurb" or "Name - blurb" if present
+        let name = String(med).trim();
         let blurb = "";
-
-        if (name.includes(":") || name.includes("-")) {
-          const parts = name.split(/[:\-]/); // split on first colon or dash
-          name = parts.shift().trim();
-          blurb = parts.join(":").trim(); // keep rest as blurb
-        }
-
-        if (!grouped["Other"]) grouped["Other"] = [];
-        grouped["Other"].push({ name, blurb });
+        const m = name.match(/^([^:-]+)[:\-](.+)$/);
+        if (m) { name = m[1].trim(); blurb = m[2].trim(); }
+        (grouped["Other"] ||= []).push({ name, blurb });
       }
     });
 
@@ -393,23 +392,22 @@ if (toConsiderList && toConsiderBlock) {
       ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
     ];
 
-    orderedCats.forEach(cat => {
-      html += `<li class="to-consider-subtitle">${cat}</li>`;
-      grouped[cat].forEach(item => {
-        html += `
-          <li class="to-consider-row">
-            <div><strong>${item.name}</strong></div>
-            <div>${normalizeCellText(item.blurb)}</div>
-          </li>`;
-      });
-    });
+    toConsiderList.innerHTML = orderedCats.map(cat => {
+      const items = grouped[cat].map(item => `
+        <li class="to-consider-row">
+          <div><strong>${item.name}</strong></div>
+          <div>${normalizeCellText(item.blurb)}</div>
+        </li>
+      `).join("");
+      return `<li class="to-consider-subtitle">${cat}</li>${items}`;
+    }).join("");
 
-    toConsiderList.innerHTML = html;
     toConsiderBlock.style.display = "block";
   } else {
     toConsiderBlock.style.display = "none";
   }
 }
+
 
 
 
