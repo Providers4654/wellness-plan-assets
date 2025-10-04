@@ -348,7 +348,9 @@ function parseHybridValues(rows, fieldNames, knownOptions = []) {
 const toConsiderList = document.getElementById("toConsider");
 const toConsiderBlock = document.getElementById("toConsiderBlock");
 if (toConsiderList && toConsiderBlock) {
-  const toConsiderKnown = toConsiderData.map(r => (r["Medication"] || "").trim());
+ const toConsiderKnown = toConsiderData.map(
+  r => (r["To Consider Medication"] || r["Medication"] || "").trim()
+);
   // ✅ now checking all rows, not just rows[0]
   const meds = parseHybridValues(rows, ["To Consider","Consider"], toConsiderKnown);
 
