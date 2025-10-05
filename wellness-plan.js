@@ -143,22 +143,34 @@ document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute("
 // Info Icon + Name Toggles (Meds + Lifestyle)
 // ============================
 document.addEventListener("click", e => {
-  // Works for both .med-name and .tip-name
-  const toggleEl = e.target.closest(".med-name, .tip-name"); 
-  if (!toggleEl) return;
-  
-  const row = toggleEl.closest("li, .med-row");
-  const content = row?.querySelector(".learn-more-content");
-  if (!content) return;
+  // --- Medications ---
+  const medNameEl = e.target.closest(".med-name");
+  if (medNameEl) {
+    const row = medNameEl.closest(".med-row");
+    const content = row?.querySelector(".learn-more-content");
+    if (content) {
+      document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
+        if (openContent !== content) openContent.classList.remove("expanded");
+      });
+      content.classList.toggle("expanded");
+    }
+    return;
+  }
 
-  // Close all other expanded blurbs
-  document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
-    if (openContent !== content) openContent.classList.remove("expanded");
-  });
-
-  // Toggle this one
-  content.classList.toggle("expanded");
+  // --- Lifestyle ---
+  const tipNameEl = e.target.closest(".tip-name");
+  if (tipNameEl) {
+    const row = tipNameEl.closest(".lifestyle-row");
+    const content = row?.querySelector(".lifestyle-learn-more");
+    if (content) {
+      document.querySelectorAll(".lifestyle-learn-more.expanded").forEach(openContent => {
+        if (openContent !== content) openContent.classList.remove("expanded");
+      });
+      content.classList.toggle("expanded");
+    }
+  }
 });
+
 
 
 // ============================
@@ -436,7 +448,7 @@ if (tipInfo) {
         <strong>${tipInfo["Tip"]}</strong>
         ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
       </div>
-      ${tipInfo["Blurb"] ? `<div class="learn-more-content">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
+      ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
     </li>`;
 } else {
   html += `
