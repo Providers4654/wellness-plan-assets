@@ -140,21 +140,26 @@ if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
 document.querySelectorAll('a[target="_blank"]').forEach(a => a.removeAttribute("target"));
 
 // ============================
-// Info Icon + Name Toggles
+// Info Icon + Name Toggles (Meds + Lifestyle)
 // ============================
 document.addEventListener("click", e => {
-  const medNameEl = e.target.closest(".med-name"); 
-  if (!medNameEl) return;
-  const row = medNameEl.closest(".med-row");
+  // Works for both .med-name and .tip-name
+  const toggleEl = e.target.closest(".med-name, .tip-name"); 
+  if (!toggleEl) return;
+  
+  const row = toggleEl.closest("li, .med-row");
   const content = row?.querySelector(".learn-more-content");
   if (!content) return;
 
+  // Close all other expanded blurbs
   document.querySelectorAll(".learn-more-content.expanded").forEach(openContent => {
     if (openContent !== content) openContent.classList.remove("expanded");
   });
 
+  // Toggle this one
   content.classList.toggle("expanded");
 });
+
 
 // ============================
 // Helpers
@@ -424,21 +429,22 @@ const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifest
 const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
 
-        if (tipInfo) {
-          html += `
-            <li>
-              <span class="editable">
-                <strong>${tipInfo["Tip"]}:</strong><br>
-                ${normalizeCellText(tipInfo["Blurb"])}
-              </span>
-            </li>`;
-        } else {
-          html += `<li><span class="editable">${normalizeCellText(tipName)}</span></li>`;
-        }
-      });
-      lifestyleBlock.innerHTML = html;
-    } else lifestyleBlock.innerHTML = "";
-  }
+if (tipInfo) {
+  html += `
+    <li class="lifestyle-row">
+      <div class="tip-name">
+        <strong>${tipInfo["Tip"]}</strong>
+        ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
+      </div>
+      ${tipInfo["Blurb"] ? `<div class="learn-more-content">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
+    </li>`;
+} else {
+  html += `
+    <li class="lifestyle-row">
+      <div class="tip-name"><strong>${normalizeCellText(tipName)}</strong></div>
+    </li>`;
+}
+
 
   // --- Visit Timeline (row 1 only) ---
   const visitTimelineList = document.getElementById("visitTimeline");
