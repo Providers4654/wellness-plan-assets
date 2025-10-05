@@ -441,6 +441,7 @@ if (lifestyleBlock) {
       const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
       if (tipInfo) {
+        // ✅ Known tip from library
         html += `
           <li class="lifestyle-row">
             <div class="tip-name">
@@ -450,16 +451,31 @@ if (lifestyleBlock) {
             ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
           </li>`;
       } else {
+        // ✅ Custom free-text tip (split on colon)
+        let raw = String(tipName).trim();
+        let title = raw;
+        let blurb = "";
+
+        const colonIndex = raw.indexOf(":");
+        if (colonIndex !== -1) {
+          title = raw.slice(0, colonIndex).trim();
+          blurb = raw.slice(colonIndex + 1).trim();
+        }
+
         html += `
           <li class="lifestyle-row">
-            <div class="tip-name"><strong>${normalizeCellText(tipName)}</strong></div>
+            <div class="tip-name">
+              <strong>${normalizeCellText(title)}</strong>
+              ${blurb ? `<span class="info-icon">i</span>` : ""}
+            </div>
+            ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
           </li>`;
       }
-    }); // ✅ this closes forEach
+    }); // ✅ end forEach
 
     lifestyleBlock.innerHTML = html;
   }
-} // ✅ this closes the if(lifestyleBlock) block
+} // ✅ end if(lifestyleBlock)
 
 // --- Visit Timeline (row 1 only) ---
 const visitTimelineList = document.getElementById("visitTimeline");
@@ -480,6 +496,7 @@ if (visitTimelineList && visitTimelineTitle) {
     visitTimelineList.remove();
   }
 }
+
 
 
   // --- Body Comp ---
