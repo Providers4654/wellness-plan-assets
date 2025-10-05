@@ -428,55 +428,59 @@ if (toConsiderList && toConsiderBlock) {
 
 
 
-  // --- Lifestyle Tips ---
-  const lifestyleBlock = document.getElementById("lifestyleTips");
-  if (lifestyleBlock) {
-    const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
-const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
+// --- Lifestyle Tips ---
+const lifestyleBlock = document.getElementById("lifestyleTips");
+if (lifestyleBlock) {
+  const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
+  const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
 
-    console.log("Lifestyle tips (all rows):", tips);
-    if (tips.length > 0) {
-      let html = "";
-      tips.forEach(tipName => {
-const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
+  console.log("Lifestyle tips (all rows):", tips);
+  if (tips.length > 0) {
+    let html = "";
+    tips.forEach(tipName => {
+      const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
+      if (tipInfo) {
+        html += `
+          <li class="lifestyle-row">
+            <div class="tip-name">
+              <strong>${tipInfo["Tip"]}</strong>
+              ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
+            </div>
+            ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
+          </li>`;
+      } else {
+        html += `
+          <li class="lifestyle-row">
+            <div class="tip-name"><strong>${normalizeCellText(tipName)}</strong></div>
+          </li>`;
+      }
+    }); // ✅ this closes forEach
 
-if (tipInfo) {
-  html += `
-    <li class="lifestyle-row">
-      <div class="tip-name">
-        <strong>${tipInfo["Tip"]}</strong>
-        ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
-      </div>
-      ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
-    </li>`;
-} else {
-  html += `
-    <li class="lifestyle-row">
-      <div class="tip-name"><strong>${normalizeCellText(tipName)}</strong></div>
-    </li>`;
+    lifestyleBlock.innerHTML = html;
+  }
+} // ✅ this closes the if(lifestyleBlock) block
+
+// --- Visit Timeline (row 1 only) ---
+const visitTimelineList = document.getElementById("visitTimeline");
+const visitTimelineTitle = document.getElementById("visitTimelineTitle");
+if (visitTimelineList && visitTimelineTitle) {
+  visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+
+  const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
+  const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
+
+  if (prev || next) {
+    let html = "";
+    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
+    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+    visitTimelineList.innerHTML = html;
+  } else {
+    visitTimelineTitle.remove();
+    visitTimelineList.remove();
+  }
 }
 
-
-  // --- Visit Timeline (row 1 only) ---
-  const visitTimelineList = document.getElementById("visitTimeline");
-  const visitTimelineTitle = document.getElementById("visitTimelineTitle");
-  if (visitTimelineList && visitTimelineTitle) {
-    visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
-
-    const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
-    const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
-
-    if (prev || next) {
-      let html = "";
-      if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
-      if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
-      visitTimelineList.innerHTML = html;
-    } else {
-      visitTimelineTitle.remove();
-      visitTimelineList.remove();
-    }
-  }
 
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
