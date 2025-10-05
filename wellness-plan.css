@@ -543,6 +543,56 @@ html, body {
 }
 
 
+/* ============================
+   LIFESTYLE DROPDOWNS
+   ============================ */
+
+/* Keep tip header clickable */
+.tip-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tip-name .info-icon {
+  width: 14px;
+  height: 14px;
+  font-size: 10px;
+  font-weight: bold;
+  color: #555;
+  border: 1px solid #bbb;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: border 0.2s ease, color 0.2s ease;
+}
+
+.tip-name .info-icon:hover {
+  border-color: #666;
+  color: #222;
+}
+
+/* Hidden by default */
+.lifestyle-learn-more {
+  display: none;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: inherit;       /* inherits from the block’s color theme */
+}
+
+/* Show when expanded */
+.lifestyle-learn-more.expanded {
+  display: block;
+}
+
+
+
+
 
 
 
