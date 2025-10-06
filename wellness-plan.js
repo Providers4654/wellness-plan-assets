@@ -411,12 +411,13 @@ if (toConsiderList && toConsiderBlock) {
     ];
 
     toConsiderList.innerHTML = orderedCats.map(cat => {
-      const items = grouped[cat].map(item => `
-        <li class="to-consider-row">
-          <div><strong>${item.name}</strong></div>
-          <div>${normalizeCellText(item.blurb)}</div>
-        </li>
-      `).join("");
+const items = grouped[cat].map(item => `
+  <li class="to-consider-row">
+    <div class="to-consider-name"><strong>${item.name}</strong></div>
+    <div class="to-consider-blurb">${normalizeCellText(item.blurb)}</div>
+  </li>
+`).join("");
+
       return `<li class="to-consider-subtitle">${cat}</li>${items}`;
     }).join("");
 
