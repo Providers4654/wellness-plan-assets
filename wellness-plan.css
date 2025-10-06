@@ -406,22 +406,24 @@ html, body {
 
 .to-consider-name {
   font-weight: 600;
-  margin-bottom: 2px;
+  margin-bottom: 0; /* remove extra gap below medication name */
 }
 
 .to-consider-blurb {
   font-style: italic;
   color: #444;
-  margin-top: 4px;
-  margin-bottom: 8px;
-  line-height: 1.4;
-  font-size: 0.92rem;
+  margin-top: 3px;          /* 👈 this adds only a tiny space under the med name */
+  margin-bottom: 8px;       /* keeps spacing below blurb consistent */
+  line-height: 1.45;
+  font-size: 0.92rem;       /* slightly smaller text */
 }
 
 .to-consider-blurb a {
-  color: #0073e6;            /* MTN HLTH blue */
+  font-style: italic;       /* keep links italic */
+  color: #0073e6;
   text-decoration: underline;
 }
+
 
 
 /* --- Subtitle Divider (final tweak) --- */
