@@ -796,14 +796,14 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li a {
   font-style: italic;
   text-decoration: underline;
-  font-weight: 400;
-  color: inherit;
-  transition: none;
+  font-weight: 500;
+  color: #007bff; /* bright blue */
+  transition: color 0.2s ease;
 }
 .wellness-plan .lifestyle-tips-list > li a:hover {
-  color: inherit;
-  text-decoration: underline;
+  color: #0056b3; /* darker on hover */
 }
+
 
 /* Tip color themes */
 .wellness-plan .lifestyle-tips-list > li:nth-child(1) { background-color: #f0f8ff; border-left-color: #007acc; }
