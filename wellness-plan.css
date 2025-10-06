@@ -418,10 +418,10 @@ html, body {
 }
 
 .to-consider-blurb a {
-  font-style: normal;        /* cancel italics for links */
   color: #0073e6;            /* MTN HLTH blue */
   text-decoration: underline;
 }
+
 
 /* --- Subtitle Divider (final tweak) --- */
 .to-consider-subtitle {
