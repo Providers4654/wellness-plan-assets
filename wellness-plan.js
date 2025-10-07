@@ -119,7 +119,9 @@ if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
   // Titles & intro
   setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
   setTextIfAvailable(".title-summary", "--title-summary", "Summary");
-  setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Habits");
+  setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Optimization Protocol");
+  setTextIfAvailable(".lifestyle-subtext", "--lifestyle-subtext", "");
+
   setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
 
   const intro = document.querySelector(".intro-text");
