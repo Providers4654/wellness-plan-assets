@@ -854,7 +854,7 @@ html, body {
   color: var(--color-subheading);
 }
 
-/* Links inside goals — match lifestyle blue style */
+/* ✅ Keep this single correct link block */
 .wellness-plan .goals-list li a {
   font-style: italic;
   text-decoration: underline;
@@ -864,7 +864,7 @@ html, body {
 }
 
 .wellness-plan .goals-list li a:hover {
-  color: #0056b3; /* darker on hover */
+  color: #0056b3;
   text-decoration: underline;
 }
 
@@ -896,18 +896,7 @@ html, body {
 .wellness-plan .goals-list:nth-of-type(6) li strong { color: #d48806; }
 .wellness-plan .goals-list:nth-of-type(6) li { background-color: #fffbe6; border-left-color: #ffb347; }
 
-/* Links inside goals */
-.wellness-plan .goals-list li a {
-  font-style: italic;
-  text-decoration: underline;
-  font-weight: 400;
-  color: inherit;
-  transition: none;
-}
-.wellness-plan .goals-list li a:hover {
-  color: inherit;
-  text-decoration: underline;
-}
+
 
 /* Nested bullets inside a goals item */
 .wellness-plan .goals-list li ul {
