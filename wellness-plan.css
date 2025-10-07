@@ -5,7 +5,8 @@
   /* Section titles */
   --title-summary: 💊 Treatment Summary;
   --title-supplements: Supplements;
-  --title-lifestyle: 🏃 Lifestyle & Health Habits;
+  --title-lifestyle: 🏃 Lifestyle & Health Optimization Protocol;
+   --lifestyle-subtext: "These habits are prescribed components of your treatment plan — not optional add-ons. Follow them consistently to support optimal results and long-term health.";
   --title-goals: 🎯 Goals & Follow-Up;
 
 --intro-message: A clear guide to support your treatment, lifestyle, and long-term goals.;
@@ -778,6 +779,24 @@ html, body {
    LIFESTYLE SECTION
    ============================ */
 
+/* --- Section Subtext (new) --- */
+.wellness-plan .section-subtext.lifestyle-subtext {
+  font-style: italic;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 24px 24px -16px; /* space between title and bubble */
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .wellness-plan .section-subtext.lifestyle-subtext {
+    font-size: 14px;
+    margin: 20px 16px -12px;
+  }
+}
+
+/* --- Lifestyle Tips Container --- */
 .wellness-plan .lifestyle-tips-list {
   list-style-type: none;
   padding-left: 0;
@@ -800,6 +819,7 @@ html, body {
   color: #007bff; /* bright blue */
   transition: color 0.2s ease;
 }
+
 .wellness-plan .lifestyle-tips-list > li a:hover {
   color: #0056b3; /* darker on hover */
 }
