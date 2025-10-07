@@ -781,8 +781,8 @@ html, body {
 
 /* --- Section Subtext (inside bubble, refined) --- */
 .wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext {
-  background: #fff; /* pure white to match the bubble */
-  border: 1px solid rgba(0, 0, 0, 0.06); /* faint neutral outline */
+  background: #fff; /* stays pure white */
+  border: 1.2px solid rgba(0, 0, 0, 0.08); /* subtle, visible neutral edge */
   border-radius: 10px;
   padding: 16px 22px;
   font-style: italic;
@@ -792,21 +792,22 @@ html, body {
   margin: -6px 0 28px 0;
   text-align: center;
   box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.08),
-    0 1px 2px rgba(0, 0, 0, 0.04); /* gentle lift */
+    0 3px 8px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04); /* soft lift */
   transition: box-shadow 0.2s ease;
 }
 
 .wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext:hover {
   box-shadow:
     0 4px 10px rgba(0, 0, 0, 0.12),
-    0 1px 3px rgba(0, 0, 0, 0.06); /* soft interactive feel */
+    0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext strong {
   font-weight: 600;
-  color: #111; /* subtle emphasis */
+  color: #111;
 }
+
 
 
 
