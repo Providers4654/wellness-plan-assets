@@ -854,6 +854,21 @@ html, body {
   color: var(--color-subheading);
 }
 
+/* Links inside goals — match lifestyle blue style */
+.wellness-plan .goals-list li a {
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 500;
+  color: #007bff; /* bright blue like lifestyle tips */
+  transition: color 0.2s ease;
+}
+
+.wellness-plan .goals-list li a:hover {
+  color: #0056b3; /* darker on hover */
+  text-decoration: underline;
+}
+
+
 
 
 /* Nth-section color themes */
