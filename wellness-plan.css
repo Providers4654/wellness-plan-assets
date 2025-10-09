@@ -500,31 +500,31 @@ html, body {
   gap: 4px;
 }
 
-/* Outlined info icon (slightly superscript) */
-.wellness-plan .info-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* Make ALL info icons match the blue outline style */
+.wellness-plan .info-icon,
+.tip-name .info-icon {
   width: 15px;
   height: 15px;
   font-size: 10px;
   font-weight: 700;
-  color: #007bff;              /* link blue */
-  border: 1.5px solid #007bff; /* outline only */
+  color: #007bff;
+  border: 1.5px solid #007bff;
   border-radius: 50%;
   cursor: pointer;
+  background: transparent;
   line-height: 1;
   margin-left: 4px;
-  background: transparent;     /* no fill */
   transform: translate(1px, -3px);
   transition: all 0.2s ease;
 }
-
-.wellness-plan .info-icon:hover {
-  color: #0056b3;              /* darker blue text */
-  border-color: #0056b3;       /* darker blue border */
+.wellness-plan .info-icon:hover,
+.tip-name .info-icon:hover {
+  color: #0056b3;
+  border-color: #0056b3;
   transform: scale(1.15) translate(1px, -3px);
 }
+
+
 
 
 
@@ -559,26 +559,6 @@ html, body {
   gap: 6px;
   cursor: pointer;
   user-select: none;
-}
-
-.tip-name .info-icon {
-  width: 14px;
-  height: 14px;
-  font-size: 10px;
-  font-weight: bold;
-  color: #555;
-  border: 1px solid #bbb;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  transition: border 0.2s ease, color 0.2s ease;
-}
-
-.tip-name .info-icon:hover {
-  border-color: #666;
-  color: #222;
 }
 
 /* Hidden by default */
