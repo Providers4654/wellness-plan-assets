@@ -505,27 +505,28 @@ html, body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 14px;
-  height: 14px;
-  font-size: 9px;
-  font-weight: bold;
-  color: #555;
-  border: 1px solid #bbb;
+  width: 15px;
+  height: 15px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #007bff;              /* link blue */
+  border: 1.5px solid #007bff; /* match link color */
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 3px;
-
-  /* Nudge upward and right */
+  margin-left: 4px;
   transform: translate(1px, -3px);
-
-  transition: border 0.2s ease, color 0.2s ease;
+  background: #f0f8ff;         /* faint blue-tinted background for contrast */
+  transition: all 0.2s ease;
 }
 
 .wellness-plan .info-icon:hover {
-  border-color: #666;
-  color: #222;
+  background: #007bff;         /* invert colors on hover */
+  color: #fff;
+  border-color: #0066cc;       /* slightly darker border */
+  transform: scale(1.15) translate(1px, -3px);
 }
+
 
 /* Hidden blurb */
 .learn-more-content {
