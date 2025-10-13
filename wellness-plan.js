@@ -65,42 +65,38 @@ function normalizeHeader(h) {
 
 
 // ========================================
-// SECURE FETCH (replaces fetchCsv)
+// SECURE FETCH (for /pj/274 or /pb/274 structure)
 // ========================================
 
 async function fetchCsv() {
-  // 🔹 Your secure token (must match the one in Apps Script)
+  // 🔹 Your secure token — must match Apps Script
   const AUTH_TOKEN = "mtnhlth_secure_2025";
 
-  // 🔹 Your deployed Google Apps Script web app URL
+  // 🔹 Your deployed Google Apps Script Web App URL
   const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
-  // 🔹 Determine provider (pj or pb) and patient ID from URL path
+  // 🔹 Extract provider + patient ID from URL path
   const parts = window.location.pathname.split("/").filter(Boolean);
-  const provider = parts[1] || "pj";   // 'pj' or 'pb' — fallback to pj
-  const patientId = parts[2] || "";    // e.g. 274
+  const provider = parts[0];   // 'pj' or 'pb'
+  const patientId = parts[1];  // e.g. 274
 
-  if (!patientId) {
-    throw new Error("No patient ID found in URL path");
+  if (!provider || !patientId) {
+    throw new Error("❌ Missing provider or patient ID in URL path");
   }
 
-  // 🔹 Build full API request URL
+  // 🔹 Build full API request URL (this is the key line)
   const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&token=${AUTH_TOKEN}`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
-  // 🔹 Fetch from the secure endpoint
+  // 🔹 Fetch securely
   const response = await fetch(urlWithParams, { cache: "no-store" });
-
-  if (!response.ok) {
-    throw new Error(`❌ Failed to load patient data (${response.status})`);
-  }
+  if (!response.ok) throw new Error(`❌ Failed to load patient data (${response.status})`);
 
   const data = await response.json();
-
-  // 🔹 Log + return to main app logic
-  console.log(`✅ Loaded ${data.length} rows for patient ${patientId} (${provider.toUpperCase()})`);
-  return data; // same structure as before
+  console.log(`✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`);
+  return data;
 }
+
 
 
 
