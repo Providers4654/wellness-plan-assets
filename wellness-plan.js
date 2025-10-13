@@ -732,14 +732,13 @@ async function loadPatientData() {
       console.warn("⚠️ CSV returned no rows at all");
     }
 
-    const patientBlock = getPatientBlock(patientRows, patientId);
+if (patientRows && patientRows.length > 0) {
+  injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
+  injectResourceLinksAndTitles();
+} else {
+  console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
+}
 
-    if (patientBlock.length > 0) {
-      injectPatientData(patientBlock, lifestyleData, medsData, bodyCompData, toConsiderData);
-      injectResourceLinksAndTitles(); // 👈 new line
-    } else {
-      console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
-    }
 
     console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
   } catch (err) {
