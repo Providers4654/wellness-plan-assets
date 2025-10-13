@@ -67,29 +67,22 @@ function normalizeHeader(h) {
 // ========================================
 // SECURE FETCH (for /pj/274 or /pb/274 structure)
 // ========================================
-
-async function fetchCsv() {
-  // 🔹 Your secure token — must match Apps Script
+async function fetchPatientRows() {
   const AUTH_TOKEN = "mtnhlth_secure_2025";
-
-  // 🔹 Your deployed Google Apps Script Web App URL
   const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
-// Extract provider + patient ID from URL path
-const parts = window.location.pathname.split("/").filter(Boolean);
-const provider = parts[0];                   // 'pj' or 'pb'
-const patientId = parts[parts.length - 1];   // always grab last part (e.g. 274)
-
+  // Extract provider + patient ID from URL
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const provider = parts[0];                   
+  const patientId = parts[parts.length - 1];   
 
   if (!provider || !patientId) {
     throw new Error("❌ Missing provider or patient ID in URL path");
   }
 
-  // 🔹 Build full API request URL (this is the key line)
   const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&token=${AUTH_TOKEN}`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
-  // 🔹 Fetch securely
   const response = await fetch(urlWithParams, { cache: "no-store" });
   if (!response.ok) throw new Error(`❌ Failed to load patient data (${response.status})`);
 
@@ -97,6 +90,25 @@ const patientId = parts[parts.length - 1];   // always grab last part (e.g. 274)
   console.log(`✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`);
   return data;
 }
+
+
+// ========================================
+// FETCH PUBLIC LIBRARY CSVs
+// ========================================
+async function fetchLibraryCsv(url) {
+  const text = await (await fetch(url, { cache: "no-store" })).text();
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length === 0) return [];
+
+  const headers = parseCsvLine(lines[0]).map(normalizeHeader);
+  return lines.slice(1).map(line => {
+    const cells = parseCsvLine(line);
+    const obj = {};
+    headers.forEach((h, i) => (obj[h] = cells[i] ?? ""));
+    return obj;
+  });
+}
+
 
 
 
@@ -722,34 +734,33 @@ async function loadPatientData() {
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
-    const [patientRows, medsData, lifestyleData, bodyCompData, toConsiderData] = await Promise.all([
-      fetchCsv(provider.wellness),
-      fetchCsv(TABS.meds),
-      fetchCsv(TABS.lifestyle),
-      fetchCsv(TABS.bodycomp),
-      fetchCsv(TABS.toconsider),
+    const [
+      patientRows,
+      medsData,
+      lifestyleData,
+      bodyCompData,
+      toConsiderData
+    ] = await Promise.all([
+      fetchPatientRows(), // ✅ Secure JSON for current patient
+      fetchLibraryCsv(TABS.meds),
+      fetchLibraryCsv(TABS.lifestyle),
+      fetchLibraryCsv(TABS.bodycomp),
+      fetchLibraryCsv(TABS.toconsider),
     ]);
 
-    if (patientRows.length > 0) {
-      console.log("Headers from CSV:", Object.keys(patientRows[0]));
-      console.log("First 10 Patient IDs:", patientRows.slice(0, 10).map(r => getIdField(r)));
+    if (patientRows && patientRows.length > 0) {
+      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
+      injectResourceLinksAndTitles();
     } else {
-      console.warn("⚠️ CSV returned no rows at all");
+      console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
     }
-
-if (patientRows && patientRows.length > 0) {
-  injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
-  injectResourceLinksAndTitles();
-} else {
-  console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
-}
-
 
     console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
   } catch (err) {
     console.error("❌ Error in loadPatientData:", err);
   }
 }
+
 
 
 // ============================
