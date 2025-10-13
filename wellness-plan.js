@@ -10,13 +10,11 @@ function cssVar(name) {
 }
 
 // --- Provider-specific secure endpoints ---
+const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
+
 const PROVIDERS = {
-  pj: {
-    wellness: "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec"
-  },
-  pb: {
-    wellness: "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec"
-  }
+  pj: { wellness: API_URL },
+  pb: { wellness: API_URL }
 };
 
 
@@ -74,8 +72,7 @@ async function fetchCsv(url) {
   // Instead of using the CSV URL, we'll call your secure Apps Script
   // The "url" argument here is unused, but we keep it for compatibility
 
-  // 🔹 Your deployed Google Apps Script web app URL:
-  const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
+// Use the global API_URL defined above
 
   // 🔹 This must exactly match your token in the Apps Script file
   const AUTH_TOKEN = "mtnhlth_secure_2025";
