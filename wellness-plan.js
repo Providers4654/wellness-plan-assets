@@ -75,7 +75,7 @@ async function fetchCsv(url) {
   // The "url" argument here is unused, but we keep it for compatibility
 
   // 🔹 Your deployed Google Apps Script web app URL:
-  const API_URL = "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
   // 🔹 This must exactly match your token in the Apps Script file
   const AUTH_TOKEN = "mtnhlth_secure_2025";
