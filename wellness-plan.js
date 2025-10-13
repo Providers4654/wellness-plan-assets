@@ -72,17 +72,18 @@ async function fetchCsv(url) {
   // Instead of using the CSV URL, we'll call your secure Apps Script
   // The "url" argument here is unused, but we keep it for compatibility
 
-// Use the global API_URL defined above
+  // Use the global API_URL defined above
 
   // 🔹 This must exactly match your token in the Apps Script file
   const AUTH_TOKEN = "mtnhlth_secure_2025";
 
   // Figure out which patient page is open
   const parts = window.location.pathname.split("/").filter(Boolean);
-  const patientId = parts.pop(); // last part of URL (e.g. 274)
-  
+  const providerCode = parts[0]; // pj or pb
+  const patientId = parts[1];    // e.g. 274
+
   // Fetch the patient data securely
-  const urlWithParams = `${API_URL}?id=${patientId}&token=${AUTH_TOKEN}`;
+  const urlWithParams = `${API_URL}?provider=${providerCode}&id=${patientId}&token=${AUTH_TOKEN}`;
   const response = await fetch(urlWithParams, { cache: "no-store" });
 
   if (!response.ok) {
@@ -93,6 +94,7 @@ async function fetchCsv(url) {
   const data = await response.json();
   return data; // Same structure as your old CSV loader
 }
+
 
 
 
