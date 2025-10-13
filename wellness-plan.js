@@ -68,32 +68,40 @@ function normalizeHeader(h) {
 // SECURE FETCH (replaces fetchCsv)
 // ========================================
 
-async function fetchCsv(url) {
-  // Instead of using the CSV URL, we'll call your secure Apps Script
-  // The "url" argument here is unused, but we keep it for compatibility
-
-  // Use the global API_URL defined above
-
-  // 🔹 This must exactly match your token in the Apps Script file
+async function fetchCsv() {
+  // 🔹 Your secure token (must match the one in Apps Script)
   const AUTH_TOKEN = "mtnhlth_secure_2025";
 
-  // Figure out which patient page is open
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  const providerCode = parts[0]; // pj or pb
-  const patientId = parts[1];    // e.g. 274
+  // 🔹 Your deployed Google Apps Script web app URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
-  // Fetch the patient data securely
-  const urlWithParams = `${API_URL}?provider=${providerCode}&id=${patientId}&token=${AUTH_TOKEN}`;
+  // 🔹 Determine provider (pj or pb) and patient ID from URL path
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const provider = parts[1] || "pj";   // 'pj' or 'pb' — fallback to pj
+  const patientId = parts[2] || "";    // e.g. 274
+
+  if (!patientId) {
+    throw new Error("No patient ID found in URL path");
+  }
+
+  // 🔹 Build full API request URL
+  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&token=${AUTH_TOKEN}`;
+  console.log("🔍 Fetching patient data:", urlWithParams);
+
+  // 🔹 Fetch from the secure endpoint
   const response = await fetch(urlWithParams, { cache: "no-store" });
 
   if (!response.ok) {
-    throw new Error(`Failed to load patient data (${response.status})`);
+    throw new Error(`❌ Failed to load patient data (${response.status})`);
   }
 
-  // Parse the JSON returned by the Apps Script
   const data = await response.json();
-  return data; // Same structure as your old CSV loader
+
+  // 🔹 Log + return to main app logic
+  console.log(`✅ Loaded ${data.length} rows for patient ${patientId} (${provider.toUpperCase()})`);
+  return data; // same structure as before
 }
+
 
 
 
