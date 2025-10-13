@@ -75,10 +75,11 @@ async function fetchCsv() {
   // 🔹 Your deployed Google Apps Script Web App URL
   const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
-  // 🔹 Extract provider + patient ID from URL path
-  const parts = window.location.pathname.split("/").filter(Boolean);
-  const provider = parts[0];   // 'pj' or 'pb'
-  const patientId = parts[1];  // e.g. 274
+// Extract provider + patient ID from URL path
+const parts = window.location.pathname.split("/").filter(Boolean);
+const provider = parts[0];                   // 'pj' or 'pb'
+const patientId = parts[parts.length - 1];   // always grab last part (e.g. 274)
+
 
   if (!provider || !patientId) {
     throw new Error("❌ Missing provider or patient ID in URL path");
