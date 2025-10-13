@@ -9,15 +9,16 @@ function cssVar(name) {
   return root.getPropertyValue(name).trim();
 }
 
-// --- Provider-specific public CSVs ---
+// --- Provider-specific secure endpoints ---
 const PROVIDERS = {
   pj: {
-    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv"
+    wellness: "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec"
   },
   pb: {
-    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=747226804&single=true&output=csv"
+    wellness: "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec"
   }
 };
+
 
 
 const TABS = {
@@ -65,17 +66,37 @@ function normalizeHeader(h) {
 
 
 
+// ========================================
+// SECURE FETCH (replaces fetchCsv)
+// ========================================
+
 async function fetchCsv(url) {
-  const text = await fetch(url).then(r => r.text());
-  const [headerLine, ...lines] = text.trim().split("\n");
-  const headers = parseCsvLine(headerLine).map(normalizeHeader);  // ✅ normalize headers
-  return lines.map(line => {
-    const cells = parseCsvLine(line);
-    const obj = {};
-    headers.forEach((h, i) => (obj[h] = cells[i] || ""));
-    return obj;
-  });
+  // Instead of using the CSV URL, we'll call your secure Apps Script
+  // The "url" argument here is unused, but we keep it for compatibility
+
+  // 🔹 Your deployed Google Apps Script web app URL:
+  const API_URL = "https://script.google.com/macros/s/AKfycbyDeqoori9zIDEyj3T8y4YXwd_s7bmi5Prb_MqB6QezH9YOotFww7uG8QUk8ZN0QnJN/exec";
+
+  // 🔹 This must exactly match your token in the Apps Script file
+  const AUTH_TOKEN = "mtnhlth_secure_2025";
+
+  // Figure out which patient page is open
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const patientId = parts.pop(); // last part of URL (e.g. 274)
+  
+  // Fetch the patient data securely
+  const urlWithParams = `${API_URL}?id=${patientId}&token=${AUTH_TOKEN}`;
+  const response = await fetch(urlWithParams, { cache: "no-store" });
+
+  if (!response.ok) {
+    throw new Error(`Failed to load patient data (${response.status})`);
+  }
+
+  // Parse the JSON returned by the Apps Script
+  const data = await response.json();
+  return data; // Same structure as your old CSV loader
 }
+
 
 
 
