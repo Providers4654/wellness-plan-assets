@@ -500,7 +500,7 @@ html, body {
   line-height: 1.4;
 }
 
-/* Higher superscript-style info icon */
+/* Higher superscript-style info icon (default for meds, etc.) */
 .wellness-plan .info-icon,
 .tip-name .info-icon {
   display: inline-flex;
@@ -517,9 +517,16 @@ html, body {
   line-height: 1;
   margin-left: 7px;
   background: transparent;
-  transform: translateY(-0.95em); /* 👈 raised higher */
+  transform: translateY(-0.95em);
   transition: all 0.2s ease;
 }
+
+/* --- Lifestyle tips only: bring icon closer --- */
+.tip-name .info-icon {
+  margin-left: 3px;            /* 👈 closer to text */
+  transform: translateY(-0.95em); 
+}
+
 
 /* Hover interaction */
 .wellness-plan .info-icon:hover,
