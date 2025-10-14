@@ -490,34 +490,34 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (natural inline flow)
+   INFO ICON + BLURB DROPDOWN (inline superscript style)
 ============================ */
 
-/* Keep med name + icon aligned inline */
+/* Keep med name + icon inline */
 .med-name {
-  display: inline;          /* let the text and icon flow naturally */
-  white-space: normal;      /* allows wrapping for long names */
+  display: inline;
+  white-space: normal;
   line-height: 1.4;
 }
 
-/* Icon styling (sits at end of name naturally) */
+/* Superscript-style icon that follows the name */
 .wellness-plan .info-icon,
 .tip-name .info-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 15px;
-  height: 15px;
-  font-size: 10px;
+  width: 13px;
+  height: 13px;
+  font-size: 9px;
   font-weight: 700;
-  color: #007bff;              /* link blue */
-  border: 1.5px solid #007bff; /* outline only */
+  color: #007bff;
+  border: 1.3px solid #007bff;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 4px;            /* small space after the name */
+  margin-left: 3px;             /* small spacing from text */
   background: transparent;
-  transform: translateY(-1px); /* subtle vertical align fix */
+  transform: translateY(-0.35em); /* 👈 raises icon to superscript position */
   transition: all 0.2s ease;
 }
 
@@ -526,19 +526,17 @@ html, body {
 .tip-name .info-icon:hover {
   color: #0056b3;
   border-color: #0056b3;
-  transform: scale(1.15) translateY(-1px);
+  transform: scale(1.1) translateY(-0.35em);
 }
 
-/* Optional: smaller tweak for mobile */
+/* Optional: small tweak for mobile */
 @media (max-width: 600px) {
-  .med-name {
-    line-height: 1.45;
-  }
-  .wellness-plan .info-icon {
-    width: 14px;
-    height: 14px;
-    font-size: 9px;
-    transform: translateY(-0.5px);
+  .wellness-plan .info-icon,
+  .tip-name .info-icon {
+    width: 12px;
+    height: 12px;
+    font-size: 8.5px;
+    transform: translateY(-0.3em);
   }
 }
 
