@@ -714,42 +714,13 @@ function bootstrapWellnessPlanSafe(attempt = 1) {
   }
 }
 
+// ============================
 // Ensure DOM is ready before firing
+// ============================
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    console.log("🚀 DOM ready — loading patient plan first...");
-
-    // Step 1: Load patient data first
-    fetchPatientRows()
-      .then(patientData => {
-        if (patientData && patientData.length > 0) {
-          // Render the patient’s personal plan immediately
-          const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
-          console.log(`✅ Rendered patient plan for ${providerCode.toUpperCase()} ID=${patientId}`);
-          injectPatientData(patientData, [], [], [], []);
-        }
-
-        // Step 2: After a short delay, load the shared libraries
-        setTimeout(async () => {
-          console.log("📚 Fetching libraries...");
-          const [meds, lifestyle, bodyComp, toConsider] = await Promise.all([
-            fetchLibraryCsv(TABS.meds),
-            fetchLibraryCsv(TABS.lifestyle),
-            fetchLibraryCsv(TABS.bodycomp),
-            fetchLibraryCsv(TABS.toconsider)
-          ]);
-
-          injectPatientData(patientData, lifestyle, meds, bodyComp, toConsider);
-          injectResourceLinksAndTitles();
-          console.log("🏁 All data loaded.");
-        }, 200); // delay by 200ms so UI paints faster
-      })
-      .catch(err => {
-        console.error("❌ Failed to load patient data:", err);
-      });
-  });
+  document.addEventListener("DOMContentLoaded", () => bootstrapWellnessPlanSafe());
 } else {
-  // If DOM already ready
-  document.dispatchEvent(new Event("DOMContentLoaded"));
+  bootstrapWellnessPlanSafe();
 }
+
 
