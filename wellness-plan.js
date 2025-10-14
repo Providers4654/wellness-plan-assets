@@ -80,7 +80,7 @@ async function fetchPatientRows() {
   const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
-  const response = await fetch(urlWithParams, { cache: "force-cache" });
+ const response = await fetch(urlWithParams, { cache: "no-store" });
   if (!response.ok) throw new Error(`❌ Failed to load patient data (${response.status})`);
 
   const data = await response.json();
@@ -92,7 +92,7 @@ async function fetchPatientRows() {
 // FETCH PUBLIC LIBRARY CSVs
 // ========================================
 async function fetchLibraryCsv(url) {
-  const text = await (await fetch(url, { cache: "force-cache" })).text();
+  const text = await (await fetch(url, { cache: "no-store" })).text();
   const lines = text.trim().split(/\r?\n/);
   if (lines.length === 0) return [];
 
