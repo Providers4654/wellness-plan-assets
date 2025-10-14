@@ -683,44 +683,46 @@ async function loadPatientData() {
 
 
 // ============================
-// Bootstrap with retry
+// FINAL STABLE BOOTSTRAP
 // ============================
-function bootstrapWellnessPlanSafe(attempt = 1) {
+
+// Run only after DOM is fully loaded
+document.addEventListener("DOMContentLoaded", async () => {
+  console.log("🚀 DOM ready — loading full patient plan...");
+
   try {
-    console.log(`🚀 bootstrapWellnessPlanSafe attempt ${attempt}`);
-    loadPatientData();
+    // Step 1 — Fetch the patient's personalized plan data
+    const patientRows = await fetchPatientRows();
+    console.log("✅ Patient data received:", patientRows);
 
-    // Check for key DOM blocks that should exist
-    const requiredEls = [
-      document.getElementById("toConsiderBlock"),
-      document.getElementById("dynamicFullscriptLink"),
-      document.getElementById("dynamicAddOnsLink"),
-      document.getElementById("dynamicStandardsLink"),
-      document.getElementById("dynamicCoachingLink"),
-      document.getElementById("dynamicFollowUpLink"),
-    ];
+    // Step 2 — Fetch all shared CSV libraries in parallel
+    const [meds, lifestyle, bodyComp, toConsider] = await Promise.all([
+      fetchLibraryCsv(TABS.meds),
+      fetchLibraryCsv(TABS.lifestyle),
+      fetchLibraryCsv(TABS.bodycomp),
+      fetchLibraryCsv(TABS.toconsider),
+    ]);
 
-    const missing = requiredEls.filter(el => !el);
-    if (missing.length > 0 && attempt < 3) {
-      console.warn(`⚠️ Missing ${missing.length} critical elements. Retrying in 200ms...`);
-      setTimeout(() => bootstrapWellnessPlanSafe(attempt + 1), 200);
-    } else if (missing.length === 0) {
-      console.log("✅ All critical blocks loaded on attempt", attempt);
+    console.log("✅ Libraries loaded:", {
+      meds: meds.length,
+      lifestyle: lifestyle.length,
+      bodyComp: bodyComp.length,
+      toConsider: toConsider.length,
+    });
+
+    // Step 3 — Inject everything into the DOM
+    if (patientRows && patientRows.length > 0) {
+      injectPatientData(patientRows, lifestyle, meds, bodyComp, toConsider);
+      injectResourceLinksAndTitles();
+      console.log("🏁 Wellness plan fully rendered.");
     } else {
-      console.warn("❌ Some elements never appeared:", missing);
+      console.warn("⚠️ No patient rows found to inject.");
     }
-  } catch (err) {
-    console.error("❌ bootstrapWellnessPlanSafe failed:", err);
-  }
-}
 
-// ============================
-// Ensure DOM is ready before firing
-// ============================
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => bootstrapWellnessPlanSafe());
-} else {
-  bootstrapWellnessPlanSafe();
-}
+  } catch (err) {
+    console.error("❌ Error loading plan:", err);
+  }
+});
+
 
 
