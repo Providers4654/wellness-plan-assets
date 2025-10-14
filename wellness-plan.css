@@ -490,32 +490,19 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (robust for single- and multi-line)
+   INFO ICON + BLURB DROPDOWN (natural inline flow)
 ============================ */
 
-/* Medication name + icon */
+/* Keep med name + icon aligned inline */
 .med-name {
-  display: inline-grid;
-  grid-template-columns: 1fr auto; /* text | icon */
-  align-items: start;              /* top-align the icon */
-  column-gap: 6px;
+  display: inline;          /* let the text and icon flow naturally */
+  white-space: normal;      /* allows wrapping for long names */
   line-height: 1.4;
-  vertical-align: middle;
-  max-width: 100%;
 }
 
-/* Ensure the text stays in the first column even if it's <strong> or plain text */
-.med-name > :not(.info-icon) {
-  grid-column: 1;
-}
-
-/* Icon lives in the second column, never wraps */
+/* Icon styling (sits at end of name naturally) */
 .wellness-plan .info-icon,
 .tip-name .info-icon {
-  grid-column: 2;
-  align-self: start;
-  justify-self: end;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -523,37 +510,37 @@ html, body {
   height: 15px;
   font-size: 10px;
   font-weight: 700;
-  color: #007bff;
-  border: 1.5px solid #007bff;
+  color: #007bff;              /* link blue */
+  border: 1.5px solid #007bff; /* outline only */
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 4px;  /* small breathing room on single-line names */
+  margin-left: 4px;            /* small space after the name */
   background: transparent;
-  transform: none;   /* no offset */
-  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-  flex-shrink: 0;
+  transform: translateY(-1px); /* subtle vertical align fix */
+  transition: all 0.2s ease;
 }
 
-/* Hover */
+/* Hover interaction */
 .wellness-plan .info-icon:hover,
 .tip-name .info-icon:hover {
   color: #0056b3;
   border-color: #0056b3;
-  transform: scale(1.15);
+  transform: scale(1.15) translateY(-1px);
 }
 
-/* Mobile size tweak (optional) */
+/* Optional: smaller tweak for mobile */
 @media (max-width: 600px) {
-  .wellness-plan .info-icon,
-  .tip-name .info-icon {
+  .med-name {
+    line-height: 1.45;
+  }
+  .wellness-plan .info-icon {
     width: 14px;
     height: 14px;
     font-size: 9px;
+    transform: translateY(-0.5px);
   }
 }
-
-
 
 
 
