@@ -514,16 +514,16 @@ html, body {
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 7px;
+  margin-left: 7px; /* default gap for med names */
   background: transparent;
   transform: translateY(-0.95em);
   transition: all 0.2s ease;
 }
 
 /* --- Lifestyle tips only: bring icon closer --- */
-.wellness-plan .lifestyle-tips-list .tip-name .info-icon {
-  margin-left: 3px;            /* 👈 closer to text */
-  transform: translateY(-0.85em); /* same height, tighter spacing */
+.wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
+  margin-left: 3px;              /* 👈 tighter gap */
+  transform: translateY(-0.85em); /* same height, slight visual balance */
 }
 
 /* Hover interaction */
@@ -543,7 +543,14 @@ html, body {
     font-size: 8.5px;
     transform: translateY(-0.55em);
   }
+
+  /* Lifestyle tips mobile tweak */
+  .wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
+    margin-left: 2px;
+    transform: translateY(-0.5em);
+  }
 }
+
 
 
 
