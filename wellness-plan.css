@@ -501,8 +501,7 @@ html, body {
 }
 
 /* Higher superscript-style info icon (default for meds, etc.) */
-.wellness-plan .info-icon,
-.tip-name .info-icon {
+.wellness-plan .info-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -522,11 +521,10 @@ html, body {
 }
 
 /* --- Lifestyle tips only: bring icon closer --- */
-.tip-name .info-icon {
+.wellness-plan .lifestyle-tips-list .tip-name .info-icon {
   margin-left: 3px;            /* 👈 closer to text */
-  transform: translateY(-0.95em); 
+  transform: translateY(-0.95em); /* same height, tighter spacing */
 }
-
 
 /* Hover interaction */
 .wellness-plan .info-icon:hover,
@@ -546,7 +544,6 @@ html, body {
     transform: translateY(-0.55em);
   }
 }
-
 
 
 
