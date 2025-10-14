@@ -12,15 +12,6 @@ function cssVar(name) {
   return root.getPropertyValue(name).trim();
 }
 
-// --- ONE master API endpoint (used globally) ---
-const API_URL =
-  "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
-
-// --- Provider-specific references (reuses API_URL) ---
-const PROVIDERS = {
-  pj: { wellness: API_URL },
-  pb: { wellness: API_URL },
-};
 
 // --- Library CSVs (public) ---
 const TABS = {
@@ -64,11 +55,10 @@ function normalizeHeader(h) {
 }
 
 // ========================================
-// SECURE FETCH (for /pj/274 or /pb/274 structure)
+// DIRECT CSV FETCH (no web app, no CORS)
 // ========================================
 async function fetchPatientRows() {
-  // ✅ Uses global API_URL above
-
+  // Extract provider + patient ID from URL path
   const parts = window.location.pathname.split("/").filter(Boolean);
   const provider = parts[0];
   const patientId = parts[parts.length - 1];
@@ -77,19 +67,41 @@ async function fetchPatientRows() {
     throw new Error("❌ Missing provider or patient ID in URL path");
   }
 
-  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&key=YOUR_SECRET_KEY_HERE`;
-  console.log("🔍 Fetching patient data:", urlWithParams);
+  // ✅ Choose the correct public CSV URL
+  const csvUrl =
+    provider === "pj"
+      ? "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=0&single=true&output=csv"
+      : provider === "pb"
+      ? "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=747226804&single=true&output=csv"
+      : null;
 
-  const response = await fetch(urlWithParams, { cache: "no-store" });
-  if (!response.ok)
-    throw new Error(`❌ Failed to load patient data (${response.status})`);
+  if (!csvUrl) throw new Error(`❌ Unknown provider: ${provider}`);
 
-  const data = await response.json();
-  console.log(
-    `✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`
-  );
-  return data;
+  console.log(`🔍 Fetching CSV for ${provider.toUpperCase()} from:`, csvUrl);
+
+  // Fetch the raw CSV text
+  const response = await fetch(csvUrl, { cache: "no-store" });
+  if (!response.ok) throw new Error(`❌ Failed to fetch CSV (${response.status})`);
+
+  const text = await response.text();
+  const lines = text.trim().split(/\r?\n/);
+  if (lines.length === 0) return [];
+
+  const headers = lines[0].split(",").map(h => h.replace(/^\uFEFF/, "").trim());
+  const rows = lines.slice(1).map(line => {
+    const cells = line.split(",");
+    const row = {};
+    headers.forEach((h, i) => (row[h] = cells[i] ?? ""));
+    return row;
+  });
+
+  // ✅ Filter to only the patient’s rows
+  const filtered = rows.filter(r => String(r["Patient ID"] || "").trim() === patientId);
+
+  console.log(`✅ Found ${filtered.length} rows for patient ${patientId}`);
+  return filtered;
 }
+
 
 
 // ========================================
@@ -652,8 +664,9 @@ async function loadPatientData() {
   const start = performance.now();
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
-    const provider = PROVIDERS[providerCode];
-    if (!provider) return console.error("❌ Unknown provider:", providerCode);
+if (!["pj", "pb"].includes(providerCode)) {
+  return console.error("❌ Unknown provider:", providerCode);
+}
 
     console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
 
