@@ -87,20 +87,38 @@ async function fetchPatientRows() {
   const lines = text.trim().split(/\r?\n/);
   if (lines.length === 0) return [];
 
+  // Parse headers safely
   const headers = lines[0].split(",").map(h => h.replace(/^\uFEFF/, "").trim());
-  const rows = lines.slice(1).map(line => {
+  console.log("📄 CSV headers:", headers);
+
+  // Parse rows
+  const rows = lines.slice(1).map((line, idx) => {
     const cells = line.split(",");
     const row = {};
-    headers.forEach((h, i) => (row[h] = cells[i] ?? ""));
+    headers.forEach((h, i) => (row[h] = (cells[i] ?? "").trim()));
     return row;
   });
 
-  // ✅ Filter to only the patient’s rows
-  const filtered = rows.filter(r => String(r["Patient ID"] || "").trim() === patientId);
+  console.log(`📊 Parsed ${rows.length} rows total.`);
+  console.log("🔎 Example first row:", rows[0]);
 
-  console.log(`✅ Found ${filtered.length} rows for patient ${patientId}`);
+  // ✅ Filter to only the patient’s rows (normalize numbers like 689.0)
+  const filtered = rows.filter(r => {
+    const rawId = String(r["Patient ID"] || "").trim();
+    const cleanId = rawId.replace(/\.0$/, "");
+    if (cleanId === patientId) {
+      console.log(`✅ Match found! Row ID=${cleanId} matches patientId=${patientId}`);
+      return true;
+    } else {
+      if (rawId) console.log(`⚪ Skipped row: "${rawId}" (normalized="${cleanId}")`);
+      return false;
+    }
+  });
+
+  console.log(`🎯 Found ${filtered.length} matching rows for patient ${patientId}`);
   return filtered;
 }
+
 
 
 
