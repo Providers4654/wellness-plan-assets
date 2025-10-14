@@ -490,44 +490,52 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (fixed for mobile + wrapping)
+   INFO ICON + BLURB DROPDOWN (robust for single- and multi-line)
 ============================ */
 
-/* Keep med name + icon aligned (icon stays top-right even with long names) */
+/* Medication name + icon */
 .med-name {
-  position: relative;
-  display: inline-block;
-  max-width: 100%;
+  display: inline-grid;
+  grid-template-columns: 1fr auto; /* text | icon */
+  align-items: start;              /* top-align the icon */
+  column-gap: 6px;
   line-height: 1.4;
-  padding-right: 22px; /* space for the icon */
   vertical-align: middle;
+  max-width: 100%;
 }
 
-/* Unified icon styling (absolutely positioned top-right) */
+/* Ensure the text stays in the first column even if it's <strong> or plain text */
+.med-name > :not(.info-icon) {
+  grid-column: 1;
+}
+
+/* Icon lives in the second column, never wraps */
 .wellness-plan .info-icon,
 .tip-name .info-icon {
-  position: absolute;
-  top: 0.15em;
-  right: 0;
-  display: flex;
+  grid-column: 2;
+  align-self: start;
+  justify-self: end;
+
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 15px;
   height: 15px;
   font-size: 10px;
   font-weight: 700;
-  color: #007bff;              /* link blue */
-  border: 1.5px solid #007bff; /* outline only */
+  color: #007bff;
+  border: 1.5px solid #007bff;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
+  margin-left: 4px;  /* small breathing room on single-line names */
   background: transparent;
-  transform: none;             /* remove previous offset */
-  transition: all 0.2s ease;
+  transform: none;   /* no offset */
+  transition: transform 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   flex-shrink: 0;
 }
 
-/* Hover interaction */
+/* Hover */
 .wellness-plan .info-icon:hover,
 .tip-name .info-icon:hover {
   color: #0056b3;
@@ -535,18 +543,16 @@ html, body {
   transform: scale(1.15);
 }
 
-/* Optional: smaller tweak for mobile */
+/* Mobile size tweak (optional) */
 @media (max-width: 600px) {
-  .med-name {
-    padding-right: 20px;
-  }
-  .med-name .info-icon {
+  .wellness-plan .info-icon,
+  .tip-name .info-icon {
     width: 14px;
     height: 14px;
     font-size: 9px;
-    top: 0.2em;
   }
 }
+
 
 
 
