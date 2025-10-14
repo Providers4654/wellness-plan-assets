@@ -68,7 +68,6 @@ function normalizeHeader(h) {
 // SECURE FETCH (for /pj/274 or /pb/274 structure)
 // ========================================
 async function fetchPatientRows() {
-  const AUTH_TOKEN = "mtnhlth_secure_2025";
   const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
 
   // Extract provider + patient ID from URL
@@ -80,7 +79,8 @@ async function fetchPatientRows() {
     throw new Error("❌ Missing provider or patient ID in URL path");
   }
 
-  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&token=${AUTH_TOKEN}`;
+  // Build secure request (no token needed)
+  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
   const response = await fetch(urlWithParams, { cache: "no-store" });
@@ -90,6 +90,7 @@ async function fetchPatientRows() {
   console.log(`✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`);
   return data;
 }
+
 
 
 // ========================================
