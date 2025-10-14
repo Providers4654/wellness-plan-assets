@@ -1,3 +1,7 @@
+/********************************************************************
+ * FRONT-END JS (FULL ORIGINAL — CSV-BASED, CLEANED, FIXED)
+ ********************************************************************/
+
 // ============================
 // WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED, FIXED)
 // ============================
@@ -16,8 +20,6 @@ const PROVIDERS = {
   pj: { wellness: API_URL },
   pb: { wellness: API_URL }
 };
-
-
 
 const TABS = {
   meds:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
@@ -55,14 +57,9 @@ function parseCsvLine(line) {
   return cells;
 }
 
-
 function normalizeHeader(h) {
   return (h || "").replace(/^\uFEFF/, "").trim();
 }
-
-
-
-
 
 // ========================================
 // SECURE FETCH (for /pj/274 or /pb/274 structure)
@@ -72,8 +69,8 @@ async function fetchPatientRows() {
 
   // Extract provider + patient ID from URL
   const parts = window.location.pathname.split("/").filter(Boolean);
-  const provider = parts[0];                   
-  const patientId = parts[parts.length - 1];   
+  const provider = parts[0];
+  const patientId = parts[parts.length - 1];
 
   if (!provider || !patientId) {
     throw new Error("❌ Missing provider or patient ID in URL path");
@@ -90,8 +87,6 @@ async function fetchPatientRows() {
   console.log(`✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`);
   return data;
 }
-
-
 
 // ========================================
 // FETCH PUBLIC LIBRARY CSVs
@@ -110,13 +105,6 @@ async function fetchLibraryCsv(url) {
   });
 }
 
-
-
-
-
-
-
-
 // ============================
 // Apply CSS TEXT Vars
 // ============================
@@ -126,8 +114,6 @@ function setTextIfAvailable(selector, cssVarName, fallback) {
     el.innerHTML = normalizeCellText(cssVar(cssVarName) || fallback);
   }
 }
-
-
 
 function injectResourceLinksAndTitles() {
   console.log("🔗 Injecting resource links & titles");
@@ -149,9 +135,8 @@ function injectResourceLinksAndTitles() {
     const note = noteVar ? cssVar(noteVar) : "";
 
     if (link && href) link.href = href;
-if (textEl && text) textEl.innerHTML = normalizeCellText(text);
-if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
-
+    if (textEl && text) textEl.innerHTML = normalizeCellText(text);
+    if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
   });
 
   // Titles & intro
@@ -159,7 +144,6 @@ if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
   setTextIfAvailable(".title-summary", "--title-summary", "Summary");
   setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Optimization Protocol");
   setTextIfAvailable(".lifestyle-subtext", "--lifestyle-subtext", "");
-
   setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
 
   const intro = document.querySelector(".intro-text");
@@ -173,7 +157,6 @@ if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
     }
   });
 }
-
 
 // ============================
 // Remove target="_blank"
@@ -212,8 +195,6 @@ document.addEventListener("click", e => {
   }
 });
 
-
-
 // ============================
 // Helpers
 // ============================
@@ -226,7 +207,6 @@ function normalizeCellText(text) {
     .replace(/&lt;br&gt;/g, "<br>");
 }
 
-
 // Normalize header names (strip hidden chars, unify variations)
 function getIdField(row) {
   return (
@@ -237,8 +217,6 @@ function getIdField(row) {
   );
 }
 
-
-
 // --- Flexible field getter ---
 function getField(row, keys) {
   for (const key of keys) {
@@ -248,22 +226,6 @@ function getField(row, keys) {
   }
   return "";
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // --- Inject Patient Data ---
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
@@ -290,28 +252,25 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
     const med = getField(r, ["Meds/Supp", "Medication", "Med"]);
     if (!med) return;
 
-// --- Dose with Note styling ---
-let dose = getField(r, ["Dose", "Dosing"]) || "";
-let doseHtml = dose;
+    // --- Dose with Note styling ---
+    let dose = getField(r, ["Dose", "Dosing"]) || "";
+    let doseHtml = dose;
 
-if (dose.includes("Note:")) {
-  const [mainDose, ...noteParts] = dose.split(/Note:/);
-  const main = mainDose.trim();
-  const note = noteParts.join("Note:").trim();
+    if (dose.includes("Note:")) {
+      const [mainDose, ...noteParts] = dose.split(/Note:/);
+      const main = mainDose.trim();
+      const note = noteParts.join("Note:").trim();
 
-  doseHtml = `
-    ${main ? main + "<br>" : ""}
-    <span class="dose-note">Note: ${note}</span>
-  `;
-}
-
+      doseHtml = `
+        ${main ? main + "<br>" : ""}
+        <span class="dose-note">Note: ${note}</span>
+      `;
+    }
 
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
 
     let blurb = "";
-const medInfo = medsData.find(m => (m["Medication"] || "").trim() === med.trim());
-
-
+    const medInfo = medsData.find(m => (m["Medication"] || "").trim() === med.trim());
     if (medInfo) blurb = medInfo["Blurb"] || "";
 
     // --- Build med name ---
@@ -356,190 +315,183 @@ const medInfo = medsData.find(m => (m["Medication"] || "").trim() === med.trim()
   });
 
   // --- Hybrid Parser Helper ---
-function parseHybridValues(rows, fieldNames, knownOptions = []) {
-  const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
-  const values = [];
+  function parseHybridValues(rows, fieldNames, knownOptions = []) {
+    const rawValues = rows.map(r => getField(r, fieldNames)).filter(Boolean);
+    const values = [];
 
-  rawValues.forEach((val, idx) => {
-    if (!val) return;
+    rawValues.forEach((val, idx) => {
+      if (!val) return;
 
-    console.group(`🔎 parseHybridValues: Row ${idx + 2}`);
-    console.log("Raw value:", JSON.stringify(val));
+      console.group(`🔎 parseHybridValues: Row ${idx + 2}`);
+      console.log("Raw value:", JSON.stringify(val));
 
-    // If custom HTML, keep whole
-    if (val.includes("<") || val.includes(">")) {
-      console.log("📌 Detected HTML → keeping as-is");
-      values.push(val.trim());
-      console.groupEnd();
-      return;
-    }
-
-    const cleanVal = val.trim();
-
-    // Try splitting by comma
-    const parts = cleanVal.split(",").map(v => v.trim()).filter(Boolean);
-    const allKnown = parts.length > 1 && parts.every(p => knownOptions.includes(p));
-
-    if (allKnown) {
-      console.log("✅ All parts are KNOWN dropdown items:", parts);
-      values.push(...parts);
-    } else {
-      console.log("↩️ Treating as free-text → splitting only on returns");
-      cleanVal.split(/\r\n|\r|\n/).forEach(v => {
-        const t = v.trim();
-        if (t) {
-          console.log("  ➡️ Added:", t);
-          values.push(t);
-        }
-      });
-    }
-    console.groupEnd();
-  });
-
-  console.log("🎯 Final parsed values:", values);
-  return values;
-}
-
-
-
-// --- To Consider (supports library headers "To Consider Medication" OR "Medication") ---
-const toConsiderList = document.getElementById("toConsider");
-const toConsiderBlock = document.getElementById("toConsiderBlock");
-
-if (toConsiderList && toConsiderBlock) {
-  // Flexible getter for the library row's name field
-  const getTCName = r => (r["To Consider Medication"] || r["Medication"] || "").trim();
-
-  // Known options from the library (for chip/free-text parsing)
-  const toConsiderKnown = toConsiderData.map(getTCName).filter(Boolean);
-
-  // Read selections from the patient's rows (chips or free text)
-  const meds = parseHybridValues(rows, ["To Consider", "Consider"], toConsiderKnown);
-
-  if (meds.length > 0) {
-    // Case-insensitive find against the library
-    const findInfo = (name) => {
-      const target = String(name).trim().toLowerCase();
-      return toConsiderData.find(r => getTCName(r).toLowerCase() === target) || null;
-    };
-
-    const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Micronutrients", "Other"];
-    const grouped = {};
-
-    meds.forEach(med => {
-      const info = findInfo(med);
-
-      if (info) {
-        const category = (info["Category"] || "").trim() || "Other";
-        (grouped[category] ||= []).push({
-          name: getTCName(info),
-          blurb: info["Blurb"] || ""
-        });
-      } else {
-        // Free text → split "Name: blurb" or "Name - blurb" if present
-        let name = String(med).trim();
-        let blurb = "";
-        const m = name.match(/^([^:-]+)[:\-](.+)$/);
-        if (m) { name = m[1].trim(); blurb = m[2].trim(); }
-        (grouped["Other"] ||= []).push({ name, blurb });
+      // If custom HTML, keep whole
+      if (val.includes("<") || val.includes(">")) {
+        console.log("📌 Detected HTML → keeping as-is");
+        values.push(val.trim());
+        console.groupEnd();
+        return;
       }
+
+      const cleanVal = val.trim();
+
+      // Try splitting by comma
+      const parts = cleanVal.split(",").map(v => v.trim()).filter(Boolean);
+      const allKnown = parts.length > 1 && parts.every(p => knownOptions.includes(p));
+
+      if (allKnown) {
+        console.log("✅ All parts are KNOWN dropdown items:", parts);
+        values.push(...parts);
+      } else {
+        console.log("↩️ Treating as free-text → splitting only on returns");
+        cleanVal.split(/\r\n|\r|\n/).forEach(v => {
+          const t = v.trim();
+          if (t) {
+            console.log("  ➡️ Added:", t);
+            values.push(t);
+          }
+        });
+      }
+      console.groupEnd();
     });
 
-    const orderedCats = [
-      ...CATEGORY_ORDER.filter(cat => grouped[cat]),
-      ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
-    ];
-
-    toConsiderList.innerHTML = orderedCats.map(cat => {
-const items = grouped[cat].map(item => `
-  <li class="to-consider-row">
-    <div class="to-consider-name"><strong>${item.name}</strong></div>
-    <div class="to-consider-blurb">${normalizeCellText(item.blurb)}</div>
-  </li>
-`).join("");
-
-      return `<li class="to-consider-subtitle">${cat}</li>${items}`;
-    }).join("");
-
-    toConsiderBlock.style.display = "block";
-  } else {
-    toConsiderBlock.style.display = "none";
+    console.log("🎯 Final parsed values:", values);
+    return values;
   }
-}
 
+  // --- To Consider (supports library headers "To Consider Medication" OR "Medication") ---
+  const toConsiderList = document.getElementById("toConsider");
+  const toConsiderBlock = document.getElementById("toConsiderBlock");
 
+  if (toConsiderList && toConsiderBlock) {
+    // Flexible getter for the library row's name field
+    const getTCName = r => (r["To Consider Medication"] || r["Medication"] || "").trim();
 
+    // Known options from the library (for chip/free-text parsing)
+    const toConsiderKnown = toConsiderData.map(getTCName).filter(Boolean);
 
-// --- Lifestyle Tips ---
-const lifestyleBlock = document.getElementById("lifestyleTips");
-if (lifestyleBlock) {
-  const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
-  const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
+    // Read selections from the patient's rows (chips or free text)
+    const meds = parseHybridValues(rows, ["To Consider", "Consider"], toConsiderKnown);
 
-  console.log("Lifestyle tips (all rows):", tips);
-  if (tips.length > 0) {
-    let html = "";
-    tips.forEach(tipName => {
-      const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
+    if (meds.length > 0) {
+      // Case-insensitive find against the library
+      const findInfo = (name) => {
+        const target = String(name).trim().toLowerCase();
+        return toConsiderData.find(r => getTCName(r).toLowerCase() === target) || null;
+      };
 
-      if (tipInfo) {
-        // ✅ Known tip from library
-        html += `
-          <li class="lifestyle-row">
-            <div class="tip-name">
-              <strong>${tipInfo["Tip"]}</strong>
-              ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
-            </div>
-            ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
-          </li>`;
-      } else {
-        // ✅ Custom free-text tip (split on colon)
-        let raw = String(tipName).trim();
-        let title = raw;
-        let blurb = "";
+      const CATEGORY_ORDER = ["Hormones", "Peptides", "Medications", "Micronutrients", "Other"];
+      const grouped = {};
 
-        const colonIndex = raw.indexOf(":");
-        if (colonIndex !== -1) {
-          title = raw.slice(0, colonIndex).trim();
-          blurb = raw.slice(colonIndex + 1).trim();
+      meds.forEach(med => {
+        const info = findInfo(med);
+
+        if (info) {
+          const category = (info["Category"] || "").trim() || "Other";
+          (grouped[category] ||= []).push({
+            name: getTCName(info),
+            blurb: info["Blurb"] || ""
+          });
+        } else {
+          // Free text → split "Name: blurb" or "Name - blurb" if present
+          let name = String(med).trim();
+          let blurb = "";
+          const m = name.match(/^([^:-]+)[:\-](.+)$/);
+          if (m) { name = m[1].trim(); blurb = m[2].trim(); }
+          (grouped["Other"] ||= []).push({ name, blurb });
         }
+      });
 
-        html += `
-          <li class="lifestyle-row">
-            <div class="tip-name">
-              <strong>${normalizeCellText(title)}</strong>
-              ${blurb ? `<span class="info-icon">i</span>` : ""}
-            </div>
-            ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
-          </li>`;
-      }
-    }); // ✅ end forEach
+      const orderedCats = [
+        ...CATEGORY_ORDER.filter(cat => grouped[cat]),
+        ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
+      ];
 
-    lifestyleBlock.innerHTML = html;
+      toConsiderList.innerHTML = orderedCats.map(cat => {
+        const items = grouped[cat].map(item => `
+          <li class="to-consider-row">
+            <div class="to-consider-name"><strong>${item.name}</strong></div>
+            <div class="to-consider-blurb">${normalizeCellText(item.blurb)}</div>
+          </li>
+        `).join("");
+
+        return `<li class="to-consider-subtitle">${cat}</li>${items}`;
+      }).join("");
+
+      toConsiderBlock.style.display = "block";
+    } else {
+      toConsiderBlock.style.display = "none";
+    }
   }
-} // ✅ end if(lifestyleBlock)
 
-// --- Visit Timeline (row 1 only) ---
-const visitTimelineList = document.getElementById("visitTimeline");
-const visitTimelineTitle = document.getElementById("visitTimelineTitle");
-if (visitTimelineList && visitTimelineTitle) {
-  visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+  // --- Lifestyle Tips ---
+  const lifestyleBlock = document.getElementById("lifestyleTips");
+  if (lifestyleBlock) {
+    const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
+    const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
 
-  const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
-  const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
+    console.log("Lifestyle tips (all rows):", tips);
+    if (tips.length > 0) {
+      let html = "";
+      tips.forEach(tipName => {
+        const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
-  if (prev || next) {
-    let html = "";
-    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
-    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
-    visitTimelineList.innerHTML = html;
-  } else {
-    visitTimelineTitle.remove();
-    visitTimelineList.remove();
+        if (tipInfo) {
+          // ✅ Known tip from library
+          html += `
+            <li class="lifestyle-row">
+              <div class="tip-name">
+                <strong>${tipInfo["Tip"]}</strong>
+                ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
+              </div>
+              ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
+            </li>`;
+        } else {
+          // ✅ Custom free-text tip (split on colon)
+          let raw = String(tipName).trim();
+          let title = raw;
+          let blurb = "";
+
+          const colonIndex = raw.indexOf(":");
+          if (colonIndex !== -1) {
+            title = raw.slice(0, colonIndex).trim();
+            blurb = raw.slice(colonIndex + 1).trim();
+          }
+
+          html += `
+            <li class="lifestyle-row">
+              <div class="tip-name">
+                <strong>${normalizeCellText(title)}</strong>
+                ${blurb ? `<span class="info-icon">i</span>` : ""}
+              </div>
+              ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
+            </li>`;
+        }
+      }); // ✅ end forEach
+
+      lifestyleBlock.innerHTML = html;
+    }
+  } // ✅ end if(lifestyleBlock)
+
+  // --- Visit Timeline (row 1 only) ---
+  const visitTimelineList = document.getElementById("visitTimeline");
+  const visitTimelineTitle = document.getElementById("visitTimelineTitle");
+  if (visitTimelineList && visitTimelineTitle) {
+    visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+
+    const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
+    const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
+
+    if (prev || next) {
+      let html = "";
+      if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
+      if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+      visitTimelineList.innerHTML = html;
+    } else {
+      visitTimelineTitle.remove();
+      visitTimelineList.remove();
+    }
   }
-}
-
-
 
   // --- Body Comp ---
   const bodyCompList = document.getElementById("bodyComp");
@@ -548,14 +500,13 @@ if (visitTimelineList && visitTimelineTitle) {
     bodyCompTitle.textContent = cssVar("--bodycomp-title") || "Body Composition";
 
     const bodyCompKnown = bodyCompData.map(r => (r["State"] || "").trim());
-const keys = parseHybridValues(rows, ["Body Comp","Body Composition"], bodyCompKnown);
+    const keys = parseHybridValues(rows, ["Body Comp","Body Composition"], bodyCompKnown);
 
     if (keys.length > 0) {
       let html = "";
       keys.forEach(key => {
-const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key.trim());
+        const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key.trim());
 
-        
         if (compRow && compRow["Blurb"]) {
           html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
         } else {
@@ -576,7 +527,7 @@ const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key.trim())
     targetTitle.textContent = cssVar("--target-title") || "Target Goals";
 
     const goalKnown = []; // no fixed library? leave empty
-const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
+    const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
 
     if (allGoals.length > 0) {
       let html = "";
@@ -590,72 +541,40 @@ const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
     }
   }
 
+  // --- Other (free text with parsing for colon/dash) ---
+  const otherList = document.getElementById("otherItems");
+  const otherTitle = document.getElementById("otherTitle");
 
+  if (otherList && otherTitle) {
+    otherTitle.textContent = cssVar("--other-title") || "Other";
 
+    const rawOthers = parseHybridValues(rows, ["Other"], []);
+    if (rawOthers.length > 0) {
+      let html = "";
+      rawOthers.forEach(item => {
+        let name = item.trim();
+        let blurb = "";
 
-// --- Other (free text with parsing for colon/dash) ---
-const otherList = document.getElementById("otherItems");
-const otherTitle = document.getElementById("otherTitle");
+        // Split on first colon OR dash
+        if (name.includes(":") || name.includes("-")) {
+          const parts = name.split(/[:\-]/);
+          name = parts.shift().trim();
+          blurb = parts.join(":").trim();
+        }
 
-if (otherList && otherTitle) {
-  otherTitle.textContent = cssVar("--other-title") || "Other";
+        html += `<li class="other-row"><span class="editable"><strong>${name}</strong>${blurb ? ": " + normalizeCellText(blurb) : ""}</span></li>`;
+      });
 
-  const rawOthers = parseHybridValues(rows, ["Other"], []);
-  if (rawOthers.length > 0) {
-    let html = "";
-    rawOthers.forEach(item => {
-      let name = item.trim();
-      let blurb = "";
-
-      // Split on first colon OR dash
-      if (name.includes(":") || name.includes("-")) {
-        const parts = name.split(/[:\-]/);
-        name = parts.shift().trim();
-        blurb = parts.join(":").trim();
-      }
-
-      html += `<li class="other-row"><span class="editable"><strong>${name}</strong>${blurb ? ": " + normalizeCellText(blurb) : ""}</span></li>`;
-    });
-
-    otherList.innerHTML = html;
-    otherTitle.style.display = "block";
-  } else {
-    otherTitle.remove();
-    otherList.remove();
+      otherList.innerHTML = html;
+      otherTitle.style.display = "block";
+    } else {
+      otherTitle.remove();
+      otherList.remove();
+    }
   }
-}
 
-
-
-
-  
   console.groupEnd();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // ============================
 // Find contiguous block of rows for a patient ID (with detailed logging)
@@ -712,10 +631,6 @@ function getPatientBlock(rows, patientId) {
   return result;
 }
 
-
-
-
-
 // ============================
 // Load Patient Data
 // ============================
@@ -762,12 +677,9 @@ async function loadPatientData() {
   }
 }
 
-
-
 // ============================
 // Bootstrap with retry
 // ============================
-
 function bootstrapWellnessPlanSafe(attempt = 1) {
   try {
     console.log(`🚀 bootstrapWellnessPlanSafe attempt ${attempt}`);
@@ -803,4 +715,3 @@ if (document.readyState === "loading") {
 } else {
   bootstrapWellnessPlanSafe();
 }
-
