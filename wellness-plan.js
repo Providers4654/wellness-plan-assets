@@ -14,7 +14,7 @@ function cssVar(name) {
 }
 
 // --- Provider-specific secure endpoints ---
-const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
 
 const PROVIDERS = {
   pj: { wellness: API_URL },
@@ -65,7 +65,7 @@ function normalizeHeader(h) {
 // SECURE FETCH (for /pj/274 or /pb/274 structure)
 // ========================================
 async function fetchPatientRows() {
-  const API_URL = "https://script.google.com/macros/s/AKfycbzDeexCvQ9q39mkCotsMpz9t4YvFosKKufUd0n8hFAZGRdt4QKEEXthiE9cBuoKML1Y/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
 
   // Extract provider + patient ID from URL
   const parts = window.location.pathname.split("/").filter(Boolean);
