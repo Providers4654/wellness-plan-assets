@@ -80,7 +80,7 @@ async function fetchPatientRows() {
   const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
-  const response = await fetch(urlWithParams, { cache: "no-store" });
+  const response = await fetch(urlWithParams, { cache: "force-cache" });
   if (!response.ok) throw new Error(`❌ Failed to load patient data (${response.status})`);
 
   const data = await response.json();
@@ -92,7 +92,7 @@ async function fetchPatientRows() {
 // FETCH PUBLIC LIBRARY CSVs
 // ========================================
 async function fetchLibraryCsv(url) {
-  const text = await (await fetch(url, { cache: "no-store" })).text();
+  const text = await (await fetch(url, { cache: "force-cache" })).text();
   const lines = text.trim().split(/\r?\n/);
   if (lines.length === 0) return [];
 
@@ -711,7 +711,40 @@ function bootstrapWellnessPlanSafe(attempt = 1) {
 
 // Ensure DOM is ready before firing
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => bootstrapWellnessPlanSafe());
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("🚀 DOM ready — loading patient plan first...");
+
+    // Step 1: Load patient data first
+    fetchPatientRows()
+      .then(patientData => {
+        if (patientData && patientData.length > 0) {
+          // Render the patient’s personal plan immediately
+          const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
+          console.log(`✅ Rendered patient plan for ${providerCode.toUpperCase()} ID=${patientId}`);
+          injectPatientData(patientData, [], [], [], []);
+        }
+
+        // Step 2: After a short delay, load the shared libraries
+        setTimeout(async () => {
+          console.log("📚 Fetching libraries...");
+          const [meds, lifestyle, bodyComp, toConsider] = await Promise.all([
+            fetchLibraryCsv(TABS.meds),
+            fetchLibraryCsv(TABS.lifestyle),
+            fetchLibraryCsv(TABS.bodycomp),
+            fetchLibraryCsv(TABS.toconsider)
+          ]);
+
+          injectPatientData(patientData, lifestyle, meds, bodyComp, toConsider);
+          injectResourceLinksAndTitles();
+          console.log("🏁 All data loaded.");
+        }, 200); // delay by 200ms so UI paints faster
+      })
+      .catch(err => {
+        console.error("❌ Failed to load patient data:", err);
+      });
+  });
 } else {
-  bootstrapWellnessPlanSafe();
+  // If DOM already ready
+  document.dispatchEvent(new Event("DOMContentLoaded"));
 }
+
