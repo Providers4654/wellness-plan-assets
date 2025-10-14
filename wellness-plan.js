@@ -572,12 +572,13 @@ if (otherList && otherTitle) {
       let name = item.trim();
       let blurb = "";
 
-      // Split on first colon OR dash
-      if (name.includes(":") || name.includes("-")) {
-        const parts = name.split(/[:\-]/);
-        name = parts.shift().trim();
-        blurb = parts.join(":").trim();
-      }
+  // Split on first colon only (ignore dashes)
+if (name.includes(":")) {
+  const parts = name.split(":");
+  name = parts.shift().trim();
+  blurb = parts.join(":").trim();
+}
+
 
       html += `<li class="other-row"><span class="editable"><strong>${name}</strong>${blurb ? ": " + normalizeCellText(blurb) : ""}</span></li>`;
     });
