@@ -641,41 +641,47 @@ function getProviderAndPatientIdFromUrl() {
   return { providerCode, patientId };
 }
 
+// ============================
+// Load Patient + Library Data (Single Combined Endpoint)
+// ============================
 async function loadPatientData() {
   const start = performance.now();
   try {
     const { providerCode, patientId } = getProviderAndPatientIdFromUrl();
-    const provider = PROVIDERS[providerCode];
-    if (!provider) return console.error("❌ Unknown provider:", providerCode);
-
-    console.log(`📋 Loading data for provider=${providerCode}, patientId=${patientId}`);
-
-    const [
-      patientRows,
-      medsData,
-      lifestyleData,
-      bodyCompData,
-      toConsiderData
-    ] = await Promise.all([
-      fetchPatientRows(), // ✅ Secure JSON for current patient
-      fetchLibraryCsv(TABS.meds),
-      fetchLibraryCsv(TABS.lifestyle),
-      fetchLibraryCsv(TABS.bodycomp),
-      fetchLibraryCsv(TABS.toconsider),
-    ]);
-
-    if (patientRows && patientRows.length > 0) {
-      injectPatientData(patientRows, lifestyleData, medsData, bodyCompData, toConsiderData);
-      injectResourceLinksAndTitles();
-    } else {
-      console.warn(`⚠️ No rows found for Patient ID=${patientId}`);
+    if (!providerCode || !patientId) {
+      console.error("❌ Missing provider or patient ID");
+      return;
     }
 
-    console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
+    console.log(`📋 Fetching combined data for provider=${providerCode}, patientId=${patientId}`);
+
+    const url = `${API_URL}?provider=${providerCode}&id=${patientId}`;
+    const response = await fetch(url, { cache: "force-cache" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+
+    // --- Pull data pieces out of the response ---
+    const plan = data.plan || [];
+    const libs = data.libraries || {};
+
+    if (plan && plan.length > 0) {
+      injectPatientData(
+        plan,
+        libs.lifestyle || [],
+        libs.meds || [],
+        libs.bodycomp || [],
+        libs.toconsider || []
+      );
+      injectResourceLinksAndTitles();
+      console.log(`✅ Total load time: ${(performance.now() - start).toFixed(2)} ms`);
+    } else {
+      console.warn(`⚠️ No plan data found for Patient ID=${patientId}`);
+    }
   } catch (err) {
-    console.error("❌ Error in loadPatientData:", err);
+    console.error("❌ Error loading combined patient data:", err);
   }
 }
+
 
 // ============================
 // Bootstrap with retry
