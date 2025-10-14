@@ -515,9 +515,9 @@ html, body {
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 5px;
+  margin-left: 7px;
   background: transparent;
-  transform: translateY(-0.85em); /* 👈 raised higher */
+  transform: translateY(-0.95em); /* 👈 raised higher */
   transition: all 0.2s ease;
 }
 
