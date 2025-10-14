@@ -3,29 +3,31 @@
  ********************************************************************/
 
 // ============================
-// WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED, FIXED)
+// WELLNESS PLAN DYNAMIC JS
 // ============================
 
+// --- Root + CSS helper ---
 const root = getComputedStyle(document.documentElement);
-
-// ✅ Helper for CSS vars
 function cssVar(name) {
   return root.getPropertyValue(name).trim();
 }
 
-// --- Provider-specific secure endpoints ---
-const API_URL = "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
+// --- ONE master API endpoint (used globally) ---
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
 
+// --- Provider-specific references (reuses API_URL) ---
 const PROVIDERS = {
   pj: { wellness: API_URL },
-  pb: { wellness: API_URL }
+  pb: { wellness: API_URL },
 };
 
+// --- Library CSVs (public) ---
 const TABS = {
-  meds:       "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
-  lifestyle:  "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
-  bodycomp:   "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
-  toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv"
+  meds: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1442071508&single=true&output=csv",
+  lifestyle: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1970185497&single=true&output=csv",
+  bodycomp: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1795189157&single=true&output=csv",
+  toconsider: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=1041049772&single=true&output=csv",
 };
 
 // ============================
@@ -65,9 +67,8 @@ function normalizeHeader(h) {
 // SECURE FETCH (for /pj/274 or /pb/274 structure)
 // ========================================
 async function fetchPatientRows() {
-  const API_URL = "https://script.google.com/macros/s/AKfycbxueaXSY53pn5iEEXyUR1-xxJwTl9txRIGj7_ua8o_NCJDBVVT0Ap25y2zxaewje7xV/exec";
+  // ✅ Uses global API_URL above
 
-  // Extract provider + patient ID from URL
   const parts = window.location.pathname.split("/").filter(Boolean);
   const provider = parts[0];
   const patientId = parts[parts.length - 1];
@@ -76,17 +77,20 @@ async function fetchPatientRows() {
     throw new Error("❌ Missing provider or patient ID in URL path");
   }
 
-  // Build secure request (no token needed)
-  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}`;
+  const urlWithParams = `${API_URL}?provider=${provider}&id=${patientId}&key=YOUR_SECRET_KEY_HERE`;
   console.log("🔍 Fetching patient data:", urlWithParams);
 
- const response = await fetch(urlWithParams, { cache: "no-store" });
-  if (!response.ok) throw new Error(`❌ Failed to load patient data (${response.status})`);
+  const response = await fetch(urlWithParams, { cache: "no-store" });
+  if (!response.ok)
+    throw new Error(`❌ Failed to load patient data (${response.status})`);
 
   const data = await response.json();
-  console.log(`✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`);
+  console.log(
+    `✅ Loaded ${data.length} rows for ${provider.toUpperCase()} patient ${patientId}`
+  );
   return data;
 }
+
 
 // ========================================
 // FETCH PUBLIC LIBRARY CSVs
