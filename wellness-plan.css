@@ -490,23 +490,26 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (fixed for mobile wrapping)
+   INFO ICON + BLURB DROPDOWN (fixed for mobile + wrapping)
 ============================ */
 
-/* Keep med name + icon aligned */
+/* Keep med name + icon aligned (icon stays top-right even with long names) */
 .med-name {
-  display: inline-flex;
-  align-items: flex-start;   /* aligns with top of text instead of middle */
-  flex-wrap: wrap;           /* allows long names to wrap naturally */
-  gap: 4px;
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
   line-height: 1.4;
+  padding-right: 22px; /* space for the icon */
   vertical-align: middle;
 }
 
-/* Unified icon styling */
+/* Unified icon styling (absolutely positioned top-right) */
 .wellness-plan .info-icon,
 .tip-name .info-icon {
-  display: inline-flex;
+  position: absolute;
+  top: 0.15em;
+  right: 0;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 15px;
@@ -518,13 +521,10 @@ html, body {
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 4px;
   background: transparent;
-  transform: none;             /* ✅ removed the misaligning translate */
+  transform: none;             /* remove previous offset */
   transition: all 0.2s ease;
-  flex-shrink: 0;              /* keeps icon from squishing on wrap */
-  position: relative;
-  top: 1px;                    /* tiny optical nudge for alignment */
+  flex-shrink: 0;
 }
 
 /* Hover interaction */
@@ -532,18 +532,22 @@ html, body {
 .tip-name .info-icon:hover {
   color: #0056b3;
   border-color: #0056b3;
-  transform: scale(1.15);      /* ✅ no translate on hover */
+  transform: scale(1.15);
 }
 
 /* Optional: smaller tweak for mobile */
 @media (max-width: 600px) {
+  .med-name {
+    padding-right: 20px;
+  }
   .med-name .info-icon {
     width: 14px;
     height: 14px;
     font-size: 9px;
-    top: 0;
+    top: 0.2em;
   }
 }
+
 
 
 
