@@ -523,7 +523,7 @@ html, body {
 /* --- Lifestyle tips only: bring icon closer --- */
 .wellness-plan .lifestyle-tips-list .tip-name .info-icon {
   margin-left: 3px;            /* 👈 closer to text */
-  transform: translateY(-0.95em); /* same height, tighter spacing */
+  transform: translateY(-0.85em); /* same height, tighter spacing */
 }
 
 /* Hover interaction */
