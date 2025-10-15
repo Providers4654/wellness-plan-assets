@@ -504,8 +504,8 @@ html, body {
 /* Superscript info icon — smaller, closer, and lower */
 .wellness-plan .info-icon {
   position: absolute;
-  top: -0.45em;                  /* 👈 slightly lower */
-  right: -0.7em;                 /* 👈 tighter spacing */
+  top: -0.3em;                  /* 👈 slightly lower */
+  right: -0.5em;                 /* 👈 tighter spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
