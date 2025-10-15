@@ -163,19 +163,27 @@ document.addEventListener("click", e => {
     return;
   }
 
-  // --- Lifestyle ---
-  const tipNameEl = e.target.closest(".tip-name");
-  if (tipNameEl) {
-    const row = tipNameEl.closest(".lifestyle-row");
-    const content = row?.querySelector(".lifestyle-learn-more");
-    if (content) {
-      document.querySelectorAll(".lifestyle-learn-more.expanded").forEach(openContent => {
-        if (openContent !== content) openContent.classList.remove("expanded");
-      });
-      content.classList.toggle("expanded");
-    }
+// --- Lifestyle ---
+const tipNameEl = e.target.closest(".tip-name");
+if (tipNameEl) {
+  const row = tipNameEl.closest(".lifestyle-row");
+  const content = row?.querySelector(".lifestyle-learn-more");
+  if (content) {
+    // Close any other open rows
+    document.querySelectorAll(".lifestyle-learn-more.expanded").forEach(open => {
+      if (open !== content) open.classList.remove("expanded");
+    });
+    document.querySelectorAll(".tip-name.expanded").forEach(openHdr => {
+      if (openHdr !== tipNameEl) openHdr.classList.remove("expanded");
+    });
+
+    // Toggle this one
+    content.classList.toggle("expanded");
+    tipNameEl.classList.toggle("expanded");   // <-- drives chevron change
   }
-});
+  return;
+}
+
 
 
 
