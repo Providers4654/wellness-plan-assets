@@ -579,10 +579,10 @@ html, body {
 
 
 /* ============================
-   LIFESTYLE TIP CHEVRON (big, themed, no superscript)
+   LIFESTYLE TIP CHEVRON (rotates down, themed)
 ============================ */
 
-/* Kill the tiny info icon inside lifestyle tips */
+/* Hide small superscript info icon inside lifestyle tips */
 .wellness-plan ul.lifestyle-tips-list li .info-icon {
   display: none !important;
 }
@@ -599,23 +599,23 @@ html, body {
   padding-right: 10px;
 }
 
-/* Big chevron on the right (collapsed) */
+/* Chevron stays the same symbol — just rotates */
 .tip-name::after {
-  content: "❯";                 /* chevron right */
-  font-size: 26px;              /* bigger */
+  content: "❯";                 /* single right-facing chevron */
+  font-size: 26px;
   font-weight: 900;
   line-height: 1;
   margin-left: 12px;
   color: currentColor;
-  transition: transform 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+  transform: rotate(0deg);      /* default right */
+  transition: transform 0.25s ease, color 0.2s ease, opacity 0.2s ease;
   flex-shrink: 0;
   opacity: 0.95;
 }
 
-/* Expanded: chevron down */
+/* Rotate it down when expanded */
 .tip-name.expanded::after {
-  content: "⌄";                 /* chevron down */
-  transform: translateY(1px);
+  transform: rotate(90deg);     /* points downward */
   opacity: 1;
 }
 
@@ -630,13 +630,23 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li:nth-child(8) .tip-name::after { color: #c97b00; }
 
 /* Expanded content */
-.lifestyle-learn-more { display: none; margin-top: 8px; font-size: 14px; line-height: 1.55; }
-.lifestyle-learn-more.expanded { display: block; }
-
-/* Mobile size tweak */
-@media (max-width: 600px) {
-  .tip-name::after { font-size: 22px; }
+.lifestyle-learn-more {
+  display: none;
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.55;
 }
+.lifestyle-learn-more.expanded {
+  display: block;
+}
+
+/* Mobile tweak */
+@media (max-width: 600px) {
+  .tip-name::after {
+    font-size: 22px;
+  }
+}
+
 
 
 
