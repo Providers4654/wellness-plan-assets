@@ -490,69 +490,67 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (raised superscript style — fixed wrapping)
+   INFO ICON + BLURB DROPDOWN (true superscript — fixed wrapping)
 ============================ */
 
-/* Inline med name with natural wrapping and icon alignment */
+/* Inline med name that wraps cleanly, with icon locked to end */
 .med-name {
-  display: inline-flex;          /* ✅ allows text and icon to stay together */
-  align-items: baseline;         /* aligns icon with text baseline */
-  flex-wrap: wrap;               /* allows line wrapping naturally */
-  gap: 4px;                      /* space between text and icon */
-  white-space: normal;
+  display: inline;                /* allow wrapping naturally */
+  position: relative;             /* so icon can anchor inside */
   line-height: 1.4;
-  vertical-align: baseline;
+  white-space: normal;
 }
 
-/* Superscript-style info icon (default for meds, etc.) */
+/* Superscript-style info icon */
 .wellness-plan .info-icon {
-  position: relative;
-  top: -0.3em;                   /* ✅ visually raised higher */
+  position: absolute;
+  top: -0.7em;                    /* ✅ true superscript rise */
+  right: -1em;                    /* ✅ pushes icon to upper right */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 13px;
-  height: 13px;
-  font-size: 9px;
+  width: 12px;
+  height: 12px;
+  font-size: 8px;
   font-weight: 700;
   color: #007bff;
   border: 1.3px solid #007bff;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 6px;              /* default spacing */
-  background: transparent;
-  transition: none;              /* ⚡️ instant dropdown — no lag */
+  background: #fff;
+  transition: none;               /* ⚡️ instant dropdown, no lag */
+  vertical-align: top;
 }
 
-/* --- Lifestyle tips only: bring icon slightly closer --- */
-.wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
-  margin-left: 3px;              /* tighter gap */
-  top: -0.25em;                  /* slightly adjusted for visual balance */
+/* Keep icon above long wrapped text without forcing line breaks */
+.med-name::after {
+  content: "";
+  display: inline-block;
+  width: 1.2em;                   /* space reservation for icon */
 }
 
 /* Hover interaction */
-.wellness-plan .info-icon:hover,
-.tip-name .info-icon:hover {
+.wellness-plan .info-icon:hover {
   color: #0056b3;
   border-color: #0056b3;
-  transform: scale(1.1);         /* subtle pop, but instant click response */
+  transform: scale(1.1);
 }
 
-/* Optional: mobile fine-tune */
-@media (max-width: 600px) {
-  .wellness-plan .info-icon,
-  .tip-name .info-icon {
-    width: 12px;
-    height: 12px;
-    font-size: 8.5px;
-    top: -0.25em;
-  }
+/* --- Lifestyle tips: smaller rise and closer spacing --- */
+.wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
+  top: -0.55em;
+  right: -0.9em;
+}
 
-  /* Lifestyle tips mobile tweak */
-  .wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
-    margin-left: 2px;
-    top: -0.2em;
+/* Mobile fine-tune */
+@media (max-width: 600px) {
+  .wellness-plan .info-icon {
+    width: 11px;
+    height: 11px;
+    font-size: 7.5px;
+    top: -0.6em;
+    right: -0.9em;
   }
 }
 
