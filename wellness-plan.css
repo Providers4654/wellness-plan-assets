@@ -579,15 +579,15 @@ html, body {
 
 
 /* ============================
-   LIFESTYLE TIP DROPDOWN ARROW (no superscript icon)
+   LIFESTYLE TIP CHEVRON (big, themed, no superscript)
 ============================ */
 
-/* Hide old superscript icon inside lifestyle tips */
+/* Kill the tiny info icon inside lifestyle tips */
 .wellness-plan ul.lifestyle-tips-list li .info-icon {
   display: none !important;
 }
 
-/* Tip name container stays clickable */
+/* Clickable header */
 .tip-name {
   display: flex;
   align-items: center;
@@ -596,29 +596,30 @@ html, body {
   user-select: none;
   font-weight: 700;
   position: relative;
-  padding-right: 8px;
+  padding-right: 10px;
 }
 
-/* Big arrow on right side (▸ default) */
+/* Big chevron on the right (collapsed) */
 .tip-name::after {
-  content: "▸";
-  font-size: 22px;           /* 👈 bigger and more visible */
+  content: "❯";                 /* chevron right */
+  font-size: 26px;              /* bigger */
   font-weight: 900;
-  margin-left: 10px;
+  line-height: 1;
+  margin-left: 12px;
   color: currentColor;
-  transition: transform 0.25s ease, color 0.2s ease;
+  transition: transform 0.2s ease, color 0.2s ease, opacity 0.2s ease;
   flex-shrink: 0;
-  opacity: 0.9;
+  opacity: 0.95;
 }
 
-/* Expanded: arrow points down */
+/* Expanded: chevron down */
 .tip-name.expanded::after {
-  content: "▾";
+  content: "⌄";                 /* chevron down */
   transform: translateY(1px);
   opacity: 1;
 }
 
-/* --- Arrow color matches tip theme --- */
+/* Theme the chevron to each card color */
 .wellness-plan .lifestyle-tips-list > li:nth-child(1) .tip-name::after { color: #007acc; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(2) .tip-name::after { color: #d48806; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(3) .tip-name::after { color: #239b56; }
@@ -628,18 +629,15 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li:nth-child(7) .tip-name::after { color: #1e88e5; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(8) .tip-name::after { color: #c97b00; }
 
-/* --- Expanded dropdown text --- */
-.lifestyle-learn-more {
-  display: none;
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 1.55;
-  color: inherit;
+/* Expanded content */
+.lifestyle-learn-more { display: none; margin-top: 8px; font-size: 14px; line-height: 1.55; }
+.lifestyle-learn-more.expanded { display: block; }
+
+/* Mobile size tweak */
+@media (max-width: 600px) {
+  .tip-name::after { font-size: 22px; }
 }
 
-.lifestyle-learn-more.expanded {
-  display: block;
-}
 
 
 
