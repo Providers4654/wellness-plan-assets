@@ -490,44 +490,44 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (true superscript — fixed wrapping)
+   INFO ICON + BLURB DROPDOWN (true superscript — tuned position)
 ============================ */
 
-/* Inline med name that wraps cleanly, with icon locked to end */
+/* Inline med name — wraps naturally but keeps icon attached */
 .med-name {
-  display: inline;                /* allow wrapping naturally */
-  position: relative;             /* so icon can anchor inside */
+  display: inline;
+  position: relative;
   line-height: 1.4;
   white-space: normal;
 }
 
-/* Superscript-style info icon */
+/* Superscript info icon — smaller, closer, and lower */
 .wellness-plan .info-icon {
   position: absolute;
-  top: -0.7em;                    /* ✅ true superscript rise */
-  right: -1em;                    /* ✅ pushes icon to upper right */
+  top: -0.45em;                  /* 👈 slightly lower */
+  right: -0.7em;                 /* 👈 tighter spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 12px;
-  height: 12px;
-  font-size: 8px;
+  width: 11px;                   /* 👈 slightly smaller */
+  height: 11px;
+  font-size: 7.5px;              /* 👈 smaller text inside */
   font-weight: 700;
   color: #007bff;
-  border: 1.3px solid #007bff;
+  border: 1.2px solid #007bff;
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
   background: #fff;
-  transition: none;               /* ⚡️ instant dropdown, no lag */
+  transition: none;              /* ⚡ instant dropdown */
   vertical-align: top;
 }
 
-/* Keep icon above long wrapped text without forcing line breaks */
+/* Reserve space for icon to prevent line jump */
 .med-name::after {
   content: "";
   display: inline-block;
-  width: 1.2em;                   /* space reservation for icon */
+  width: 1em;                    /* keeps wrapping stable */
 }
 
 /* Hover interaction */
@@ -537,20 +537,20 @@ html, body {
   transform: scale(1.1);
 }
 
-/* --- Lifestyle tips: smaller rise and closer spacing --- */
+/* --- Lifestyle tips: match visual rhythm --- */
 .wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
-  top: -0.55em;
-  right: -0.9em;
+  top: -0.35em;
+  right: -0.6em;
 }
 
 /* Mobile fine-tune */
 @media (max-width: 600px) {
   .wellness-plan .info-icon {
-    width: 11px;
-    height: 11px;
-    font-size: 7.5px;
-    top: -0.6em;
-    right: -0.9em;
+    width: 10px;
+    height: 10px;
+    font-size: 7px;
+    top: -0.4em;
+    right: -0.6em;
   }
 }
 
