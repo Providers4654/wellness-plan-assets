@@ -579,8 +579,13 @@ html, body {
 
 
 /* ============================
-   LIFESTYLE TIP DROPDOWN ARROW (replaces superscript icon)
+   LIFESTYLE TIP DROPDOWN ARROW (no superscript icon)
 ============================ */
+
+/* Hide old superscript icon inside lifestyle tips */
+.wellness-plan ul.lifestyle-tips-list li .info-icon {
+  display: none !important;
+}
 
 /* Tip name container stays clickable */
 .tip-name {
@@ -591,26 +596,29 @@ html, body {
   user-select: none;
   font-weight: 700;
   position: relative;
+  padding-right: 8px;
 }
 
-/* Arrow icon (▸ by default) */
+/* Big arrow on right side (▸ default) */
 .tip-name::after {
   content: "▸";
-  font-size: 15px;
-  font-weight: 700;
-  margin-left: 8px;
+  font-size: 22px;           /* 👈 bigger and more visible */
+  font-weight: 900;
+  margin-left: 10px;
   color: currentColor;
   transition: transform 0.25s ease, color 0.2s ease;
   flex-shrink: 0;
+  opacity: 0.9;
 }
 
-/* Expanded: arrow rotates down */
+/* Expanded: arrow points down */
 .tip-name.expanded::after {
   content: "▾";
   transform: translateY(1px);
+  opacity: 1;
 }
 
-/* --- Color tuning by theme --- */
+/* --- Arrow color matches tip theme --- */
 .wellness-plan .lifestyle-tips-list > li:nth-child(1) .tip-name::after { color: #007acc; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(2) .tip-name::after { color: #d48806; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(3) .tip-name::after { color: #239b56; }
@@ -620,12 +628,12 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li:nth-child(7) .tip-name::after { color: #1e88e5; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(8) .tip-name::after { color: #c97b00; }
 
-/* --- Expanded dropdown content --- */
+/* --- Expanded dropdown text --- */
 .lifestyle-learn-more {
   display: none;
   margin-top: 8px;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.55;
   color: inherit;
 }
 
