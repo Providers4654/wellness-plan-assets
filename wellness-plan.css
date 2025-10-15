@@ -490,18 +490,24 @@ html, body {
 }
 
 /* ============================
-   INFO ICON + BLURB DROPDOWN (raised superscript style)
+   INFO ICON + BLURB DROPDOWN (raised superscript style — fixed wrapping)
 ============================ */
 
-/* Inline med name with natural wrapping */
+/* Inline med name with natural wrapping and icon alignment */
 .med-name {
-  display: inline;
+  display: inline-flex;          /* ✅ allows text and icon to stay together */
+  align-items: baseline;         /* aligns icon with text baseline */
+  flex-wrap: wrap;               /* allows line wrapping naturally */
+  gap: 4px;                      /* space between text and icon */
   white-space: normal;
   line-height: 1.4;
+  vertical-align: baseline;
 }
 
-/* Higher superscript-style info icon (default for meds, etc.) */
+/* Superscript-style info icon (default for meds, etc.) */
 .wellness-plan .info-icon {
+  position: relative;
+  top: -0.3em;                   /* ✅ visually raised higher */
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -514,16 +520,15 @@ html, body {
   border-radius: 50%;
   cursor: pointer;
   line-height: 1;
-  margin-left: 7px; /* default gap for med names */
+  margin-left: 6px;              /* default spacing */
   background: transparent;
-  transform: translateY(-0.95em);
-  transition: all 0.2s ease;
+  transition: none;              /* ⚡️ instant dropdown — no lag */
 }
 
-/* --- Lifestyle tips only: bring icon closer --- */
+/* --- Lifestyle tips only: bring icon slightly closer --- */
 .wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
-  margin-left: 3px;              /* 👈 tighter gap */
-  transform: translateY(-0.65em); 
+  margin-left: 3px;              /* tighter gap */
+  top: -0.25em;                  /* slightly adjusted for visual balance */
 }
 
 /* Hover interaction */
@@ -531,7 +536,7 @@ html, body {
 .tip-name .info-icon:hover {
   color: #0056b3;
   border-color: #0056b3;
-  transform: scale(1.1) translateY(-0.65em); /* stays raised on hover */
+  transform: scale(1.1);         /* subtle pop, but instant click response */
 }
 
 /* Optional: mobile fine-tune */
@@ -541,17 +546,15 @@ html, body {
     width: 12px;
     height: 12px;
     font-size: 8.5px;
-    transform: translateY(-0.65em);
+    top: -0.25em;
   }
 
   /* Lifestyle tips mobile tweak */
   .wellness-plan ul.lifestyle-tips-list li .tip-name .info-icon {
     margin-left: 2px;
-    transform: translateY(-0.5em);
+    top: -0.2em;
   }
 }
-
-
 
 
 
