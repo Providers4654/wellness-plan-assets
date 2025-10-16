@@ -505,13 +505,13 @@ html, body {
 .wellness-plan .info-icon {
   position: absolute;
   top: -0.3em;                  /* 👈 slightly lower */
-  right: -0.5em;                 /* 👈 tighter spacing */
+  right: -0.5em;                /* 👈 tighter spacing */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 11px;                   /* 👈 slightly smaller */
+  width: 11px;                  /* 👈 slightly smaller */
   height: 11px;
-  font-size: 7.5px;              /* 👈 smaller text inside */
+  font-size: 7.5px;             /* 👈 smaller text inside */
   font-weight: 700;
   color: #007bff;
   border: 1.2px solid #007bff;
@@ -519,8 +519,22 @@ html, body {
   cursor: pointer;
   line-height: 1;
   background: #fff;
-  transition: none;              /* ⚡ instant dropdown */
+  transition: none;             /* ⚡ instant dropdown */
   vertical-align: top;
+
+  /* ✅ NEW: allow hitbox to sit above other elements */
+  z-index: 2;
+}
+
+/* ✅ NEW: invisible hitbox to expand clickable/tap area */
+.wellness-plan .info-icon::before {
+  content: "";
+  position: absolute;
+  top: -8px;     /* expand upward */
+  left: -8px;    /* expand left */
+  right: -8px;   /* expand right */
+  bottom: -8px;  /* expand downward */
+  background: transparent;  /* invisible but clickable */
 }
 
 /* Reserve space for icon to prevent line jump */
@@ -543,7 +557,7 @@ html, body {
   right: -0.6em;
 }
 
-/* Mobile fine-tune */
+/* ✅ MOBILE fine-tune (kept from your original) */
 @media (max-width: 600px) {
   .wellness-plan .info-icon {
     width: 10px;
@@ -552,11 +566,15 @@ html, body {
     top: -0.4em;
     right: -0.6em;
   }
+
+  /* ✅ NEW: larger invisible tap buffer only for mobile */
+  .wellness-plan .info-icon::before {
+    top: -10px;
+    left: -10px;
+    right: -10px;
+    bottom: -10px;
+  }
 }
-
-
-
-
 
 /* Hidden blurb */
 .learn-more-content {
@@ -576,6 +594,7 @@ html, body {
 .learn-more-content.expanded {
   display: block;
 }
+
 
 
 /* ============================
