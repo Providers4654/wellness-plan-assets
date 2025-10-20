@@ -450,6 +450,8 @@ const lifestyleBlock = document.getElementById("lifestyleTips");
 if (lifestyleBlock) {
   const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
   const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
+tips.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })); // ✅ alphabetical, case-insensitive
+
 
   console.log("Lifestyle tips (all rows):", tips);
   if (tips.length > 0) {
