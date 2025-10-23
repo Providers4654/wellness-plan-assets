@@ -7,9 +7,10 @@
   --title-supplements: Supplements;
   --title-lifestyle: 🏃 Lifestyle & Health Optimization Protocol;
   --lifestyle-subtext: These habits are prescribed components of your treatment plan — <strong>not just good suggestions</strong>. Follow them consistently to support optimal results and long-term health.;
+  --title-to-consider: 💡 To Consider;
+  --to-consider-subtext: These are <strong>personalized recommendations</strong> from your clinician, based on what we’ve observed together and what may best support your goals. They’re optional, but help support sustainable improvement and results.; 
   --title-goals: 🎯 Goals & Follow-Up;
-
---intro-message: A clear guide to support your treatment, lifestyle, and long-term goals.;
+  --intro-message: A clear guide to support your treatment, lifestyle, and long-term goals.;
 
 
   /* Resource URLs */
@@ -53,9 +54,9 @@
   --fullscript-url: https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true;
   --fullscript-note: Personalized recommendations, shipped directly to you — at a discounted price.;
 
-  --addons-text: 🔗 Optional Add-On Therapies;
+  --addons-text: 🔗 Additional Add-On Therapies;
   --addons-url: https://www.mtnhlth.com/treatment-add-ons;
-  --addons-note: These can be added to support energy, metabolism, recovery, and more.;
+  --addons-note: A growing library of additional therapies and treatment options designed to complement your plan and support your goals.;
 
   /* Visit Timeline labels */
   --visit-timeline-title: Visit Timeline;
@@ -396,63 +397,6 @@ html, body {
 
 
 
-/* ============================
-   TO CONSIDER SUBTITLE STYLING (Tightened)
-   ============================ */
-/* Medication rows under subtitle */
-.to-consider-row {
-  margin-bottom: 12px;
-  padding-left: 16px !important;   /* force indent */
-}
-
-.to-consider-name {
-  font-weight: 600;
-  margin-bottom: 0; /* remove extra gap below medication name */
-}
-
-.to-consider-blurb {
-  font-style: italic;
-  color: #444;
-  margin-top: 3px;          /* 👈 this adds only a tiny space under the med name */
-  margin-bottom: 8px;       /* keeps spacing below blurb consistent */
-  line-height: 1.45;
-  font-size: 0.92rem;       /* slightly smaller text */
-}
-
-.to-consider-blurb a {
-  font-style: italic;       /* keep links italic */
-  color: #0073e6;
-  text-decoration: underline;
-}
-
-
-
-/* --- Subtitle Divider (final tweak) --- */
-.to-consider-subtitle {
-  display: flex;
-  align-items: center;
-  font-size: 0.85rem;
-  font-style: italic;
-  font-weight: 600;
-  color: #555;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-
-  margin-top: 18px;        /* keep good space above */
-  margin-bottom: 4px !important;   /* force tighter space below */
-}
-
-.to-consider-subtitle::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: #ddd;
-  margin-left: 8px;
-}
-
-
-
-
 
 
 
@@ -780,15 +724,10 @@ html, body {
    RESPONSIVE: MOBILE FONT TWEAKS
    ============================ */
 @media (max-width: 600px) {
-  /* Section Titles (📋 Personalized Wellness Plan, 💊 Treatment Summary, etc.) */
   .wellness-plan .section-title {
-    font-size: 15px !important;   /* smaller on mobile */
-    padding: 4px 14px !important; /* tighter pill padding */
-  }
-
-  /* To Consider subtitles (PEPTIDES, HORMONES, etc.) */
-  .to-consider-subtitle {
-    font-size: 0.75rem !important; /* slightly smaller */
+    font-size: 16px !important;      /* 🔹 Slightly larger text */
+    padding: 6px 18px !important;    /* 🔹 Adds height and width to the pill */
+    border-radius: 999px !important; /* keeps smooth rounded ends */
   }
 
   /* Treatment Summary blocks (Daily, Evening, Weekly, PRN) */
@@ -809,46 +748,230 @@ html, body {
 
 
 /* ============================
-   "TO CONSIDER" BLOCK (override)
+   TO CONSIDER — POLISHED + FIXED
    ============================ */
+
+/* Wrapper cleanup */
 .wellness-plan .med-time-block.to-consider-block {
-  background: #f3f3f3 !important;     /* override generic white */
-  border-left: 6px solid #6b93ff !important;
-  padding: 1rem;
-  margin-top: 2rem;
-  border-radius: 8px;
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  box-shadow: none !important;
 }
 
+/* Remove any old label */
 .wellness-plan .med-time-block.to-consider-block .med-time-label {
-  font-weight: 700;
-  font-size: 1.2rem;
-  margin-bottom: 0.75rem;
-  color: var(--color-text);
+  display: none !important;
 }
 
-.wellness-plan .med-time-block.to-consider-block .medication-list {
+/* Each category <li> */
+#toConsider .to-consider-li {
   list-style: none;
-  padding-left: 1rem;
-  margin-top: 0.5rem;
+  margin: 0;
+  padding: 0;
 }
 
-.wellness-plan .med-time-block.to-consider-block .medication-list li {
-  margin-bottom: 1rem;
-  border-bottom: none; /* no dashed line here */
+/* ------------------------------
+   SECTION SUBTEXT — styled intro box (full width + visible text)
+------------------------------- */
+
+.to-consider-subtext {
+  position: relative;
+  display: block;
+  background: #f9fbff;
+  border: 1px solid #e3e8f4;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #333;
+  line-height: 1.55;
+  font-style: italic;
+  text-align: center;
+  margin: 0.5rem 0 1.3rem 0;
+  padding: 1rem 1.25rem;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  position: relative;
+  z-index: 1;
+
+  /* ✅ Full width alignment with category cards */
+  width: 100%;
+  max-width: 100%; 
+  margin-left: 0;
+  margin-right: 0;
 }
 
-.wellness-plan .med-time-block.to-consider-block .medication-list li strong {
-  font-size: 15.5px;
+/* Hover polish */
+.to-consider-subtext:hover {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+
+
+
+/* ------------------------------
+   CATEGORY HEADER — restored solid accent, aligned flush
+------------------------------- */
+.wellness-plan .to-consider-subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(226, 232, 249, 0.9);
+  border-left: 8px solid var(--accent-color, #6b93ff); /* ✅ restored solid accent */
+  border-radius: 14px;
+  padding: 0.55rem 0.9rem; /* ✅ matches Lifestyle spacing */
+  margin: 0.5rem 0;
+  color: #121212;
+  font-size: 1.15rem;
   font-weight: 700;
-  color: #2c2c2c;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
 }
 
-.wellness-plan .med-time-block.to-consider-block .medication-list li p {
-  margin-top: 0.5rem;
-  font-size: 14.5px;
-  line-height: 1.5;
-  color: #444;
+.wellness-plan .to-consider-subtitle:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
 }
+
+/* Clean — no gradient or pseudo-element */
+.wellness-plan .to-consider-subtitle::before {
+  content: none;
+}
+
+/* Chevron arrow */
+.wellness-plan .to-consider-subtitle::after {
+  content: "›";
+  font-size: 1.5rem;
+  color: var(--accent-color, #6b93ff);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 6px;
+}
+.wellness-plan .to-consider-subtitle.expanded::after {
+  transform: rotate(90deg);
+}
+
+/* Mobile scaling */
+@media (max-width: 600px) {
+  .wellness-plan .to-consider-subtitle {
+    font-size: 1rem !important;
+    padding: 0.6rem 0.8rem !important;
+  }
+}
+
+/* Align the entire list flush */
+#toConsider {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+
+
+/* ------------------------------
+   PANEL CONTENT (collapsible)
+------------------------------- */
+.wellness-plan .to-consider-content {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  padding: 0 1.2rem;
+  margin: 0.25rem 0 0.5rem 0.4rem;
+  transition: all 0.3s ease;
+  border-left: 2px solid transparent;
+  border-radius: 5px;
+  background: #fff;
+}
+.wellness-plan .to-consider-content.open {
+  max-height: 600px;
+  opacity: 1;
+  padding-top: 0.5rem;
+  padding-bottom: 0.25rem;
+}
+
+/* ------------------------------
+   ITEMS INSIDE PANEL
+------------------------------- */
+.wellness-plan .to-consider-item {
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  border-bottom: 1px dashed #e3e6f0;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+.wellness-plan .to-consider-item:hover {
+  background: #f8faff;
+  transform: translateY(-1px);
+}
+.wellness-plan .to-consider-item:last-child {
+  border-bottom: none;
+}
+
+.wellness-plan .to-consider-name {
+  font-weight: 700;
+  color: #202020;
+  margin-bottom: 0.2rem;
+  font-size: 0.95rem;
+}
+
+.wellness-plan .to-consider-blurb {
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.wellness-plan .to-consider-blurb a {
+  color: var(--accent-color, #3052ff);
+  text-decoration: underline;
+  font-style: italic;
+  transition: color 0.25s ease;
+}
+.wellness-plan .to-consider-blurb a:hover {
+  color: #1b33b6;
+}
+
+/* ------------------------------
+   CATEGORY COLORS + BACKGROUND TINTS
+------------------------------- */
+#toConsider > li:nth-child(1) .to-consider-subtitle,
+#toConsider > li:nth-child(1) .to-consider-content {
+  --accent-color: #6b93ff; /* Blue */
+  border-left-color: #6b93ff;
+  background: linear-gradient(90deg, #eef1ff, #ffffff);
+}
+#toConsider > li:nth-child(2) .to-consider-subtitle,
+#toConsider > li:nth-child(2) .to-consider-content {
+  --accent-color: #6acb72; /* Green */
+  border-left-color: #6acb72;
+  background: linear-gradient(90deg, #e9fbea, #ffffff);
+}
+#toConsider > li:nth-child(3) .to-consider-subtitle,
+#toConsider > li:nth-child(3) .to-consider-content {
+  --accent-color: #ff6b6b; /* Coral */
+  border-left-color: #ff6b6b;
+  background: linear-gradient(90deg, #ffecec, #ffffff);
+}
+#toConsider > li:nth-child(4) .to-consider-subtitle,
+#toConsider > li:nth-child(4) .to-consider-content {
+  --accent-color: #b48bff; /* Lavender */
+  border-left-color: #b48bff;
+  background: linear-gradient(90deg, #f7f0ff, #ffffff);
+}
+#toConsider > li:nth-child(5) .to-consider-subtitle,
+#toConsider > li:nth-child(5) .to-consider-content {
+  --accent-color: #f5a623; /* Gold */
+  border-left-color: #f5a623;
+  background: linear-gradient(90deg, #fff9ec, #ffffff);
+}
+
+
+
+
+
+
+
+
 
 /* ============================
    LIFESTYLE SECTION
