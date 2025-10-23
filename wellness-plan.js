@@ -5,12 +5,11 @@
 // WELLNESS PLAN DYNAMIC JS (CSV-BASED, CLEANED, FIXED)
 // ============================
 
-const root = getComputedStyle(document.documentElement);
-
-// ✅ Helper for CSS vars
 function cssVar(name) {
+  const root = getComputedStyle(document.documentElement);
   return root.getPropertyValue(name).trim();
 }
+
 
 // --- Provider-specific public CSVs ---
 const PROVIDERS = {
@@ -120,12 +119,13 @@ if (noteEl && note) noteEl.innerHTML = normalizeCellText(note);
   });
 
   // Titles & intro
-  setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
-  setTextIfAvailable(".title-summary", "--title-summary", "Summary");
-  setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Optimization Protocol");
-  setTextIfAvailable(".lifestyle-subtext", "--lifestyle-subtext", "");
-
-  setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
+setTextIfAvailable(".title-plan", "--title-plan", "Wellness Plan");
+setTextIfAvailable(".title-summary", "--title-summary", "Summary");
+setTextIfAvailable(".title-lifestyle", "--title-lifestyle", "Lifestyle & Health Optimization Protocol");
+setTextIfAvailable(".lifestyle-subtext", "--lifestyle-subtext", "");
+setTextIfAvailable(".title-to-consider", "--title-to-consider", "To Consider");
+setTextIfAvailable(".to-consider-subtext", "--to-consider-subtext", ""); // 👈 ADD THIS LINE
+setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
 
   const intro = document.querySelector(".intro-text");
   if (intro) intro.innerHTML = normalizeCellText(cssVar("--intro-message"));
@@ -184,6 +184,34 @@ document.addEventListener("click", e => {
     return;
   }
 }); // ✅ properly closes the event listener
+
+
+// ============================
+// To Consider Accordion (modern clean version)
+// ============================
+
+document.addEventListener("click", e => {
+  const header = e.target.closest(".to-consider-subtitle");
+  if (!header) return;
+
+  const isExpanded = header.classList.contains("expanded");
+  const allHeaders = document.querySelectorAll(".to-consider-subtitle");
+  const allContents = document.querySelectorAll(".to-consider-content");
+
+  // Collapse all
+  allHeaders.forEach(h => h.classList.remove("expanded"));
+  allContents.forEach(c => c.classList.remove("open"));
+
+  // Expand clicked one
+  if (!isExpanded) {
+    header.classList.add("expanded");
+    const content = header.nextElementSibling;
+    if (content && content.classList.contains("to-consider-content")) {
+      content.classList.add("open");
+    }
+  }
+});
+
 
 
 
@@ -425,21 +453,27 @@ if (toConsiderList && toConsiderBlock) {
       ...Object.keys(grouped).filter(cat => !CATEGORY_ORDER.includes(cat)),
     ];
 
-    toConsiderList.innerHTML = orderedCats.map(cat => {
-const items = grouped[cat].map(item => `
-  <li class="to-consider-row">
-    <div class="to-consider-name"><strong>${item.name}</strong></div>
-    <div class="to-consider-blurb">${normalizeCellText(item.blurb)}</div>
+toConsiderList.innerHTML = orderedCats.map(cat => `
+  <li class="to-consider-li">
+    <div class="to-consider-subtitle">${cat}</div>
+    <div class="to-consider-content">
+      ${grouped[cat].map(item => `
+        <div class="to-consider-item">
+          <div class="to-consider-name"><strong>${item.name}</strong></div>
+          <div class="to-consider-blurb">${normalizeCellText(item.blurb)}</div>
+        </div>
+      `).join("")}
+    </div>
   </li>
 `).join("");
 
-      return `<li class="to-consider-subtitle">${cat}</li>${items}`;
-    }).join("");
 
-    toConsiderBlock.style.display = "block";
-  } else {
-    toConsiderBlock.style.display = "none";
-  }
+toConsiderBlock.style.display = "block";
+} else {
+  // Hide the entire "To Consider" section wrapper if there’s nothing selected
+  const toConsiderSection = document.querySelector(".to-consider-section");
+  if (toConsiderSection) toConsiderSection.remove(); // remove entire section (title + spacing)
+}
 }
 
 
