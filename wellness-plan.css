@@ -1216,6 +1216,20 @@ html, body {
 }
 
 
+/* ============================
+   Link Styling — Keep standard link color
+   ============================ */
+.wellness-plan .goals-list a,
+.wellness-plan .goals-list a.editable {
+  color: #0073e6 !important;  /* standard link blue */
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+.wellness-plan .goals-list a:hover,
+.wellness-plan .goals-list a:focus {
+  color: #0056b3 !important;
+  text-decoration-thickness: 2px;
+}
 
 
 
