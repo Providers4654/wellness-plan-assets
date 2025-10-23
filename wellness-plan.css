@@ -1080,90 +1080,145 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li:nth-child(8) strong { color: #c97b00; }
 
 
+
+
+
+
+
+
+
 /* ============================
-   GOALS + FOLLOW-UP
+   GOALS + FOLLOW-UP — Consistent ID-Based Styling
    ============================ */
-.wellness-plan .goals-list {
-  list-style-type: none;
-  padding-left: 0;
-  margin: 0;
-}
 
+/* Base neutral fallback (for new or undefined sections) */
 .wellness-plan .goals-list li {
-  padding: 12px;
-  margin-bottom: 10px;
-  border-left: 4px solid transparent;
-  border-radius: 8px;
+  border-left: none;
+  background: linear-gradient(to right, rgba(205, 215, 255, 0.15), rgba(255, 255, 255, 0));
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  color: #222;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  transition: all 0.25s ease;
+}
+.wellness-plan .goals-list li:hover {
+  background: linear-gradient(to right, rgba(205, 215, 255, 0.25), rgba(255, 255, 255, 0));
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
 }
 
-/* Generic subheader */
-.wellness-plan .goals-subheader {
-  font-size: var(--size-subheading);
-  font-weight: var(--weight-heading);
-  margin: 1.5rem 0 0.5rem;
-  color: var(--color-subheading);
-}
-
-/* ✅ Keep this single correct link block */
-.wellness-plan .goals-list li a {
-  font-style: italic;
-  text-decoration: underline;
-  font-weight: 500;
-  color: #007bff; /* bright blue like lifestyle tips */
-  transition: color 0.2s ease;
-}
-
-.wellness-plan .goals-list li a:hover {
-  color: #0056b3;
-  text-decoration: underline;
-}
-
-
-
-
-/* Nth-section color themes */
-.wellness-plan .goals-subheader:nth-of-type(1),
-.wellness-plan .goals-list:nth-of-type(1) li strong { color: #6b93ff; }
-.wellness-plan .goals-list:nth-of-type(1) li { background-color: #eef1f8; border-left-color: #6b93ff; }
-
-.wellness-plan .goals-subheader:nth-of-type(2),
-.wellness-plan .goals-list:nth-of-type(2) li strong { color: #00a5b5; }
-.wellness-plan .goals-list:nth-of-type(2) li { background-color: #e7fafa; border-left-color: #00a5b5; }
-
-.wellness-plan .goals-subheader:nth-of-type(3),
-.wellness-plan .goals-list:nth-of-type(3) li strong { color: #b86bff; }
-.wellness-plan .goals-list:nth-of-type(3) li { background-color: #f4efff; border-left-color: #b86bff; }
-
-.wellness-plan .goals-subheader:nth-of-type(4),
-.wellness-plan .goals-list:nth-of-type(4) li strong { color: #28b463; }
-.wellness-plan .goals-list:nth-of-type(4) li { background-color: #e9f7ef; border-left-color: #28b463; }
-
-.wellness-plan .goals-subheader:nth-of-type(5),
-.wellness-plan .goals-list:nth-of-type(5) li strong { color: #ff6f61; }
-.wellness-plan .goals-list:nth-of-type(5) li { background-color: #fff0f0; border-left-color: #ff6f61; }
-
-.wellness-plan .goals-subheader:nth-of-type(6),
-.wellness-plan .goals-list:nth-of-type(6) li strong { color: #d48806; }
-.wellness-plan .goals-list:nth-of-type(6) li { background-color: #fffbe6; border-left-color: #ffb347; }
-
-
-
-/* Nested bullets inside a goals item */
-.wellness-plan .goals-list li ul {
-  list-style: disc;
-  margin: 8px 0 0 20px;  /* normal bullet indent */
-  padding-left: 0;
-}
-.wellness-plan .goals-list li ul li {
-  background: none !important;
-  border-left: none !important;
-  border-radius: 0 !important;
-  padding: 0 !important;
-  margin: 6px 0 !important;
+/* Ensure <strong> elements inherit section color */
+.wellness-plan .goals-list strong {
   color: inherit !important;
+  font-weight: 700;
+}
+
+/* Section title styling */
+.wellness-plan .goals-subheader {
+  font-size: 1.15rem;
+  font-weight: 800;
+  margin: 1.8rem 0 0.9rem;
+  letter-spacing: 0.4px;
+  text-transform: none;
+  position: relative;
+}
+.wellness-plan .goals-subheader::after {
+  content: "";
+  display: block;
+  width: 45px;
+  height: 3px;
+  border-radius: 3px;
+  margin-top: 4px;
+  background: currentColor;
+  opacity: 0.35;
+}
+
+/* Remove the gray background + padding from editable spans */
+.wellness-plan .goals-list .editable {
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: inline !important;
   font-size: inherit !important;
   line-height: inherit !important;
 }
+
+/* Keep text inheriting color, but not for links */
+.wellness-plan .goals-list .editable:not(a) {
+  color: inherit !important;
+}
+
+
+/* ============================
+   INDIVIDUAL SECTION THEMES
+   ============================ */
+
+/* --- 1. Visit Timeline --- */
+#visitTimelineTitle {
+  color: #4b6fff;
+}
+#visitTimelineTitle::after {
+  background: #4b6fff;
+}
+#visitTimeline li {
+  color: #4b6fff;
+  background: linear-gradient(to right, rgba(75,111,255,0.12), rgba(255,255,255,0));
+}
+#visitTimeline li:hover {
+  background: linear-gradient(to right, rgba(75,111,255,0.2), rgba(255,255,255,0));
+}
+
+/* --- 2. Body Composition Analysis --- */
+#bodyCompTitle {
+  color: #008896;
+}
+#bodyCompTitle::after {
+  background: #008896;
+}
+#bodyComp li {
+  color: #008896;
+  background: linear-gradient(to right, rgba(0,136,150,0.12), rgba(255,255,255,0));
+}
+#bodyComp li:hover {
+  background: linear-gradient(to right, rgba(0,136,150,0.2), rgba(255,255,255,0));
+}
+
+/* --- 3. Target Goals --- */
+#targetTitle {
+  color: #9a46ff;
+}
+#targetTitle::after {
+  background: #9a46ff;
+}
+#targetGoals li {
+  color: #9a46ff;
+  background: linear-gradient(to right, rgba(154,70,255,0.12), rgba(255,255,255,0));
+}
+#targetGoals li:hover {
+  background: linear-gradient(to right, rgba(154,70,255,0.2), rgba(255,255,255,0));
+}
+
+/* --- 4. Other Goals / Follow-Up --- */
+#otherTitle {
+  color: #1d914e;
+}
+#otherTitle::after {
+  background: #1d914e;
+}
+#otherItems li {
+  color: #1d914e;
+  background: linear-gradient(to right, rgba(29,145,78,0.12), rgba(255,255,255,0));
+}
+#otherItems li:hover {
+  background: linear-gradient(to right, rgba(29,145,78,0.2), rgba(255,255,255,0));
+}
+
+
+
+
+
 
 /* ============================
    MED-TIME BLOCKS (Daily/Evening/Weekly/PRN)
