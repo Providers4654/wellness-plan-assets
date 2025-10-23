@@ -1118,11 +1118,28 @@ html, body {
 .wellness-plan .goals-subheader {
   font-size: 1.15rem;
   font-weight: 800;
-  margin: 1.8rem 0 0.9rem;
+  margin: 2rem 0 0.9rem; /* space between goal sections */
   letter-spacing: 0.4px;
   text-transform: none;
   position: relative;
 }
+
+/* Tighter first subheader under pill */
+.wellness-plan .goal-block:first-of-type .goals-subheader {
+  margin-top: 0.2rem !important; /* ✅ this closes the pill gap */
+}
+
+/* ============================
+   GOALS SECTION SPACING CONTROL
+   ============================ */
+
+/* Consistent vertical spacing between sections */
+.wellness-plan .goal-block {
+  margin-top: 3rem; /* Adjust for more/less space between goals */
+}
+
+
+
 .wellness-plan .goals-subheader::after {
   content: "";
   display: block;
