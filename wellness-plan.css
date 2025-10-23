@@ -1628,49 +1628,105 @@ html, body {
 
 
 /* ============================
-   BUTTONS: SCHEDULE + PRINT
+   BUTTONS: SCHEDULE + PRINT (Refined, centered, no icon)
    ============================ */
-.schedule-followup-btn {
-  background: #f3f3f3;
-  color: #2e2e2e;
-  padding: 8px 22px;
-  border: 1.5px solid #999;
-  border-radius: 10px;
-  font-size: var(--size-button);
-  font-weight: var(--weight-button);
-  font-family: var(--font-button);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: none;
-  letter-spacing: 0.3px;
-}
-.schedule-followup-btn:hover {
-  background: #e6e6e6;
-  border-color: #bcbcbc;
+
+/* Follow-Up Button Block — with divider and extra spacing */
+.wellness-plan .followup-link {
+  text-align: center;
+  margin-top: 48px;       /* more space above */
+  margin-bottom: 10px;
+  padding-top: 16px;
+  border-top: 1px solid #eee; /* subtle divider like other resource sections */
 }
 
+/* Center the anchor and ensure proper alignment */
+.wellness-plan .followup-link a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Schedule Follow-Up Button */
+.schedule-followup-btn {
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  color: #1f2d3d;
+  padding: 10px 26px;
+  border: 1.5px solid #bbb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 #fff;
+}
+
+/* Hover + Pressed States */
+.schedule-followup-btn:hover {
+  background: linear-gradient(145deg, #f8f8f8, #eaeaea);
+  border-color: #999;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+}
+
+.schedule-followup-btn:active {
+  background: #e2e2e2;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+/* Print Plan Button — harmonized look */
 .print-plan-wrapper {
   text-align: center;
   margin: 60px 0 40px;
 }
+
 .print-plan-btn {
-  background: #f4f4f4;
+  background: linear-gradient(145deg, #ffffff, #f4f4f4);
   color: #2a2a2a;
   padding: 10px 24px;
-  border: 1px solid #aaa;
-  border-radius: 8px;
+  border: 1.5px solid #aaa;
+  border-radius: 10px;
   font-size: 14px;
   font-weight: 600;
-  font-family: var(--font-button);
+  font-family: "Helvetica Neue", Arial, sans-serif;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: inset 0 1px 0 #fff, 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 #fff;
 }
+
 .print-plan-btn:hover {
-  background: #e8e8e8;
+  background: linear-gradient(145deg, #f9f9f9, #eaeaea);
   border-color: #888;
   transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* Mobile Adjustment */
+@media (max-width: 600px) {
+  .schedule-followup-btn {
+    width: 100%;
+    max-width: 320px;
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+
+  .wellness-plan .followup-link a {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
 
 
 
