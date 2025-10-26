@@ -811,9 +811,40 @@ function bootstrapWellnessPlanSafe(attempt = 1) {
   }
 }
 
+
+
+
+// ============================
+// Adjust top padding dynamically based on header height
+// ============================
+function adjustHeaderSpacing() {
+  const header = document.querySelector("header, .site-header, .mtn-header");
+  const content = document.querySelector(".printable-content");
+  if (!header || !content) return;
+
+  function updateSpacing() {
+    const height = header.offsetHeight || 0;
+    // 🧩 Apply with !important priority so it always overrides CSS
+    content.style.setProperty("padding-top", `${height + 0}px`, "important");
+  }
+
+  // Initial run
+  updateSpacing();
+
+  // Watch for window resizes (for mobile/desktop adjustments)
+  window.addEventListener("resize", updateSpacing);
+}
+
+
+
+
 // Ensure DOM is ready before firing
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => bootstrapWellnessPlanSafe());
+  document.addEventListener("DOMContentLoaded", () => {
+    bootstrapWellnessPlanSafe();
+    adjustHeaderSpacing(); // 👈 dynamically fix spacing once everything loads
+  });
 } else {
   bootstrapWellnessPlanSafe();
+  adjustHeaderSpacing(); // 👈 also run immediately if DOM is already loaded
 }
