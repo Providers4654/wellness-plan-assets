@@ -815,36 +815,46 @@ function bootstrapWellnessPlanSafe(attempt = 1) {
 
 
 // ============================
-// Adjust top padding dynamically based on header height
+// Bootstrap with retry
 // ============================
-function adjustHeaderSpacing() {
-  const header = document.querySelector("header, .site-header, .mtn-header");
-  const content = document.querySelector(".printable-content");
-  if (!header || !content) return;
 
-  function updateSpacing() {
-    const height = header.offsetHeight || 0;
-    // 🧩 Apply with !important priority so it always overrides CSS
-    content.style.setProperty("padding-top", `${height + 30}px`, "important");
+function bootstrapWellnessPlanSafe(attempt = 1) {
+  try {
+    console.log(`🚀 bootstrapWellnessPlanSafe attempt ${attempt}`);
+    loadPatientData();
+
+    // Check for key DOM blocks that should exist
+    const requiredEls = [
+      document.getElementById("toConsiderBlock"),
+      document.getElementById("dynamicFullscriptLink"),
+      document.getElementById("dynamicAddOnsLink"),
+      document.getElementById("dynamicStandardsLink"),
+      document.getElementById("dynamicCoachingLink"),
+      document.getElementById("dynamicFollowUpLink"),
+    ];
+
+    const missing = requiredEls.filter(el => !el);
+    if (missing.length > 0 && attempt < 3) {
+      console.warn(`⚠️ Missing ${missing.length} critical elements. Retrying in 200ms...`);
+      setTimeout(() => bootstrapWellnessPlanSafe(attempt + 1), 200);
+    } else if (missing.length === 0) {
+      console.log("✅ All critical blocks loaded on attempt", attempt);
+    } else {
+      console.warn("❌ Some elements never appeared:", missing);
+    }
+  } catch (err) {
+    console.error("❌ bootstrapWellnessPlanSafe failed:", err);
   }
-
-  // Initial run
-  updateSpacing();
-
-  // Watch for window resizes (for mobile/desktop adjustments)
-  window.addEventListener("resize", updateSpacing);
 }
 
-
-
-
+// ============================
 // Ensure DOM is ready before firing
+// ============================
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
     bootstrapWellnessPlanSafe();
-    adjustHeaderSpacing(); // 👈 dynamically fix spacing once everything loads
   });
 } else {
   bootstrapWellnessPlanSafe();
-  adjustHeaderSpacing(); // 👈 also run immediately if DOM is already loaded
 }
