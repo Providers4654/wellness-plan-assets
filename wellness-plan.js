@@ -825,7 +825,7 @@ function adjustHeaderSpacing() {
   function updateSpacing() {
     const height = header.offsetHeight || 0;
     // 🧩 Apply with !important priority so it always overrides CSS
-    content.style.setProperty("padding-top", `${height + 0}px`, "important");
+    content.style.setProperty("padding-top", `${height + 20}px`, "important");
   }
 
   // Initial run
