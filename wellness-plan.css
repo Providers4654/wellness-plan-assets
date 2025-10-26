@@ -129,31 +129,32 @@ html, body {
 
 /* === CONTAINER SPACING (keeps content below fixed header) === */
 .printable-content {
-  padding-top: 70px !important; /* default desktop/tablet */
+  padding-top: 70px; /* default desktop/tablet — removed !important */
   margin-top: 0 !important;
 }
 
 /* Narrow desktop/tablet: extra clearance so logo never tucks under */
 @media (max-width: 1100px) and (min-width: 601px) {
   .printable-content {
-    padding-top: 100px !important;
+    padding-top: 100px; /* removed !important */
   }
 }
 
 /* Very wide desktop: tighten spacing */
 @media (min-width: 1600px) {
   .printable-content {
-    padding-top: 30px !important;
+    padding-top: 30px; /* removed !important */
   }
 }
 
 /* Mobile: clear header but keep it snug */
 @media (max-width: 600px) {
   .printable-content {
-    padding-top: calc(var(--header-height, 100px) - 10px) !important;
+    padding-top: calc(var(--header-height, 100px) - 10px); /* removed !important */
     margin-top: 0 !important;
   }
 }
+
 
 /* === LOGO === */
 .wellness-logo {
@@ -1942,3 +1943,34 @@ ul li,
 
   @page { margin: 0.75in; }
 }
+
+
+
+
+
+
+
+
+
+
+/* === FIX: Remove Squarespace’s automatic body padding for fixed headers ===
+   Squarespace adds inline padding-top to <body> to compensate for its own fixed header.
+   Our JavaScript already handles spacing dynamically, so this causes a visible white gap.
+   This rule cancels that extra padding so content sits flush under the header.
+========================================================================== */
+body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+
+/* Optional safety net:
+   Some Squarespace templates wrap content in .site-wrapper or .page-content containers.
+   These can also add top spacing automatically. Uncomment if needed. */
+/*
+.site-wrapper,
+.page-content,
+.sqs-layout {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+*/
