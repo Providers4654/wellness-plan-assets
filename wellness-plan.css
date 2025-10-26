@@ -100,7 +100,7 @@ html, body {
   color: #222;       /* clean dark text */
   max-width: 960px;
   margin: 0 auto;
-  padding: 20px 20px;
+  padding: 20px 20px 20px; /* remove top padding */
   line-height: 1.45;
   width: 100%;
   box-sizing: border-box;
@@ -112,6 +112,7 @@ html, body {
     max-width: none !important;
     margin: 0 auto;            /* center horizontally */
     padding: 12px;             /* ✅ tighter padding so content isn’t squeezed */
+   padding: 20px 12px 12px;
     box-sizing: border-box;
     padding-top: 80px;
   }
@@ -1754,9 +1755,10 @@ html, body {
 
   /* Add comfortable side padding only inside the plan */
   .wellness-plan {
-    padding: 12px 12px;  /* left/right gutters for readability */
+    padding: 80px 12px 12px;  /* left/right gutters for readability */
   }
 }
+
 
 
 
