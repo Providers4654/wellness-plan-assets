@@ -645,6 +645,28 @@ html, body {
 
 
 
+/* ============================================
+   LEARN MORE DROPDOWN CONTENT HEADER STYLING
+   ============================================ */
+
+/* Style all section titles ("How it works:", "Common side effects:", "What to expect:") */
+.wellness-plan .learn-more-content strong:has(+ br) {
+  color: #2F6B82 !important;      /* Muted steel blue */
+  display: inline-block;
+  margin-bottom: 4px;
+  margin-top: 10px;               /* Adds consistent space before each header */
+  font-weight: 700;
+}
+
+/* Preserve normal bold text inside body paragraphs */
+.wellness-plan .learn-more-content strong:not(:has(+ br)) {
+  color: inherit !important;
+  margin: 0 !important;
+  font-weight: 600;               /* Slightly lighter to differentiate from headers */
+}
+
+
+
 
 /* ============================
    Make med-name tappable
