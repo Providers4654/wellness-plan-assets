@@ -622,48 +622,46 @@ html, body {
 
 
 /* ============================
-   LEARN-MORE CONTENT TEXT NORMALIZATION
-   (ensures bold/italics only change weight/style, not size)
+   LEARN-MORE CONTENT TEXT NORMALIZATION (global)
    ============================ */
 .wellness-plan .learn-more-content {
-  font-size: 14px;        /* 👈 optional: shrink whole blurb slightly */
+  font-size: 14px;
   line-height: 1.5;
   color: #444;
 }
-
-.wellness-plan .learn-more-content strong {
+.wellness-plan .learn-more-content strong:not(.lm) {
   font-weight: 700;
-  font-size: inherit;     /* 👈 force same size as parent text */
-  color: inherit;
+  font-size: inherit;   /* keep same size as surrounding text */
+  color: inherit;       /* don't force a color */
 }
-
 .wellness-plan .learn-more-content em {
   font-style: italic;
-  font-size: inherit;     /* 👈 same size as parent text */
+  font-size: inherit;
   color: inherit;
 }
 
-
-
 /* ============================================
-   LEARN MORE DROPDOWN CONTENT HEADER STYLING
+   MEDICATION LEARN-MORE: teal headers only
+   (requires <strong class="lm">Label:</strong> in the sheet)
    ============================================ */
-
-/* Style all section titles ("How it works:", "Common side effects:", "What to expect:") */
-.wellness-plan .learn-more-content strong:has(+ br) {
-  color: #2F6B82 !important;      /* Muted steel blue */
-  display: inline-block;
-  margin-bottom: 4px;
-  margin-top: 10px;               /* Adds consistent space before each header */
+.wellness-plan .medication-list li .learn-more-content .lm {
+  color: #2F6B82 !important;  /* teal/steel blue */
   font-weight: 700;
+  display: inline;
 }
 
-/* Preserve normal bold text inside body paragraphs */
-.wellness-plan .learn-more-content strong:not(:has(+ br)) {
-  color: inherit !important;
-  margin: 0 !important;
-  font-weight: 600;               /* Slightly lighter to differentiate from headers */
+/* Meds learn-more: keep non-header bold text normal */
+.wellness-plan .medication-list li .learn-more-content strong:not(.lm) {
+  color: inherit;
+  font-weight: 600;
+  display: inline;
+  margin: 0;
+  line-height: inherit;
 }
+
+/* Spacing is controlled by inline <br> in your spreadsheet cells */
+
+
 
 
 
@@ -1421,14 +1419,14 @@ html, body {
 
 
 /* ===== LEARN-MORE BLURB KEEP STRONG/B CONSISTENT (learn-more + dose) ===== */
-.wellness-plan .medication-list li .learn-more-content strong,
-.wellness-plan .learn-more-content strong,
+.wellness-plan .medication-list li .learn-more-content strong:not(.lm),
+.wellness-plan .learn-more-content strong:not(.lm),
 .wellness-plan .medication-list li .dose strong,
 .wellness-plan .medication-list li .dose b {
-  font-size: inherit;    /* same size as surrounding dose text */
-  font-weight: 700;      /* just bold */
-  font-style: inherit;   /* keep the dose’s italic if present */
-  color: inherit;        /* same color as surrounding text */
+  font-size: inherit;
+  font-weight: 700;
+  font-style: inherit;
+  color: inherit;
 }
 
 
