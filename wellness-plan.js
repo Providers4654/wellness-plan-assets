@@ -261,13 +261,6 @@ function getField(row, keys) {
 
 
 
-
-
-
-
-
-
-
 // --- Inject Patient Data ---
 function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsiderData) {
   if (!rows || rows.length === 0) {
@@ -640,7 +633,6 @@ if (name.includes(":")) {
 
 
 
-  
   console.groupEnd();
 }
 
