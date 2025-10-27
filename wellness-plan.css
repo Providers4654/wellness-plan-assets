@@ -659,7 +659,7 @@ html, body {
   display: inline;
   margin: 0;
   line-height: inherit;
-  font-size: 1.1em !important;  /* match paragraph size exactly */
+  font-size: 1em !important;  /* match paragraph size exactly */
 }
 
 /* Spacing is controlled by inline <br> in your spreadsheet cells */
