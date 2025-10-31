@@ -593,6 +593,11 @@ html, body {
 .wellness-plan .lifestyle-tips-list > li:nth-child(6) .tip-name::after { color: #e84a5f; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(7) .tip-name::after { color: #1e88e5; }
 .wellness-plan .lifestyle-tips-list > li:nth-child(8) .tip-name::after { color: #c97b00; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(9) .tip-name::after { color: #7e57c2; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(10) .tip-name::after { color: #2e7d32; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(11) .tip-name::after { color: #d81b60; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(12) .tip-name::after { color: #007c91; }
+
 
 /* Expanded content */
 .lifestyle-learn-more {
@@ -612,6 +617,128 @@ html, body {
   }
 }
 
+
+
+
+
+
+/* ============================
+   LIFESTYLE SECTION
+   ============================ */
+
+/* --- Section Subtext (inside bubble, refined) --- */
+.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext {
+  background: linear-gradient(180deg, #fff, #fafafa); /* soft neutral gradient */
+  border: 1.2px solid rgba(0, 0, 0, 0.08); /* faint neutral border */
+  border-top: 3px solid rgba(123, 104, 238, 0.25); /* subtle lavender accent */
+  border-radius: 10px;
+  padding: 18px 22px;
+  font-style: italic;
+  color: #222;
+  font-size: 15.5px;
+  line-height: 1.65;
+  margin: -6px 0 28px 0;
+  text-align: center;
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.06),
+    0 1px 3px rgba(0, 0, 0, 0.04),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext:hover {
+  box-shadow:
+    0 4px 10px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+}
+
+.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext strong {
+  font-weight: 600;
+  color: #000;
+}
+
+
+
+
+.wellness-plan .section-subtext.lifestyle-subtext::before,
+.wellness-plan .section-subtext.lifestyle-subtext::after {
+  content: none !important; /* ensures no quote symbols render */
+}
+
+/* mobile: keep comfortable spacing, no negative margin */
+@media (max-width: 600px) {
+  .wellness-plan .section-subtext.lifestyle-subtext {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 16px 16px;
+  }
+}
+
+/* --- Lifestyle Tips Container --- */
+.wellness-plan .lifestyle-tips-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+/* Only top-level tips */
+.wellness-plan .lifestyle-tips-list > li {
+  padding: 12px;
+  margin-bottom: 16px;
+  border-left: 4px solid transparent;
+  border-radius: 6px;
+}
+
+/* Links inside lifestyle tips inherit color/underline */
+.wellness-plan .lifestyle-tips-list > li a {
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 500;
+  color: #007bff; /* bright blue */
+  transition: color 0.2s ease;
+}
+
+.wellness-plan .lifestyle-tips-list > li a:hover {
+  color: #0056b3; /* darker on hover */
+}
+
+/* Tip color themes (backgrounds, borders, and strong text) */
+.wellness-plan .lifestyle-tips-list > li:nth-child(1) { background-color: #f0f8ff; border-left-color: #007acc; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(1) strong { color: #007acc; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(2) { background-color: #fffbe6; border-left-color: #ffb347; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(2) strong { color: #d48806; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(3) { background-color: #e9f7ef; border-left-color: #28b463; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(3) strong { color: #239b56; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(4) { background-color: #fceefb; border-left-color: #af7ac5; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(4) strong { color: #884ea0; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(5) { background-color: #e0f7fa; border-left-color: #26c6da; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(5) strong { color: #008b94; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(6) { background-color: #fff0f0; border-left-color: #ff6f61; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(6) strong { color: #e84a5f; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(7) { background-color: #e6f7ff; border-left-color: #42a5f5; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(7) strong { color: #1e88e5; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(8) { background-color: #fff7e6; border-left-color: #f5a623; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(8) strong { color: #c97b00; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(9) { background-color: #f3f0ff; border-left-color: #7e57c2; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(9) strong { color: #7e57c2; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(10) { background-color: #f0fff4; border-left-color: #43a047; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(10) strong { color: #2e7d32; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(11) { background-color: #fff0fc; border-left-color: #ec407a; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(11) strong { color: #d81b60; }
+
+.wellness-plan .lifestyle-tips-list > li:nth-child(12) { background-color: #f0f9ff; border-left-color: #00acc1; }
+.wellness-plan .lifestyle-tips-list > li:nth-child(12) strong { color: #007c91; }
 
 
 
@@ -994,115 +1121,6 @@ html, body {
 
 
 
-
-
-
-
-/* ============================
-   LIFESTYLE SECTION
-   ============================ */
-
-/* --- Section Subtext (inside bubble, refined) --- */
-.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext {
-  background: linear-gradient(180deg, #fff, #fafafa); /* soft neutral gradient */
-  border: 1.2px solid rgba(0, 0, 0, 0.08); /* faint neutral border */
-  border-top: 3px solid rgba(123, 104, 238, 0.25); /* subtle lavender accent */
-  border-radius: 10px;
-  padding: 18px 22px;
-  font-style: italic;
-  color: #222;
-  font-size: 15.5px;
-  line-height: 1.65;
-  margin: -6px 0 28px 0;
-  text-align: center;
-  box-shadow:
-    0 3px 8px rgba(0, 0, 0, 0.06),
-    0 1px 3px rgba(0, 0, 0, 0.04),
-    inset 0 1px 2px rgba(255, 255, 255, 0.8);
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext:hover {
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
-}
-
-.wellness-plan .wellness-bubble .section-subtext.lifestyle-subtext strong {
-  font-weight: 600;
-  color: #000;
-}
-
-
-
-
-.wellness-plan .section-subtext.lifestyle-subtext::before,
-.wellness-plan .section-subtext.lifestyle-subtext::after {
-  content: none !important; /* ensures no quote symbols render */
-}
-
-/* mobile: keep comfortable spacing, no negative margin */
-@media (max-width: 600px) {
-  .wellness-plan .section-subtext.lifestyle-subtext {
-    font-size: 14px;
-    line-height: 1.5;
-    margin: 0 16px 16px;
-  }
-}
-
-/* --- Lifestyle Tips Container --- */
-.wellness-plan .lifestyle-tips-list {
-  list-style-type: none;
-  padding-left: 0;
-  margin: 0;
-}
-
-/* Only top-level tips */
-.wellness-plan .lifestyle-tips-list > li {
-  padding: 12px;
-  margin-bottom: 16px;
-  border-left: 4px solid transparent;
-  border-radius: 6px;
-}
-
-/* Links inside lifestyle tips inherit color/underline */
-.wellness-plan .lifestyle-tips-list > li a {
-  font-style: italic;
-  text-decoration: underline;
-  font-weight: 500;
-  color: #007bff; /* bright blue */
-  transition: color 0.2s ease;
-}
-
-.wellness-plan .lifestyle-tips-list > li a:hover {
-  color: #0056b3; /* darker on hover */
-}
-
-/* Tip color themes */
-.wellness-plan .lifestyle-tips-list > li:nth-child(1) { background-color: #f0f8ff; border-left-color: #007acc; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(1) strong { color: #007acc; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(2) { background-color: #fffbe6; border-left-color: #ffb347; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(2) strong { color: #d48806; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(3) { background-color: #e9f7ef; border-left-color: #28b463; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(3) strong { color: #239b56; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(4) { background-color: #fceefb; border-left-color: #af7ac5; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(4) strong { color: #884ea0; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(5) { background-color: #e0f7fa; border-left-color: #26c6da; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(5) strong { color: #008b94; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(6) { background-color: #fff0f0; border-left-color: #ff6f61; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(6) strong { color: #e84a5f; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(7) { background-color: #e6f7ff; border-left-color: #42a5f5; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(7) strong { color: #1e88e5; }
-
-.wellness-plan .lifestyle-tips-list > li:nth-child(8) { background-color: #fff7e6; border-left-color: #f5a623; }
-.wellness-plan .lifestyle-tips-list > li:nth-child(8) strong { color: #c97b00; }
 
 
 
