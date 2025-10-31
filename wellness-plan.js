@@ -476,9 +476,8 @@ toConsiderBlock.style.display = "block";
 const lifestyleBlock = document.getElementById("lifestyleTips");
 if (lifestyleBlock) {
   const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
-  const tips = parseHybridValues(rows, ["Lifestyle Tips","Lifestyle/Type"], lifestyleTipsKnown);
-tips.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })); // ✅ alphabetical, case-insensitive
-
+  const tips = parseHybridValues(rows, ["Lifestyle Tips", "Lifestyle/Type"], lifestyleTipsKnown);
+  tips.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })); // ✅ alphabetical, case-insensitive
 
   console.log("Lifestyle tips (all rows):", tips);
   if (tips.length > 0) {
@@ -488,13 +487,17 @@ tips.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })); // 
 
       if (tipInfo) {
         // ✅ Known tip from library
+        const blurb = tipInfo["Blurb"] || "";
+        const updated = (tipInfo["Updated"] || "").trim();
+
         html += `
           <li class="lifestyle-row">
             <div class="tip-name">
               <strong>${tipInfo["Tip"]}</strong>
-              ${tipInfo["Blurb"] ? `<span class="info-icon">i</span>` : ""}
+              ${blurb ? `<span class="info-icon">i</span>` : ""}
             </div>
-            ${tipInfo["Blurb"] ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>` : ""}
+            ${updated ? `<div class="tip-updated">Updated: ${normalizeCellText(updated)}</div>` : ""}
+            ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
           </li>`;
       } else {
         // ✅ Custom free-text tip (split on colon)
