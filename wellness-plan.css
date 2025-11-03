@@ -1102,7 +1102,7 @@ html, body {
   background: #fff;
 }
 .wellness-plan .to-consider-content.open {
-  max-height: 600px;
+  max-height: none;   /* let height expand freely */
   opacity: 1;
   padding-top: 0.5rem;
   padding-bottom: 0.25rem;
