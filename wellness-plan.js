@@ -69,9 +69,26 @@ function normalizeHeader(h) {
 
 async function fetchCsv(url) {
   const text = await fetch(url).then(r => r.text());
-  const [headerLine, ...lines] = text.trim().split("\n");
-  const headers = parseCsvLine(headerLine).map(normalizeHeader);  // ✅ normalize headers
-  return lines.map(line => {
+  const lines = text.split(/\r?\n/);
+  const rows = [];
+  let current = "";
+  let insideQuotes = false;
+
+  // ✅ Recombine multi-line rows safely
+  for (let line of lines) {
+    if (!insideQuotes) current = line;
+    else current += "\n" + line;
+
+    const quoteCount = (current.match(/"/g) || []).length;
+    insideQuotes = quoteCount % 2 !== 0;
+
+    if (!insideQuotes) rows.push(current);
+  }
+
+  const [headerLine, ...dataLines] = rows;
+  const headers = parseCsvLine(headerLine).map(normalizeHeader);
+
+  return dataLines.map(line => {
     const cells = parseCsvLine(line);
     const obj = {};
     headers.forEach((h, i) => (obj[h] = cells[i] || ""));
