@@ -638,7 +638,7 @@ html, body {
   margin-top: 1px;
   margin-left: 2px;
   font-style: italic;
-  opacity: 0.75;
+  opacity: 0.9;
   line-height: 1.2;
   transition: opacity 0.2s ease;
 }
