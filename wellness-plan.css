@@ -2060,16 +2060,15 @@ ul li,
 
 
 
-
 /* === FIX: Remove Squarespace’s automatic body padding for fixed headers ===
    Squarespace adds inline padding-top to <body> to compensate for its own fixed header.
    Our JavaScript already handles spacing dynamically, so this causes a visible white gap.
    This rule cancels that extra padding so content sits flush under the header.
 ========================================================================== */
 body {
-  padding-top: 0 !important;
   margin-top: 0 !important;
 }
+
 
 /* Optional safety net:
    Some Squarespace templates wrap content in .site-wrapper or .page-content containers.
