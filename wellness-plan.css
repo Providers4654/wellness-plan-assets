@@ -1778,76 +1778,70 @@ html, body {
 
 
 
-/* ============================================
-   RESOURCE LINKS — BUTTON STYLE (LEFT-ALIGNED)
-   Matches Follow-Up button styling (neutral, elevated)
-   ============================================ */
+/* ============================================================
+   RESOURCE LINK BUTTONS — Restored Shiny, Lifted, Premium Style
+   ============================================================ */
 
 .wellness-plan .resource-link {
   border-top: 1px solid #eee;
-  padding: 18px 0;
+  padding: 22px 0;
   margin: 0;
 }
 
-/* Turn ALL resource links into buttons */
+/* Main button styling */
 .wellness-plan .resource-link a {
-  display: inline-block;             /* LEFT aligned */
-  padding: 12px 20px;
-  background: #ffffff;
-  border: 2px solid #dcdcdc;
-  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 
-  font-weight: 600;
+  background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  border: 1.8px solid #cfcfcf;
+  border-radius: 12px;
+
+  padding: 12px 22px;
   font-size: 15px;
-  color: #222;
-  text-decoration: none;
+  font-weight: 700;
+  color: #1f2d3d !important;
+  text-decoration: none !important;
 
-  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
-  transition: all 0.2s ease;
-  margin-bottom: 6px;                /* space above note */
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+
+  transition: all 0.25s ease;
 }
 
-/* Hover / active */
+/* Hover state — lifted and shinier */
 .wellness-plan .resource-link a:hover {
-  background: #fafafa;
-  border-color: #c9c9c9;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.08);
+  background: linear-gradient(135deg, #f9f9f9, #ececec);
+  border-color: #b4b4b4;
+
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.9);
 }
 
-/* Notes beneath button */
+/* Resource note text under each button */
 .wellness-plan .resource-link .resource-note {
   display: block;
+  margin-top: 6px;
   font-size: 14px;
+  line-height: 1.55;
   color: #666;
-  line-height: 1.5;
   font-style: italic;
-  max-width: 650px;                 /* keeps text tidy */
+  max-width: 650px;
 }
 
-/* First/last spacing inside bubbles */
-.wellness-plan .wellness-bubble .resource-link:first-of-type {
-  margin-top: 20px;
-}
-.wellness-plan .wellness-bubble .resource-link:last-of-type {
-  padding-bottom: 0;
-}
-
-/* Keep everything aligned left */
-.wellness-plan .resource-link,
-.wellness-plan .resource-link a,
-.wellness-plan .resource-link .resource-note {
-  text-align: left;
-}
-
-/* Mobile: full-width button but still visually left aligned */
+/* Mobile full-width */
 @media (max-width: 600px) {
   .wellness-plan .resource-link a {
     width: 100%;
-  }
-  .wellness-plan .resource-link .resource-note {
-    max-width: 100%;
+    justify-content: center;
+    text-align: center;
   }
 }
+
 
 
 
