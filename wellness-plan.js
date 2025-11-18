@@ -585,11 +585,48 @@ const keys = parseHybridValues(rows, ["Body Comp","Body Composition"], bodyCompK
 const compRow = bodyCompData.find(b => (b["State"] || "").trim() === key.trim());
 
         
-        if (compRow && compRow["Blurb"]) {
-          html += `<li><span class="editable">${normalizeCellText(compRow["Blurb"])}</span></li>`;
-        } else {
-          html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
-        }
+if (compRow && compRow["Blurb"]) {
+
+  const raw = compRow["Blurb"];
+
+  // Split into normalized lines
+  const parts = raw
+    .replace(/(\r\n|\r|\n)/g, "\n")    // normalize endings
+    .split("\n")
+    .map(l => l.trim())
+    .filter(l => l !== "");
+
+  let sectionHtml = "";
+  let listOpen = false;
+
+  parts.forEach(line => {
+    if (line.startsWith("- ")) {
+      // Start list if it's not already open
+      if (!listOpen) {
+        sectionHtml += "<ul>";
+        listOpen = true;
+      }
+      sectionHtml += `<li>${normalizeCellText(line.substring(2))}</li>`;
+    } else {
+      // If list open, close it
+      if (listOpen) {
+        sectionHtml += "</ul>";
+        listOpen = false;
+      }
+      // Normal paragraph line
+      sectionHtml += `<p>${normalizeCellText(line)}</p>`;
+    }
+  });
+
+  if (listOpen) sectionHtml += "</ul>"; // close list if still open
+
+  html += `<li><span class="editable">${sectionHtml}</span></li>`;
+
+} else {
+
+  html += `<li><span class="editable">${normalizeCellText(key)}</span></li>`;
+}
+
       });
       bodyCompList.innerHTML = html;
     } else {
