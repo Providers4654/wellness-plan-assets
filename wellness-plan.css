@@ -1369,14 +1369,19 @@ html, body {
   box-shadow: none !important;
 }
 
-/* Make ALL text inside the body comp gradient card teal */
+/* Make all text inside Body Comp teal — EXCEPT links */
 #bodyComp,
 #bodyComp p,
-#bodyComp a,
 #bodyComp strong,
 #bodyComp span {
   color: #008896 !important;
 }
+
+/* Keep links blue */
+#bodyComp a {
+  color: #0077cc !important;
+}
+
 
 
 
