@@ -1302,18 +1302,59 @@ html, body {
 }
 
 /* --- 2. Body Composition Analysis --- */
+
+/* Title styling */
 #bodyCompTitle {
   color: #008896;
 }
 #bodyCompTitle::after {
   background: #008896;
 }
-#bodyComp li {
-  color: #008896;
-  background: linear-gradient(to right, rgba(0,136,150,0.12), rgba(255,255,255,0));
+
+/* One big gradient card that wraps all bullets */
+#bodyComp {
+  list-style: disc;
+  padding: 14px 20px 16px 36px;
+  margin: 8px 0 18px 0;
+  border-radius: 18px;
+  background: linear-gradient(
+    to right,
+    rgba(0, 136, 150, 0.12),
+    rgba(255, 255, 255, 0)
+  );
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
 }
+
+/* Clean bullets inside (no mini cards, no hover lift) */
+#bodyComp li {
+  list-style: disc;
+  margin: 4px 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: #008896;
+}
+
+/* Bullet color */
+#bodyComp li::marker {
+  color: #008896;
+}
+
+/* Make the <span class="editable"> look like normal text */
+#bodyComp li .editable {
+  background: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  display: inline !important;
+}
+
+/* Override the generic hover from .goals-list li */
 #bodyComp li:hover {
-  background: linear-gradient(to right, rgba(0,136,150,0.2), rgba(255,255,255,0));
+  background: transparent;
+  transform: none;
+  box-shadow: none;
 }
 
 /* --- 3. Target Goals --- */
