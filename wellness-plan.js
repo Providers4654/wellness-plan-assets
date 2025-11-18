@@ -307,18 +307,21 @@ function injectPatientData(rows, lifestyleData, medsData, bodyCompData, toConsid
 
 // --- Dose with Note styling ---
 let dose = getField(r, ["Dose", "Dosing"]) || "";
-let doseHtml = dose;
+let rawDose = getField(r, ["Dose", "Dosing"]) || "";
+let doseHtml = normalizeCellText(rawDose);
 
-if (dose.includes("Note:")) {
-  const [mainDose, ...noteParts] = dose.split(/Note:/);
-  const main = mainDose.trim();
-  const note = noteParts.join("Note:").trim();
+// Special logic for Note: styling (preserving multi-lines)
+if (rawDose.includes("Note:")) {
+  const [mainDose, ...noteParts] = rawDose.split(/Note:/);
+  const main = normalizeCellText(mainDose.trim());
+  const note = normalizeCellText(noteParts.join("Note:").trim());
 
   doseHtml = `
     ${main ? main + "<br>" : ""}
     <span class="dose-note">Note: ${note}</span>
   `;
 }
+
 
 
     const cat = (getField(r, ["Category", "Cat"]) || "").trim();
