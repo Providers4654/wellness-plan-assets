@@ -1686,56 +1686,75 @@ html, body {
 
 
 
-/* ============================
-   RESOURCE LINKS (clean + even)
-   ============================ */
+/* ============================================
+   RESOURCE LINKS — BUTTON STYLE (LEFT-ALIGNED)
+   Matches Follow-Up button styling (neutral, elevated)
+   ============================================ */
+
 .wellness-plan .resource-link {
-  border-top: 1px solid #eee;    /* divider between groups */
-  padding: 14px 0;               /* even top/bottom */
+  border-top: 1px solid #eee;
+  padding: 18px 0;
   margin: 0;
 }
 
+/* Turn ALL resource links into buttons */
 .wellness-plan .resource-link a {
-  display: block;                /* link on its own line */
-  color: #bd243f;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 1.4;
+  display: inline-block;             /* LEFT aligned */
+  padding: 12px 20px;
+  background: #ffffff;
+  border: 2px solid #dcdcdc;
+  border-radius: 10px;
+
+  font-weight: 600;
+  font-size: 15px;
+  color: #222;
   text-decoration: none;
-  margin-bottom: 4px;            /* tight gap before note */
+
+  box-shadow: 0 3px 6px rgba(0,0,0,0.06);
+  transition: all 0.2s ease;
+  margin-bottom: 6px;                /* space above note */
 }
+
+/* Hover / active */
 .wellness-plan .resource-link a:hover {
-  text-decoration: underline;
+  background: #fafafa;
+  border-color: #c9c9c9;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.08);
 }
 
+/* Notes beneath button */
 .wellness-plan .resource-link .resource-note {
-  display: block;                /* note directly under link */
+  display: block;
   font-size: 14px;
+  color: #666;
+  line-height: 1.5;
   font-style: italic;
-  color: #777;
-  line-height: 1.4;
+  max-width: 650px;                 /* keeps text tidy */
 }
 
-/* Coaching note stays above coaching link */
-#coachingNote {
-  margin-bottom: 4px;            /* same spacing rhythm */
-}
-
-/* First/last adjustments inside bubbles */
+/* First/last spacing inside bubbles */
 .wellness-plan .wellness-bubble .resource-link:first-of-type {
-  margin-top: 18px;
+  margin-top: 20px;
 }
 .wellness-plan .wellness-bubble .resource-link:last-of-type {
   padding-bottom: 0;
 }
 
-/* Force all resource links and notes to be left aligned */
+/* Keep everything aligned left */
 .wellness-plan .resource-link,
 .wellness-plan .resource-link a,
 .wellness-plan .resource-link .resource-note {
   text-align: left;
-  margin-left: 0;
-  padding-left: 0;
+}
+
+/* Mobile: full-width button but still visually left aligned */
+@media (max-width: 600px) {
+  .wellness-plan .resource-link a {
+    width: 100%;
+  }
+  .wellness-plan .resource-link .resource-note {
+    max-width: 100%;
+  }
 }
 
 
@@ -1923,12 +1942,6 @@ html, body {
   .wellness-plan .medication-list li { font-size: 13.5px !important; }
   .wellness-plan .medication-list li strong { font-size: 14px !important; }
   .wellness-plan .dose { font-size: 13px !important; padding: 5px 8px !important; }
-
-  /* Resource links + notes */
-  .wellness-plan .resource-link a,
-  .wellness-plan .resource-link .resource-note {
-    font-size: 13px !important;
-  }
 }
 
 
@@ -2062,6 +2075,22 @@ ul li,
 
 
 
+
+
+/* Remove bullets & reset spacing for Goals & Follow-Up lists */
+.wellness-plan .goals-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+
+/* Remove dashed medication borders from To Consider category rows */
+.wellness-plan #toConsider .to-consider-li {
+  border-bottom: none !important;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
 
 
 
