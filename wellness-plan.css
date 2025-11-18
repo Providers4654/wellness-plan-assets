@@ -1311,10 +1311,9 @@ html, body {
   background: #008896;
 }
 
-/* One big gradient card that wraps all bullets */
+/* The main gradient wrapper (now works with divs, not LI) */
 #bodyComp {
-  list-style: disc;
-  padding: 14px 20px 16px 36px;
+  padding: 14px 20px 16px 20px !important; /* FIXED: was 36px */
   margin: 8px 0 18px 0;
   border-radius: 18px;
   background: linear-gradient(
@@ -1323,9 +1322,22 @@ html, body {
     rgba(255, 255, 255, 0)
   );
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.06);
+  list-style: none; /* FIXED: so the first line won't get a bullet */
 }
 
-/* Clean bullets inside (no mini cards, no hover lift) */
+/* Each block of paragraphs + list */
+.bodycomp-block {
+  margin: 0 0 12px 0;
+  padding: 0;
+}
+
+/* UL inside the body comp card */
+#bodyComp ul {
+  margin: 8px 0 12px 1.4em;
+  padding: 0;
+}
+
+/* Clean bullets */
 #bodyComp li {
   list-style: disc;
   margin: 4px 0;
@@ -1341,8 +1353,8 @@ html, body {
   color: #008896;
 }
 
-/* Make the <span class="editable"> look like normal text */
-#bodyComp li .editable {
+/* Editable spans behave like normal text */
+#bodyComp .editable {
   background: none !important;
   padding: 0 !important;
   border-radius: 0 !important;
@@ -1350,12 +1362,23 @@ html, body {
   display: inline !important;
 }
 
-/* Override the generic hover from .goals-list li */
+/* Prevent hover effects inherited from other list styles */
 #bodyComp li:hover {
-  background: transparent;
-  transform: none;
-  box-shadow: none;
+  background: transparent !important;
+  transform: none !important;
+  box-shadow: none !important;
 }
+
+/* Make ALL text inside the body comp gradient card teal */
+#bodyComp,
+#bodyComp p,
+#bodyComp a,
+#bodyComp strong,
+#bodyComp span {
+  color: #008896 !important;
+}
+
+
 
 /* --- 3. Target Goals --- */
 #targetTitle {
