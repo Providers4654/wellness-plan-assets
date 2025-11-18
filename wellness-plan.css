@@ -1369,18 +1369,41 @@ html, body {
   box-shadow: none !important;
 }
 
-/* Make all text inside Body Comp teal — EXCEPT links */
+/* --- Body Comp Typography Rules (Safe + Precise) --- */
+
+/* Make all Body Comp text teal — EXCEPT links */
 #bodyComp,
 #bodyComp p,
-#bodyComp strong,
-#bodyComp span {
+#bodyComp span,
+#bodyComp li {
   color: #008896 !important;
 }
 
-/* Keep links blue */
+/* Normal (non-bold) links */
 #bodyComp a {
   color: #0077cc !important;
+  font-weight: normal !important;
 }
+
+/* Strong text (headings/phrases) */
+#bodyComp strong {
+  color: #008896 !important;
+  font-weight: 700 !important;
+}
+
+/* Strong links ONLY when <strong> actually wraps the link or text */
+#bodyComp strong > a,
+#bodyComp a > strong {
+  color: #0077cc !important;
+  font-weight: 700 !important;
+}
+
+/* Prevent strong from bolding entire child trees */
+#bodyComp strong * {
+  font-weight: inherit !important;
+}
+
+
 
 
 
