@@ -620,7 +620,8 @@ if (compRow && compRow["Blurb"]) {
 
   if (listOpen) sectionHtml += "</ul>"; // close list if still open
 
-  html += `<li><span class="editable">${sectionHtml}</span></li>`;
+  html += `<div class="bodycomp-block">${sectionHtml}</div>`;
+
 
 } else {
 
