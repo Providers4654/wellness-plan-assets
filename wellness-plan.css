@@ -1812,7 +1812,7 @@ html, body {
   margin-right: auto;
 }
 
-/* Follow-Up section wrapper — now matches resource-link width */
+/* Follow-Up section wrapper — matches resource-link width */
 .wellness-plan .followup-link {
   margin-top: 48px;
   margin-bottom: 10px;
@@ -1820,7 +1820,6 @@ html, body {
   border-top: 1px solid #eee;
   text-align: center;
 
-  /* 🔥 match all other resource sections */
   max-width: 650px;
   margin-left: auto;
   margin-right: auto;
@@ -1845,8 +1844,10 @@ html, body {
   text-align: center;
 }
 
+
+
 /* ============================================================
-   UNIVERSAL BUTTON STYLE — applies to <a> and <button>
+   UNIVERSAL PREMIUM BUTTON STYLE — White Glass + Depth + Readability
    ============================================================ */
 
 .wellness-plan .premium-btn,
@@ -1857,49 +1858,99 @@ html, body {
   justify-content: center;
   gap: 8px;
 
-  background: linear-gradient(135deg, #ffffff, #f3f3f3);
-  border: 2px solid #d1d1d1;
-  border-radius: 14px;
+  /* Clean readable glass gradient */
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #f3f5f8 35%,
+    #ffffff 100%
+  );
+
+  /* Soft professional border */
+  border: 2px solid #d5d8de;
+
+  /* Readable dark text */
+  color: #1b2735 !important;
 
   padding: 14px 26px;
   font-size: 15px;
   font-weight: 700;
   font-family: "Helvetica Neue", Arial, sans-serif;
 
-  color: #1f2d3d !important;
-  text-decoration: none !important;
-
-  box-shadow:
-    0 3px 8px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-
-  transition: all 0.25s ease;
+  border-radius: 16px;
   cursor: pointer;
-}
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s ease;
 
-/* Hover */
-.wellness-plan .premium-btn:hover {
-  background: linear-gradient(135deg, #fafafa, #e8e8e8);
-  border-color: #bfbfbf;
-  transform: translateY(-2px);
+  /* Professional 3D depth */
   box-shadow:
-    0 6px 14px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.95);
+    0 7px 18px rgba(0,0,0,0.16),  /* main lift */
+    0 3px 8px rgba(0,0,0,0.10),   /* grounding */
+    inset 0 1px 2px rgba(255,255,255,0.55), /* top highlight */
+    inset 0 -2px 4px rgba(0,0,0,0.04);       /* bottom curvature */
 }
 
-/* Center buttons inside their wrappers */
+/* Gloss highlight — subtle, does NOT cut through text */
+.wellness-plan .premium-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.55),
+    rgba(255,255,255,0.08)
+  );
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+  pointer-events: none;
+}
+
+/* Hover — lifted, bright, clean */
+.wellness-plan .premium-btn:hover {
+  background: linear-gradient(
+    145deg,
+    #ffffff 0%,
+    #eceff3 50%,
+    #ffffff 100%
+  );
+
+  border-color: #c9ccd2;
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(0,0,0,0.18),
+    0 5px 14px rgba(0,0,0,0.12),
+    inset 0 1px 3px rgba(255,255,255,0.65),
+    inset 0 -2px 4px rgba(0,0,0,0.05);
+}
+
+/* Press effect */
+.wellness-plan .premium-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 5px 14px rgba(0,0,0,0.14),
+    inset 0 2px 4px rgba(0,0,0,0.10);
+}
+
+/* Centers all buttons in their blocks */
 .wellness-plan .resource-link a.premium-btn,
 .wellness-plan .followup-link a.premium-btn,
 .wellness-plan .print-plan-wrapper .premium-btn {
   margin: 0 auto;
 }
 
+
+
 /* ============================================================
-   DESKTOP — Clean button layout & text flow
+   DESKTOP — Button layout & width
    ============================================================ */
 @media (min-width: 601px) {
 
-  /* Button / Note are stacked and centered */
+  /* Stack note & button, centered */
   .wellness-plan .resource-link {
     display: flex;
     flex-direction: column;
@@ -1907,19 +1958,22 @@ html, body {
     justify-content: center;
   }
 
-  /* Consistent desktop button width */
+  /* Standardized desktop button width */
   .wellness-plan .premium-btn {
-    width: 320px;   /* ⭐ Change to 300 / 320 / 360 if you want */
+    width: 320px;
     max-width: 100%;
     white-space: normal;
     text-align: center;
   }
 }
 
+
+
 /* ============================================================
-   MOBILE — full width buttons
+   MOBILE — Full-width buttons
    ============================================================ */
 @media (max-width: 600px) {
+
   .wellness-plan .premium-btn {
     width: 100%;
     min-width: unset;
@@ -1942,6 +1996,7 @@ html, body {
     justify-content: center;
   }
 }
+
 
 
 
