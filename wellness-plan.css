@@ -1732,9 +1732,11 @@ html, body {
   .wellness-plan ul li { margin-left: 0; }
 }
 
-/* Global links inside wellness plan */
+/* ============================================================
+   Global links inside wellness plan
+   ============================================================ */
 .wellness-plan a {
-  color: #0066cc;          /* clear, accessible blue */
+  color: #0066cc;          /* standard link blue */
   text-decoration: none;
   font-weight: 600;
 }
@@ -1743,6 +1745,7 @@ html, body {
   color: #004999;          /* darker blue on hover */
   text-decoration: underline;
 }
+
 
 /* Spacing between consecutive sections */
 .wellness-plan .section-wrapper + .section-wrapper { margin-top: 80px; }
@@ -1778,172 +1781,177 @@ html, body {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* ============================================================
-   RESOURCE LINK BUTTONS — Restored Shiny, Lifted, Premium Style
+   RESOURCE & SCHEDULE BUTTONS — Unified Premium Style
    ============================================================ */
 
+/* Wrapper for each resource link block */
 .wellness-plan .resource-link {
   border-top: 1px solid #eee;
   padding: 22px 0;
   margin: 0;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Main button styling */
-.wellness-plan .resource-link a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
+/* Follow-Up section wrapper — now matches resource-link width */
+.wellness-plan .followup-link {
+  margin-top: 48px;
+  margin-bottom: 10px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+  text-align: center;
 
-  background: linear-gradient(135deg, #ffffff, #f5f5f5);
-  border: 1.8px solid #cfcfcf;
-  border-radius: 12px;
-
-  padding: 12px 22px;
-  font-size: 15px;
-  font-weight: 700;
-  color: #1f2d3d !important;
-  text-decoration: none !important;
-
-  box-shadow:
-    0 4px 10px rgba(0,0,0,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.9);
-
-  transition: all 0.25s ease;
+  /* 🔥 match all other resource sections */
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-/* Hover state — lifted and shinier */
-.wellness-plan .resource-link a:hover {
-  background: linear-gradient(135deg, #f9f9f9, #ececec);
-  border-color: #b4b4b4;
-
-  transform: translateY(-2px);
-  box-shadow:
-    0 6px 16px rgba(0,0,0,0.12),
-    inset 0 1px 0 rgba(255,255,255,0.9);
+/* Print button wrapper */
+.wellness-plan .print-plan-wrapper {
+  margin-top: 40px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
-/* Resource note text under each button */
+/* Resource notes */
 .wellness-plan .resource-link .resource-note {
   display: block;
-  margin-top: 6px;
+  margin-top: 8px;
   font-size: 14px;
   line-height: 1.55;
   color: #666;
   font-style: italic;
   max-width: 650px;
+  text-align: center;
 }
 
-/* Mobile full-width */
-@media (max-width: 600px) {
-  .wellness-plan .resource-link a {
-    width: 100%;
+/* ============================================================
+   UNIVERSAL BUTTON STYLE — applies to <a> and <button>
+   ============================================================ */
+
+.wellness-plan .premium-btn,
+.wellness-plan .premium-btn:visited,
+.wellness-plan .premium-btn:focus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: linear-gradient(135deg, #ffffff, #f3f3f3);
+  border: 2px solid #d1d1d1;
+  border-radius: 14px;
+
+  padding: 14px 26px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+
+  color: #1f2d3d !important;
+  text-decoration: none !important;
+
+  box-shadow:
+    0 3px 8px rgba(0,0,0,0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+/* Hover */
+.wellness-plan .premium-btn:hover {
+  background: linear-gradient(135deg, #fafafa, #e8e8e8);
+  border-color: #bfbfbf;
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.95);
+}
+
+/* Center buttons inside their wrappers */
+.wellness-plan .resource-link a.premium-btn,
+.wellness-plan .followup-link a.premium-btn,
+.wellness-plan .print-plan-wrapper .premium-btn {
+  margin: 0 auto;
+}
+
+/* ============================================================
+   DESKTOP — Clean button layout & text flow
+   ============================================================ */
+@media (min-width: 601px) {
+
+  /* Button / Note are stacked and centered */
+  .wellness-plan .resource-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+  }
+
+  /* Consistent desktop button width */
+  .wellness-plan .premium-btn {
+    width: 320px;   /* ⭐ Change to 300 / 320 / 360 if you want */
+    max-width: 100%;
+    white-space: normal;
     text-align: center;
   }
 }
 
-
-
-
-
-/* ============================
-   BUTTONS: SCHEDULE + PRINT (Refined, centered, no icon)
-   ============================ */
-
-/* Follow-Up Button Block — with divider and extra spacing */
-.wellness-plan .followup-link {
-  text-align: center;
-  margin-top: 48px;       /* more space above */
-  margin-bottom: 10px;
-  padding-top: 16px;
-  border-top: 1px solid #eee; /* subtle divider like other resource sections */
-}
-
-/* Center the anchor and ensure proper alignment */
-.wellness-plan .followup-link a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: fit-content;
-  margin: 0 auto;
-  text-align: center;
-}
-
-/* Schedule Follow-Up Button */
-.schedule-followup-btn {
-  background: linear-gradient(145deg, #ffffff, #f5f5f5);
-  color: #1f2d3d;
-  padding: 10px 26px;
-  border: 1.5px solid #bbb;
-  border-radius: 12px;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  letter-spacing: 0.3px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 #fff;
-}
-
-/* Hover + Pressed States */
-.schedule-followup-btn:hover {
-  background: linear-gradient(145deg, #f8f8f8, #eaeaea);
-  border-color: #999;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
-}
-
-.schedule-followup-btn:active {
-  background: #e2e2e2;
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-}
-
-/* Print Plan Button — harmonized look */
-.print-plan-wrapper {
-  text-align: center;
-  margin: 60px 0 40px;
-}
-
-.print-plan-btn {
-  background: linear-gradient(145deg, #ffffff, #f4f4f4);
-  color: #2a2a2a;
-  padding: 10px 24px;
-  border: 1.5px solid #aaa;
-  border-radius: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08), inset 0 1px 0 #fff;
-}
-
-.print-plan-btn:hover {
-  background: linear-gradient(145deg, #f9f9f9, #eaeaea);
-  border-color: #888;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Mobile Adjustment */
+/* ============================================================
+   MOBILE — full width buttons
+   ============================================================ */
 @media (max-width: 600px) {
-  .schedule-followup-btn {
+  .wellness-plan .premium-btn {
     width: 100%;
-    max-width: 320px;
+    min-width: unset;
+    padding: 14px 20px;
     font-size: 14px;
-    padding: 10px 20px;
   }
 
-  .wellness-plan .followup-link a {
+  .wellness-plan .resource-link {
+    text-align: left;
+  }
+
+  .wellness-plan .resource-link .resource-note {
+    text-align: left;
+    font-size: 13px;
+  }
+
+  .wellness-plan .followup-link a.premium-btn {
     width: 100%;
+    margin: 0;
     justify-content: center;
   }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2202,3 +2210,60 @@ body {
   margin-top: 0 !important;
 }
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   FINAL OVERRIDES — MUST BE LAST
+   Ensures desktop button width + spacing below Lifestyle Tips
+   ============================================================ */
+
+/* Force correct desktop layout no matter what came earlier */
+@media (min-width: 601px) {
+  .wellness-plan .resource-link {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .wellness-plan .premium-btn {
+    width: 320px !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+}
+
+/* Fix spacing between Lifestyle Tips and the first resource-link */
+.lifestyle-tips-list + .resource-link {
+  margin-top: 50px !important;
+}
+
+
+
+
+
+
+
+
+
+
+
