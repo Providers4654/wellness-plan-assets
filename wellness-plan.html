@@ -5,6 +5,7 @@
 
 <div class="wellness-plan">
   <div class="printable-content">
+    
     <div class="wellness-logo"></div>
 
     <!-- Top Buttons -->
@@ -13,11 +14,10 @@
       <a id="dynamicTopBtn2" class="top-link-btn"></a>
     </div>
 
-<!-- PLAN HEADER -->
-<div class="section-wrapper plan-header">
-  <p class="intro-text"></p>
-</div>
-
+    <!-- PLAN HEADER -->
+    <div class="section-wrapper plan-header">
+      <p class="intro-text"></p>
+    </div>
 
 
     <!-- ======================== 
@@ -25,6 +25,7 @@
     ======================== -->
     <div class="section-wrapper treatment-summary-section">
       <div class="section-title title-summary"></div>
+
       <div class="wellness-bubble">
 
         <!-- Dynamic Med Blocks -->
@@ -49,124 +50,124 @@
         </div>
 
 
-<!-- Resource Links -->
+        <!-- Resource Links -->
+        <div class="resource-link">
+          <a id="dynamicInjectablesLink" class="premium-btn" target="_blank">
+            <span id="injectablesText"></span>
+          </a>
+          <span class="resource-note" id="injectablesNote"></span>
+        </div>
 
-<!-- Order Injectables / Peptides Link -->
-<div class="resource-link">
-  <a id="dynamicInjectablesLink" target="_blank">
-    <span id="injectablesText"></span>
-  </a>
-  <span class="resource-note" id="injectablesNote"></span>
-</div>
+        <div class="resource-link">
+          <a id="dynamicFullscriptLink" class="premium-btn" target="_blank">
+            <span id="fullscriptText"></span>
+          </a>
+          <span class="resource-note" id="fullscriptNote"></span>
+        </div>
 
-       
-<div class="resource-link">
-  <a id="dynamicFullscriptLink" target="_blank"><span id="fullscriptText"></span></a>
-  <span class="resource-note" id="fullscriptNote"></span>
-</div>
-
-</div>
-</div>
-
-
-<!-- ========================
-     LIFESTYLE
-======================== -->
-<div class="section-wrapper lifestyle-section">
-  <div class="section-title title-lifestyle"></div>
-  <div class="wellness-bubble">
-
-    <p class="section-subtext lifestyle-subtext"></p>
-
-    <ul class="lifestyle-tips-list" id="lifestyleTips"></ul>
-
-    <div class="resource-link">
-      <a id="dynamicStandardsLink" target="_blank"><span id="standardsText"></span></a>
-      <span class="resource-note" id="standardsNote"></span>
+      </div>
     </div>
 
-<!-- 
-<div class="resource-link">
-  <span class="resource-note" id="coachingNote"></span>
-  <a id="dynamicCoachingLink" target="_blank"></a>
-</div>
--->
 
+    <!-- ========================
+         LIFESTYLE
+    ======================== -->
+    <div class="section-wrapper lifestyle-section">
+      <div class="section-title title-lifestyle"></div>
 
-  </div>
-</div>
+      <div class="wellness-bubble">
 
+        <p class="section-subtext lifestyle-subtext"></p>
 
+        <ul class="lifestyle-tips-list" id="lifestyleTips"></ul>
 
-<!-- ======================== 
-     TO CONSIDER
-======================== -->
-<div class="section-wrapper to-consider-section">
-  <div class="section-title title-to-consider"></div>
-  <div class="wellness-bubble">
-<p class="section-subtext to-consider-subtext"></p>
-    <div class="med-time-block to-consider-block" id="toConsiderBlock">
-      <ul class="medication-list enhanced" id="toConsider"></ul>
+        <div class="resource-link">
+          <a id="dynamicStandardsLink" class="premium-btn" target="_blank">
+            <span id="standardsText"></span>
+          </a>
+          <span class="resource-note" id="standardsNote"></span>
+        </div>
+
+        <!-- Optional coaching block (disabled for now)
+        <div class="resource-link">
+          <a id="dynamicCoachingLink" class="premium-btn" target="_blank">
+            <span id="coachingText"></span>
+          </a>
+          <span class="resource-note" id="coachingNote"></span>
+        </div>
+        -->
+
+      </div>
     </div>
 
-    <!-- Optional Add-On Therapies link -->
-    <div class="resource-link">
-      <a id="dynamicAddOnsLink" target="_blank">
-        <span id="addonsText"></span>
-      </a>
-      <span class="resource-note" id="addonsNote"></span>
+
+    <!-- ======================== 
+         TO CONSIDER
+    ======================== -->
+    <div class="section-wrapper to-consider-section">
+      <div class="section-title title-to-consider"></div>
+
+      <div class="wellness-bubble">
+
+        <p class="section-subtext to-consider-subtext"></p>
+
+        <div class="med-time-block to-consider-block" id="toConsiderBlock">
+          <ul class="medication-list enhanced" id="toConsider"></ul>
+        </div>
+
+        <div class="resource-link">
+          <a id="dynamicAddOnsLink" class="premium-btn" target="_blank">
+            <span id="addonsText"></span>
+          </a>
+          <span class="resource-note" id="addonsNote"></span>
+        </div>
+
+      </div>
     </div>
 
-  </div>
-</div>
 
+    <!-- ========================
+         GOALS + FOLLOW-UP
+    ======================== -->
+    <div class="section-wrapper">
+      <div class="section-title title-goals"></div>
 
-   
+      <div class="wellness-bubble">
 
-<!-- ========================
-     GOALS + FOLLOW-UP
-======================== -->
-<div class="section-wrapper">
-  <div class="section-title title-goals"></div>
-  <div class="wellness-bubble">
+        <div class="goal-block">
+          <h4 class="goals-subheader" id="visitTimelineTitle"></h4>
+          <ul class="goals-list" id="visitTimeline"></ul>
+        </div>
 
-    <div class="goal-block">
-      <h4 class="goals-subheader" id="visitTimelineTitle"></h4>
-      <ul class="goals-list" id="visitTimeline"></ul>
+        <div class="goal-block">
+          <h4 class="goals-subheader" id="bodyCompTitle"></h4>
+          <ul class="goals-list" id="bodyComp"></ul>
+        </div>
+
+        <div class="goal-block">
+          <h4 class="goals-subheader" id="targetTitle"></h4>
+          <ul class="goals-list" id="targetGoals"></ul>
+        </div>
+
+        <div class="goal-block">
+          <h4 class="goals-subheader" id="otherTitle"></h4>
+          <ul class="goals-list" id="otherItems"></ul>
+        </div>
+
+        <div class="followup-link">
+          <a id="dynamicFollowUpLink" class="premium-btn schedule-followup-btn" target="_blank">
+            <span id="followupText"></span>
+          </a>
+        </div>
+
+      </div>
     </div>
 
-    <div class="goal-block">
-      <h4 class="goals-subheader" id="bodyCompTitle"></h4>
-      <ul class="goals-list" id="bodyComp"></ul>
-    </div>
 
-    <div class="goal-block">
-      <h4 class="goals-subheader" id="targetTitle"></h4>
-      <ul class="goals-list" id="targetGoals"></ul>
-    </div>
-
-    <div class="goal-block">
-      <h4 class="goals-subheader" id="otherTitle"></h4>
-      <ul class="goals-list" id="otherItems"></ul>
-    </div>
-
-<div class="followup-link">
-  <a id="dynamicFollowUpLink" target="_blank">
-    <button class="schedule-followup-btn" id="followupText"></button>
-  </a>
-</div>
-
-
-  </div>
-</div>
-
-
-
-   
     <!-- Print Button -->
     <div class="print-plan-wrapper">
-      <button class="print-plan-btn" onclick="window.print()">🖨️ Print Wellness Plan</button>
+      <button class="premium-btn print-plan-btn" onclick="window.print()">🖨️ Print Wellness Plan</button>
     </div>
+
   </div>
 </div>
-
