@@ -241,12 +241,12 @@ document.addEventListener("click", e => {
 // ============================
 function normalizeCellText(text) {
   if (!text) return "";
-  return text
-    .trim() // safe to trim here now
-    .replace(/\\n/g, "<br>")        // literal \n
-    .replace(/(\r\n|\r|\n)/g, "<br>") 
-    .replace(/&lt;br&gt;/g, "<br>");
+  return String(text)
+    .replace(/\\n/g, "<br>")
+    .replace(/(\r\n|\r|\n)/g, "<br>")
+    .replace(/&lt;br\s*\/?&gt;/gi, "<br>");
 }
+
 
 
 // Normalize header names (strip hidden chars, unify variations)
@@ -392,7 +392,7 @@ function parseHybridValues(rows, fieldNames, knownOptions = []) {
       return;
     }
 
-    const cleanVal = val.trim();
+    const cleanVal = val.replace(/\r?$/, "");
 
     // Try splitting by comma
     const parts = cleanVal.split(",").map(v => v.trim()).filter(Boolean);
@@ -402,14 +402,9 @@ function parseHybridValues(rows, fieldNames, knownOptions = []) {
       console.log("✅ All parts are KNOWN dropdown items:", parts);
       values.push(...parts);
     } else {
-      console.log("↩️ Treating as free-text → splitting only on returns");
-      cleanVal.split(/\r\n|\r|\n/).forEach(v => {
-        const t = v.trim();
-        if (t) {
-          console.log("  ➡️ Added:", t);
-          values.push(t);
-        }
-      });
+console.log("↩️ Treating as free-text → keeping entire string with line breaks");
+values.push(cleanVal);
+
     }
     console.groupEnd();
   });
@@ -523,14 +518,16 @@ if (lifestyleBlock) {
           </li>`;
       } else {
         // ✅ Custom free-text tip (split on colon)
-        let raw = String(tipName).trim();
+        let raw = String(tipName);
         let title = raw;
         let blurb = "";
 
         const colonIndex = raw.indexOf(":");
         if (colonIndex !== -1) {
-          title = raw.slice(0, colonIndex).trim();
-          blurb = raw.slice(colonIndex + 1).trim();
+title = raw.slice(0, colonIndex).trim();   // keep this trim (titles should be clean)
+blurb = raw.slice(colonIndex + 1);         // REMOVE trim here
+
+
         }
 
         html += `
