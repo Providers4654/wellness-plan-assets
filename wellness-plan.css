@@ -2033,11 +2033,12 @@ html, body {
     box-sizing: border-box;
   }
 
-  /* Add comfortable side padding only inside the plan */
-  .wellness-plan {
-    padding: 80px 12px 12px;  /* left/right gutters for readability */
-  }
+/* Add comfortable side padding only inside the plan */
+.wellness-plan {
+  padding: 12px 12px 12px;  /* remove huge top padding */
 }
+}
+
 
 
 
