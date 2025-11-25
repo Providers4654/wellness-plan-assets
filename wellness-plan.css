@@ -1155,38 +1155,169 @@ html, body {
 }
 
 /* ------------------------------
-   CATEGORY COLORS + BACKGROUND TINTS
+   CATEGORY COLORS + BACKGROUND TINTS (1–20)
 ------------------------------- */
+
+/* 1 — Blue */
 #toConsider > li:nth-child(1) .to-consider-subtitle,
 #toConsider > li:nth-child(1) .to-consider-content {
-  --accent-color: #6b93ff; /* Blue */
+  --accent-color: #6b93ff;
   border-left-color: #6b93ff;
   background: linear-gradient(90deg, #eef1ff, #ffffff);
 }
+
+/* 2 — Green */
 #toConsider > li:nth-child(2) .to-consider-subtitle,
 #toConsider > li:nth-child(2) .to-consider-content {
-  --accent-color: #6acb72; /* Green */
+  --accent-color: #6acb72;
   border-left-color: #6acb72;
   background: linear-gradient(90deg, #e9fbea, #ffffff);
 }
+
+/* 3 — Coral */
 #toConsider > li:nth-child(3) .to-consider-subtitle,
 #toConsider > li:nth-child(3) .to-consider-content {
-  --accent-color: #ff6b6b; /* Coral */
+  --accent-color: #ff6b6b;
   border-left-color: #ff6b6b;
   background: linear-gradient(90deg, #ffecec, #ffffff);
 }
+
+/* 4 — Lavender */
 #toConsider > li:nth-child(4) .to-consider-subtitle,
 #toConsider > li:nth-child(4) .to-consider-content {
-  --accent-color: #b48bff; /* Lavender */
+  --accent-color: #b48bff;
   border-left-color: #b48bff;
   background: linear-gradient(90deg, #f7f0ff, #ffffff);
 }
+
+/* 5 — Gold */
 #toConsider > li:nth-child(5) .to-consider-subtitle,
 #toConsider > li:nth-child(5) .to-consider-content {
-  --accent-color: #f5a623; /* Gold */
+  --accent-color: #f5a623;
   border-left-color: #f5a623;
   background: linear-gradient(90deg, #fff9ec, #ffffff);
 }
+
+/* 6 — Orange-Red */
+#toConsider > li:nth-child(6) .to-consider-subtitle,
+#toConsider > li:nth-child(6) .to-consider-content {
+  --accent-color: #ff7b54;
+  border-left-color: #ff7b54;
+  background: linear-gradient(90deg, #fff1ec, #ffffff);
+}
+
+/* 7 — Teal */
+#toConsider > li:nth-child(7) .to-consider-subtitle,
+#toConsider > li:nth-child(7) .to-consider-content {
+  --accent-color: #36b9b9;
+  border-left-color: #36b9b9;
+  background: linear-gradient(90deg, #e9f8f8, #ffffff);
+}
+
+/* 8 — Rose Pink */
+#toConsider > li:nth-child(8) .to-consider-subtitle,
+#toConsider > li:nth-child(8) .to-consider-content {
+  --accent-color: #ff8fc1;
+  border-left-color: #ff8fc1;
+  background: linear-gradient(90deg, #fff0f7, #ffffff);
+}
+
+/* 9 — Slate Blue */
+#toConsider > li:nth-child(9) .to-consider-subtitle,
+#toConsider > li:nth-child(9) .to-consider-content {
+  --accent-color: #7388ff;
+  border-left-color: #7388ff;
+  background: linear-gradient(90deg, #eff1ff, #ffffff);
+}
+
+/* 10 — Forest Green */
+#toConsider > li:nth-child(10) .to-consider-subtitle,
+#toConsider > li:nth-child(10) .to-consider-content {
+  --accent-color: #2e8b57;
+  border-left-color: #2e8b57;
+  background: linear-gradient(90deg, #e9f7f0, #ffffff);
+}
+
+/* 11 — Magenta */
+#toConsider > li:nth-child(11) .to-consider-subtitle,
+#toConsider > li:nth-child(11) .to-consider-content {
+  --accent-color: #d64dd1;
+  border-left-color: #d64dd1;
+  background: linear-gradient(90deg, #fcecff, #ffffff);
+}
+
+/* 12 — Aqua Blue */
+#toConsider > li:nth-child(12) .to-consider-subtitle,
+#toConsider > li:nth-child(12) .to-consider-content {
+  --accent-color: #29a6ff;
+  border-left-color: #29a6ff;
+  background: linear-gradient(90deg, #eaf6ff, #ffffff);
+}
+
+/* 13 — Amber */
+#toConsider > li:nth-child(13) .to-consider-subtitle,
+#toConsider > li:nth-child(13) .to-consider-content {
+  --accent-color: #ffb347;
+  border-left-color: #ffb347;
+  background: linear-gradient(90deg, #fff6e8, #ffffff);
+}
+
+/* 14 — Mint Green */
+#toConsider > li:nth-child(14) .to-consider-subtitle,
+#toConsider > li:nth-child(14) .to-consider-content {
+  --accent-color: #7ed6a7;
+  border-left-color: #7ed6a7;
+  background: linear-gradient(90deg, #effcf5, #ffffff);
+}
+
+/* 15 — Violet */
+#toConsider > li:nth-child(15) .to-consider-subtitle,
+#toConsider > li:nth-child(15) .to-consider-content {
+  --accent-color: #9b59b6;
+  border-left-color: #9b59b6;
+  background: linear-gradient(90deg, #f7effc, #ffffff);
+}
+
+/* 16 — Olive Green */
+#toConsider > li:nth-child(16) .to-consider-subtitle,
+#toConsider > li:nth-child(16) .to-consider-content {
+  --accent-color: #8a9b0f;
+  border-left-color: #8a9b0f;
+  background: linear-gradient(90deg, #f7fbe8, #ffffff);
+}
+
+/* 17 — Crimson */
+#toConsider > li:nth-child(17) .to-consider-subtitle,
+#toConsider > li:nth-child(17) .to-consider-content {
+  --accent-color: #d64545;
+  border-left-color: #d64545;
+  background: linear-gradient(90deg, #ffecec, #ffffff);
+}
+
+/* 18 — Indigo */
+#toConsider > li:nth-child(18) .to-consider-subtitle,
+#toConsider > li:nth-child(18) .to-consider-content {
+  --accent-color: #5c6bc0;
+  border-left-color: #5c6bc0;
+  background: linear-gradient(90deg, #eef0ff, #ffffff);
+}
+
+/* 19 — Lime Green */
+#toConsider > li:nth-child(19) .to-consider-subtitle,
+#toConsider > li:nth-child(19) .to-consider-content {
+  --accent-color: #9ccc65;
+  border-left-color: #9ccc65;
+  background: linear-gradient(90deg, #f5ffe9, #ffffff);
+}
+
+/* 20 — Navy */
+#toConsider > li:nth-child(20) .to-consider-subtitle,
+#toConsider > li:nth-child(20) .to-consider-content {
+  --accent-color: #34495e;
+  border-left-color: #34495e;
+  background: linear-gradient(90deg, #eef2f7, #ffffff);
+}
+
 
 
 
