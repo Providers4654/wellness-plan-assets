@@ -55,14 +55,6 @@
   --injectables-url: https://www.mtnhlth.com/prescription-order-form;
   --injectables-note: Pharmacy-compounded injectables, peptides, pain creams <span class="new-flag">(NEW)</span>, GLP-1s <span class="new-flag">(NEW)</span>, and medical-grade skin treatments <span class="new-flag">(NEW)</span>.;  
 
-/* === NEW FLAG TAG (Highlights "(NEW)" in resource notes) === */
-.new-flag{
-  font-weight:700;
-  color:#0a3a41;
-  opacity:.75;
-  font-style:normal !important;
-}
-
 
   --fullscript-text: 🔗 Order Supplements;
   --fullscript-url: https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true;
@@ -90,6 +82,16 @@
   --followup-url: https://www.mtnhlth.com/follow-up-visit;
 }
 
+
+
+
+/* === NEW FLAG TAG (Highlights "(NEW)" in resource notes) === */
+.new-flag{
+  font-weight:700;
+  color:#0a3a41;
+  opacity:.75;
+  font-style:normal !important;
+}
 
 
 
