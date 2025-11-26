@@ -2141,6 +2141,15 @@ html, body {
 
 
 
+/* === Highlight ONLY the Advanced Rx Therapies button (enhanced) === */
+#dynamicInjectablesLink.premium-btn {
+  border-color: rgba(0, 140, 160, 0.45) !important; /* subtle teal rim */
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.20),          /* deeper lift */
+    0 0 18px rgba(0, 140, 160, 0.32),         /* stronger teal glow */
+    inset 0 1px 2px rgba(255,255,255,0.55),
+    inset 0 -2px 4px rgba(0,0,0,0.05);
+}
 
 
 
