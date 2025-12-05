@@ -1579,6 +1579,12 @@ html, body {
   background: linear-gradient(to right, rgba(29,145,78,0.2), rgba(255,255,255,0));
 }
 
+/* Fix: ensure links are NOT bold in Other Goals section */
+#otherItems a {
+  font-weight: normal !important;
+}
+
+
 
 /* ============================
    Link Styling — Keep standard link color
