@@ -18,8 +18,12 @@ const PROVIDERS = {
   },
   pb: {
     wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=747226804&single=true&output=csv"
+  },
+  ps: {
+    wellness: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ7Bi2xiUKiVQaoTioPuFRR80FnErpRYewmt9bHTrkFW7KSUeiXBoZM3bJZHGzFgDWA3lYrb5_6T5WO/pub?gid=176261622&single=true&output=csv"
   }
 };
+
 
 
 const TABS = {
