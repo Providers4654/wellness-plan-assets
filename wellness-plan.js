@@ -549,25 +549,63 @@ blurb = raw.slice(colonIndex + 1);         // REMOVE trim here
   }
 } // ✅ end if(lifestyleBlock)
 
-// --- Visit Timeline (row 1 only) ---
+
+
+
+
+  // --- Visit Timeline (row 1 only) ---
 const visitTimelineList = document.getElementById("visitTimeline");
 const visitTimelineTitle = document.getElementById("visitTimelineTitle");
-if (visitTimelineList && visitTimelineTitle) {
-  visitTimelineTitle.textContent = cssVar("--visit-timeline-title") || "Visit Timeline";
+const followUpBtn = document.getElementById("dynamicFollowUpLink");
 
-  const prev = normalizeCellText(getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "");
-  const next = normalizeCellText(getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "");
+if (visitTimelineList && visitTimelineTitle) {
+  visitTimelineTitle.textContent =
+    cssVar("--visit-timeline-title") || "Visit Timeline";
+
+  const prev = normalizeCellText(
+    getField(rows[0], ["Previous Visit", "Prev Visit", "﻿Previous Visit"]) || ""
+  );
+
+  const next = normalizeCellText(
+    getField(rows[0], ["Next Visit", "Follow-Up", "﻿Next Visit"]) || ""
+  );
 
   if (prev || next) {
     let html = "";
-    if (prev) html += `<li><span class="editable"><strong>${cssVar("--visit-prev-label")}</strong> ${prev}</span></li>`;
-    if (next) html += `<li><span class="editable"><strong>${cssVar("--visit-next-label")}</strong> ${next}</span></li>`;
+
+    if (prev) {
+      html += `
+        <li>
+          <span class="editable">
+            <strong>${cssVar("--visit-prev-label")}</strong> ${prev}
+          </span>
+        </li>`;
+    }
+
+    if (next) {
+      html += `
+        <li>
+          <span class="editable">
+            <strong>${cssVar("--visit-next-label")}</strong> ${next}
+          </span>
+        </li>`;
+    }
+
     visitTimelineList.innerHTML = html;
+
+    // Show follow-up button ONLY if there is a next visit
+    if (followUpBtn) {
+      followUpBtn.style.display = next ? "inline-flex" : "none";
+    }
+
   } else {
     visitTimelineTitle.remove();
     visitTimelineList.remove();
+    if (followUpBtn) followUpBtn.remove();
   }
 }
+
+
 
 
 
@@ -850,7 +888,6 @@ function bootstrapWellnessPlanSafe(attempt = 1) {
       document.getElementById("dynamicAddOnsLink"),
       document.getElementById("dynamicStandardsLink"),
       document.getElementById("dynamicCoachingLink"),
-      document.getElementById("dynamicFollowUpLink"),
     ];
 
     const missing = requiredEls.filter(el => !el);
