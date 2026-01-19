@@ -126,42 +126,53 @@
     </div>
 
 
-    <!-- ========================
-         GOALS + FOLLOW-UP
-    ======================== -->
-    <div class="section-wrapper">
-      <div class="section-title title-goals"></div>
+<!-- ========================
+     GOALS + FOLLOW-UP
+======================== -->
+<div class="section-wrapper">
+  <div class="section-title title-goals"></div>
 
-      <div class="wellness-bubble">
+  <div class="wellness-bubble">
 
-        <div class="goal-block">
-          <h4 class="goals-subheader" id="visitTimelineTitle"></h4>
-          <ul class="goals-list" id="visitTimeline"></ul>
-        </div>
+    <!-- Visit Timeline -->
+    <div class="goal-block visit-timeline-block">
+      <h4 class="goals-subheader" id="visitTimelineTitle"></h4>
 
-        <div class="goal-block">
-          <h4 class="goals-subheader" id="bodyCompTitle"></h4>
-          <ul class="goals-list" id="bodyComp"></ul>
-        </div>
+      <ul class="goals-list visit-timeline-list" id="visitTimeline"></ul>
 
-        <div class="goal-block">
-          <h4 class="goals-subheader" id="targetTitle"></h4>
-          <ul class="goals-list" id="targetGoals"></ul>
-        </div>
-
-        <div class="goal-block">
-          <h4 class="goals-subheader" id="otherTitle"></h4>
-          <ul class="goals-list" id="otherItems"></ul>
-        </div>
-
-        <div class="followup-link">
-          <a id="dynamicFollowUpLink" class="premium-btn schedule-followup-btn" target="_blank">
-            <span id="followupText"></span>
-          </a>
-        </div>
-
+      <!-- Follow-up button (standard premium style, below timeline) -->
+      <div class="followup-link">
+        <a
+          id="dynamicFollowUpLink"
+          class="premium-btn"
+        >
+          <span id="followupText"></span>
+        </a>
       </div>
     </div>
+
+    <!-- Body Composition -->
+    <div class="goal-block">
+      <h4 class="goals-subheader" id="bodyCompTitle"></h4>
+      <ul class="goals-list" id="bodyComp"></ul>
+    </div>
+
+    <!-- Target Goals -->
+    <div class="goal-block">
+      <h4 class="goals-subheader" id="targetTitle"></h4>
+      <ul class="goals-list" id="targetGoals"></ul>
+    </div>
+
+    <!-- Other Goals -->
+    <div class="goal-block">
+      <h4 class="goals-subheader" id="otherTitle"></h4>
+      <ul class="goals-list" id="otherItems"></ul>
+    </div>
+
+  </div>
+</div>
+
+
 
   </div>
 </div>
