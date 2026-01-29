@@ -553,22 +553,25 @@ blurb = raw.slice(colonIndex + 1);         // REMOVE trim here
 
 
 
-  // --- Visit Timeline (row 1 only) ---
+// --- Visit Timeline (row 1 only) ---
 const visitTimelineList = document.getElementById("visitTimeline");
 const visitTimelineTitle = document.getElementById("visitTimelineTitle");
-const followUpBtn = document.getElementById("dynamicFollowUpLink");
 
 if (visitTimelineList && visitTimelineTitle) {
   visitTimelineTitle.textContent =
     cssVar("--visit-timeline-title") || "Visit Timeline";
 
-  const prev = normalizeCellText(
-    getField(rows[0], ["Previous Visit", "Prev Visit", "﻿Previous Visit"]) || ""
-  );
+  const prevRaw = getField(rows[0], ["Previous Visit","Prev Visit","﻿Previous Visit"]) || "";
+  const nextRaw = getField(rows[0], ["Next Visit","Follow-Up","﻿Next Visit"]) || "";
 
-  const next = normalizeCellText(
-    getField(rows[0], ["Next Visit", "Follow-Up", "﻿Next Visit"]) || ""
-  );
+  const prev = normalizeCellText(prevRaw);
+
+  let next = "";
+  if (nextRaw === "AS_NEEDED") {
+    next = "As needed — reach out to your provider the next time you would like to do blood work";
+  } else {
+    next = normalizeCellText(nextRaw);
+  }
 
   if (prev || next) {
     let html = "";
@@ -592,18 +595,12 @@ if (visitTimelineList && visitTimelineTitle) {
     }
 
     visitTimelineList.innerHTML = html;
-
-    // Show follow-up button ONLY if there is a next visit
-    if (followUpBtn) {
-      followUpBtn.style.display = next ? "inline-flex" : "none";
-    }
-
   } else {
     visitTimelineTitle.remove();
     visitTimelineList.remove();
-    if (followUpBtn) followUpBtn.remove();
   }
 }
+
 
 
 
@@ -876,33 +873,12 @@ async function loadPatientData() {
 // Bootstrap with retry
 // ============================
 
-function bootstrapWellnessPlanSafe(attempt = 1) {
-  try {
-    console.log(`🚀 bootstrapWellnessPlanSafe attempt ${attempt}`);
-    loadPatientData();
-
-    // Check for key DOM blocks that should exist
-    const requiredEls = [
-      document.getElementById("toConsiderBlock"),
-      document.getElementById("dynamicFullscriptLink"),
-      document.getElementById("dynamicAddOnsLink"),
-      document.getElementById("dynamicStandardsLink"),
-      document.getElementById("dynamicCoachingLink"),
-    ];
-
-    const missing = requiredEls.filter(el => !el);
-    if (missing.length > 0 && attempt < 3) {
-      console.warn(`⚠️ Missing ${missing.length} critical elements. Retrying in 200ms...`);
-      setTimeout(() => bootstrapWellnessPlanSafe(attempt + 1), 200);
-    } else if (missing.length === 0) {
-      console.log("✅ All critical blocks loaded on attempt", attempt);
-    } else {
-      console.warn("❌ Some elements never appeared:", missing);
-    }
-  } catch (err) {
-    console.error("❌ bootstrapWellnessPlanSafe failed:", err);
-  }
+function bootstrapWellnessPlanSafe() {
+  console.log("🚀 bootstrapWellnessPlanSafe");
+  loadPatientData();
+  console.log("✅ Bootstrap completed (single pass)");
 }
+
 
 
 
