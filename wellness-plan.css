@@ -262,22 +262,22 @@ html, body {
 
 
 /* ============================
-   MOBILE DIVIDER (Still Bold + Balanced)
+   MOBILE DIVIDER (More Spacious + Premium)
    ============================ */
 @media (max-width: 600px) {
 
   .wellness-plan .section-wrapper:not(.plan-header)::after {
     width: 92%;
-
-    /* Keep it obvious on mobile */
     height: 2px;
 
-    /* Equal spacing, slightly tighter than desktop */
-    margin: 52px auto 68px auto;
+    /* ✅ More spacing above AND below
+       (extra bottom space offsets pill overlap) */
+    margin: 70px auto 90px auto;
 
     opacity: 0.75;
   }
 }
+
 
 
 
