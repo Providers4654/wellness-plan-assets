@@ -129,7 +129,7 @@ html, body {
     padding: 12px;             /* ✅ tighter padding so content isn’t squeezed */
    padding: 20px 12px 12px;
     box-sizing: border-box;
-    padding-top: 80px;
+    padding-top: 0px;
   }
 }
 
