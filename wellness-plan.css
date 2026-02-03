@@ -43,11 +43,18 @@
   --weekly-bg:     #e8f5e9;
   --prn-bg:        #f5f5f5;
 
-  /* Top buttons */
-  --top-btn1-text: MTN HLTH Website;
-  --top-btn1-url: https://www.mtnhlth.com;
-  --top-btn2-text: Patient Portal;
-  --top-btn2-url: https://mtnhlthclient.md-hq.com;
+
+
+
+/* ============================
+   Patient Portal Button
+   ============================ */
+
+--portal-btn-text: Open Patient Portal;
+--portal-btn-url: https://mtnhlthclient.md-hq.com;
+
+
+
 
   /* Resource links */
 
@@ -201,84 +208,8 @@ html, body {
 
 
 
-/* ============================
-   TOP BUTTONS UNDER LOGO
-   ============================ */
-.top-buttons {
-  display: flex;
-  justify-content: center;
-  gap: 16px;
-  margin-top: 20px;
-  margin-bottom: 50px;
-  padding: 0 16px;
-  flex-wrap: nowrap;
-}
 
-.wellness-plan .top-link-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  /* upgraded gradient */
-  background: linear-gradient(145deg, #ffffff, #f3f3f3);
-  color: #1f2d3d;
-
-  padding: 12px 28px;
-  width: 220px;
-  height: 48px;
-  text-align: center;
-
-  border: 1px solid #bbb;
-  border-radius: 10px;
-
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-
-  text-decoration: none;
-  transition: all 0.25s ease;
-  cursor: pointer;
-
-  /* stronger depth */
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.12), inset 0 1px 0 #fff;
-  white-space: nowrap;
-  box-sizing: border-box;
-}
-
-.wellness-plan .top-link-btn:hover {
-  background: linear-gradient(145deg, #f9f9f9, #ececec);
-  border-color: #999;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.16), inset 0 1px 0 #fff;
-  transform: translateY(-2px);
-}
-
-/* Desktop alignment tweak */
-@media (min-width: 769px) {
-  .top-buttons {
-    justify-content: center;
-    transform: translateX(0);
-  }
-}
-
-/* Mobile sizing of top buttons */
-@media (max-width: 600px) {
-  .top-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: nowrap;
-    width: 100%;
-  }
-
-  .wellness-plan .top-link-btn {
-    flex: 1 1 48%;   /* take up equal width side by side */
-    height: 40px;
-    font-size: 13px;
-    padding: 8px;
-    max-width: none; /* don’t cap at 160px */
-  }
-}
 
 
 
@@ -302,17 +233,34 @@ html, body {
    ============================ */
 
 .plan-header {
-  width: 100vw;               /* span full viewport */
-  margin-left: calc(-50vw + 50%); /* break out of centered container */
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
   background: linear-gradient(135deg, #e9f4ff, #fdfdfd);
+
   border-bottom: 2px solid #cfd9e3;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+  /* ✅ IMPORTANT: keeps blue visible below portal strip */
+  padding-bottom: 18px;
 }
 
+
+
+/* ============================
+   HEADER SPACING OVERRIDE
+   (Prevents huge gap below banner)
+   ============================ */
+
+.wellness-plan .section-wrapper.plan-header {
+  margin-bottom: 18px; /* was inheriting 70px */
+}
+
+
+/* Intro text block */
 .plan-header .intro-text {
-  max-width: 960px;           /* match main content width */
-  margin: 0 auto;             /* center inside header */
-  padding: 28px 20px;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 26px 20px 14px;
   text-align: center;
 
   font-size: 18px;
@@ -320,39 +268,141 @@ html, body {
   color: #2a2a2a;
 }
 
+
 /* Title */
 .plan-header .intro-text::before {
   content: "Your Personalized Wellness Plan";
   display: block;
+
   font-size: 28px;
   font-weight: 800;
   margin-bottom: 6px;
   color: #1f2d3d;
 }
 
+
 /* Subtitle */
 .plan-header .intro-text::after {
   content: var(--intro-message);
   display: block;
+
   margin-top: 6px;
   font-size: 16px;
   line-height: 1.4;
   color: #444;
 }
 
-/* Mobile tweaks */
+
+
+
+
+
+/* ============================
+   MINIMAL PATIENT PORTAL STRIP
+   ============================ */
+
+.portal-access-mini {
+  max-width: 760px;
+
+  /* ✅ Move it UP closer to blue header */
+  margin: -12px auto 22px auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+
+  padding: 9px 16px;
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+
+
+
+/* Portal strip text */
+.portal-access-text {
+  font-size: 13.5px;
+  line-height: 1.25;
+  color: #333;
+  flex: 1;
+
+  /* ✅ Prevent ugly multi-line wrap on desktop */
+  max-width: 520px;
+}
+
+
+/* Button stays compact */
+.portal-access-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 8px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+
+  border-radius: 11px;
+  text-decoration: none;
+
+  background: #fff;
+  border: 1.5px solid rgba(0, 140, 160, 0.30);
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.10);
+  color: #1f2d3d;
+
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.portal-access-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.14);
+}
+
+
+
+/* ============================
+   MOBILE OPTIMIZATION
+   ============================ */
+
 @media (max-width: 600px) {
+
   .plan-header .intro-text {
-    padding: 20px 12px;
+    padding: 20px 12px 10px;
   }
+
   .plan-header .intro-text::before {
     font-size: 22px;
   }
+
   .plan-header .intro-text::after {
     font-size: 15px;
   }
-}
 
+  /* Strip becomes stacked and full-width */
+  .portal-access-mini {
+    flex-direction: column;
+    align-items: flex-start;
+
+    padding: 10px 14px;
+    gap: 10px;
+  }
+
+  .portal-access-text {
+    max-width: 100%;
+    font-size: 13.5px;
+  }
+
+  .portal-access-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
 
 
 
