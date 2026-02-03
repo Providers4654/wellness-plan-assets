@@ -153,14 +153,21 @@ setTextIfAvailable(".title-goals", "--title-goals", "Goals & Follow-Up");
   const intro = document.querySelector(".intro-text");
   if (intro) intro.innerHTML = normalizeCellText(cssVar("--intro-message"));
 
-  ["dynamicTopBtn1", "dynamicTopBtn2"].forEach((id, i) => {
-    const btn = document.getElementById(id);
-    if (btn) {
-      btn.textContent = cssVar(`--top-btn${i+1}-text`);
-      btn.href = cssVar(`--top-btn${i+1}-url`);
-    }
-  });
+  // ============================
+  // Patient Portal Button Injection
+  // ============================
+
+  const portalBtn = document.getElementById("portalAccessBtn");
+
+  if (portalBtn) {
+    portalBtn.textContent =
+      cssVar("--portal-btn-text") || "Open Patient Portal →";
+
+    portalBtn.href =
+      cssVar("--portal-btn-url") || "https://mtnhlthclient.md-hq.com";
+  }
 }
+
 
 
 // ============================
