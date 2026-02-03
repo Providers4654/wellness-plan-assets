@@ -5,7 +5,7 @@
   /* Section titles */
   --title-summary: 💊 Treatment Summary;
   --title-supplements: Supplements;
-  --title-lifestyle: 🏃 Lifestyle & Health Optimization Protocol;
+  --title-lifestyle: 🏃 Lifestyle;
   --lifestyle-subtext: These habits are prescribed components of your treatment plan — <strong>not just good suggestions</strong>. Follow them consistently to support optimal results and long-term health.;
   --title-to-consider: 💡 To Consider;
   --to-consider-subtext: These are additional treatment options that aren’t part of your current plan but may be valuable additions to consider in the future, based on your progress and goals.; 
@@ -14,11 +14,6 @@
 
 
   /* Resource URLs */
-  --treatment-addons-url: https://www.mtnhlth.com/treatment-add-ons;
-
-  --standards-text: 🔗 Basic HLTH Standards;
-  --basic-standards-url: https://www.mtnhlth.com/basic-hlth-standards;
-  --standards-note: A reference for the core habits and principles we believe form the foundation of good health — the standards everyone should aim to meet.;
 
   --coaching-text: Schedule a free consultation with our HLTH Coach;
   --health-coaching-url: https://www.mtnhlth.com/health-coaching;
@@ -67,9 +62,6 @@
   --fullscript-url: https://us.fullscript.com/welcome/mtnhlth/store-start?preview=true;
   --fullscript-note: Personalized recommendations, shipped directly to you — at a discounted price.;
 
-  --addons-text: 🔗 Additional Add-On Therapies;
-  --addons-url: https://www.mtnhlth.com/treatment-add-ons;
-  --addons-note: A growing library of additional therapies and treatment options designed to complement your plan and support your goals.;
 
   /* Visit Timeline labels */
   --visit-timeline-title: Visit Timeline;
@@ -844,6 +836,17 @@ html, body {
   border-radius: 6px;
 }
 
+
+/* ============================================================
+   ✅ EDIT: Remove extra bottom gap after final Lifestyle tip
+   Prevents last <li> margin from stacking with bubble padding
+   ============================================================ */
+
+.wellness-plan .lifestyle-tips-list > li:last-child {
+  margin-bottom: 0 !important;
+}
+
+
 /* Links inside lifestyle tips inherit color/underline */
 .wellness-plan .lifestyle-tips-list > li a {
   font-style: italic;
@@ -1001,14 +1004,23 @@ html, body {
 /* ============================
    SECTION BUBBLES (normalized spacing)
    ============================ */
+
+/* ============================================================
+   ✅ EDIT: Universal Bubble Padding (All Sections Match)
+   ============================================================ */
+
 .wellness-plan .wellness-bubble {
   background: #ffffff;
   border-radius: 20px;
-  padding: 48px 28px 28px; /* increased top padding */
+
+  /* ✅ Universal spacing */
+  padding: 48px 28px 18px;  /* bottom reduced */
+
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
-  margin-top: 44px;        /* unified gap between pill and bubble border */
+  margin-top: 44px;
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
+
 
 /* normalize first element inside bubble */
 .wellness-plan .wellness-bubble > *:first-child,
@@ -1053,8 +1065,9 @@ html, body {
 
 
 
+
 /* ============================
-   RESPONSIVE: MOBILE PILL + WRAP SAFETY
+   RESPONSIVE: MOBILE PILL + WRAP SAFETY (UNIVERSAL)
    ============================ */
 @media (max-width: 600px) {
 
@@ -1063,26 +1076,25 @@ html, body {
     font-size: 18px !important;
     font-weight: 900 !important;
 
-    padding: 10px 22px !important;
+    padding: 8px 20px !important;   /* slightly tighter */
     border-radius: 999px !important;
 
     border: 2px solid #bfc5cc !important;
     box-shadow: 0 5px 14px rgba(0,0,0,0.12) !important;
 
-    /* ✅ Allows long titles to wrap cleanly */
+    /* ✅ Allow wrapping cleanly */
     white-space: normal !important;
     max-width: 88% !important;
     line-height: 1.25 !important;
 
-    /* Position */
     top: -28px !important;
     left: 18px !important;
   }
 
-  /* ✅ WRAP SAFETY:
-     If pill becomes 2 lines, bubble needs extra clearance */
+  /* ✅ UNIVERSAL CLEARANCE:
+     Enough space for BOTH 1-line and 2-line titles */
   .wellness-plan .wellness-bubble {
-    padding-top: 70px !important;
+    padding-top: 50px !important;
   }
 
   /* ✅ Treatment Summary block labels */
@@ -1105,11 +1117,16 @@ html, body {
 
 
 
+
+
+/* ============================================================
+   TO CONSIDER — FINAL CLEAN ACCORDION (NO EXTRA SPACE)
+   ============================================================ */
+
 /* ============================
-   TO CONSIDER — POLISHED + FIXED
+   1. Wrapper Cleanup
    ============================ */
 
-/* Wrapper cleanup */
 .wellness-plan .med-time-block.to-consider-block {
   background: transparent !important;
   border: none !important;
@@ -1117,76 +1134,54 @@ html, body {
   box-shadow: none !important;
 }
 
-/* Remove any old label */
 .wellness-plan .med-time-block.to-consider-block .med-time-label {
   display: none !important;
 }
 
-/* Each category <li> */
-#toConsider .to-consider-li {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+
+/* ============================
+   2. Remove Global <ul><li> Spacing
+   ============================ */
+
+#toConsider {
+  padding-left: 0 !important;
+  margin: 0 !important;
 }
 
-/* ------------------------------
-   SECTION SUBTEXT — styled intro box (full width + visible text)
-------------------------------- */
-
-.to-consider-subtext {
-  position: relative;
-  display: block;
-  background: #f9fbff;
-  border: 1px solid #e3e8f4;
-  border-radius: 12px;
-  font-size: 0.95rem;
-  color: #333;
-  line-height: 1.55;
-  font-style: italic;
-  text-align: center;
-  margin: 0.5rem 0 1.3rem 0;
-  padding: 1rem 1.25rem;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
-  position: relative;
-  z-index: 1;
-
-  /* ✅ Full width alignment with category cards */
-  width: 100%;
-  max-width: 100%; 
-  margin-left: 0;
-  margin-right: 0;
+#toConsider > li {
+  list-style: none !important;
+  margin-bottom: 12px !important;
+  padding: 0 !important;
 }
 
-/* Hover polish */
-.to-consider-subtext:hover {
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.06);
-  transform: translateY(-1px);
+#toConsider > li:last-child {
+  margin-bottom: 0 !important;
 }
 
 
+/* ============================
+   3. Category Header Card
+   ============================ */
 
-
-/* ------------------------------
-   CATEGORY HEADER — restored solid accent, aligned flush
-------------------------------- */
 .wellness-plan .to-consider-subtitle {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative;
+
   background: #ffffff;
   border: 1px solid rgba(226, 232, 249, 0.9);
-  border-left: 8px solid var(--accent-color, #6b93ff); /* ✅ restored solid accent */
+  border-left: 8px solid var(--accent-color, #6b93ff);
+
   border-radius: 14px;
-  padding: 0.55rem 0.9rem; /* ✅ matches Lifestyle spacing */
-  margin: 0.5rem 0;
-  color: #121212;
+  padding: 0.65rem 1rem;
+
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 750;
+  color: #121212;
+
   cursor: pointer;
   transition: all 0.25s ease;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
-  overflow: hidden;
 }
 
 .wellness-plan .to-consider-subtitle:hover {
@@ -1194,100 +1189,150 @@ html, body {
   box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08);
 }
 
-/* Clean — no gradient or pseudo-element */
-.wellness-plan .to-consider-subtitle::before {
-  content: none;
-}
-
-/* Chevron arrow */
+/* Chevron */
 .wellness-plan .to-consider-subtitle::after {
   content: "›";
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: var(--accent-color, #6b93ff);
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-  margin-left: 6px;
+  transition: transform 0.25s ease;
 }
+
 .wellness-plan .to-consider-subtitle.expanded::after {
   transform: rotate(90deg);
 }
 
-/* Mobile scaling */
-@media (max-width: 600px) {
-  .wellness-plan .to-consider-subtitle {
-    font-size: 1rem !important;
-    padding: 0.6rem 0.8rem !important;
-  }
-}
 
-/* Align the entire list flush */
-#toConsider {
-  padding-left: 0 !important;
-  margin-left: 0 !important;
-}
+/* ============================
+   4. Accordion Panel (KEY FIX)
+   ============================ */
 
-
-
-/* ------------------------------
-   PANEL CONTENT (collapsible)
-------------------------------- */
 .wellness-plan .to-consider-content {
   overflow: hidden;
   max-height: 0;
+
   opacity: 0;
-  padding: 0 1.2rem;
-  margin: 0.25rem 0 0.5rem 0.4rem;
+
+  /* Closed state must take ZERO space */
+  padding: 0 !important;
+  margin: 0 !important;
+
   transition: all 0.3s ease;
-  border-left: 2px solid transparent;
-  border-radius: 5px;
-  background: #fff;
-}
-.wellness-plan .to-consider-content.open {
-  max-height: none;   /* let height expand freely */
-  opacity: 1;
-  padding-top: 0.5rem;
-  padding-bottom: 0.25rem;
 }
 
-/* ------------------------------
-   ITEMS INSIDE PANEL
-------------------------------- */
+.wellness-plan .to-consider-content.open {
+  max-height: 800px;
+  opacity: 1;
+
+  /* ✅ Keep normal padding so content breathes */
+  padding: 0.6rem 1.2rem 0.5rem !important;
+
+  margin-top: 6px !important;
+}
+
+
+/* ✅ EDIT: Remove extra bottom padding ONLY on the final dropdown */
+#toConsider > li:last-child .to-consider-content.open {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+
+
+
+
+/* ============================================================
+   4.5 RESTORE: TO CONSIDER SUBTEXT BOX STYLING
+   (This brings back the shaded paragraph background)
+   ============================================================ */
+
+.to-consider-subtext {
+  display: block;
+  background: #f9fbff;
+  border: 1px solid #e3e8f4;
+  border-radius: 14px;
+  padding: 18px 22px;
+  font-size: 15.5px;
+  line-height: 1.65;
+  font-style: italic;
+  text-align: center;
+  margin: 0.5rem 0 1.6rem 0;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+
+
+/* ============================
+   5. Items Inside Panel
+   ============================ */
+
 .wellness-plan .to-consider-item {
-  padding: 0.5rem 0 0.5rem 0.5rem;
-  border-bottom: 1px dashed #e3e6f0;
-  transition: background 0.25s ease, transform 0.2s ease;
+  padding: 0.55rem 0;
+  border-bottom: none !important; /* ✅ EDIT: remove dashed divider */
 }
-.wellness-plan .to-consider-item:hover {
-  background: #f8faff;
-  transform: translateY(-1px);
-}
+
+
 .wellness-plan .to-consider-item:last-child {
   border-bottom: none;
 }
 
 .wellness-plan .to-consider-name {
-  font-weight: 700;
-  color: #202020;
-  margin-bottom: 0.2rem;
+  font-weight: 750;
   font-size: 0.95rem;
+  margin-bottom: 0.15rem;
 }
 
 .wellness-plan .to-consider-blurb {
   font-size: 0.85rem;
+  font-style: italic;
   color: #444;
   line-height: 1.45;
-  font-style: italic;
 }
 
-.wellness-plan .to-consider-blurb a {
-  color: var(--accent-color, #3052ff);
-  text-decoration: underline;
-  font-style: italic;
-  transition: color 0.25s ease;
+
+/* ============================
+   6. Mobile Scaling
+   ============================ */
+
+@media (max-width: 600px) {
+  .wellness-plan .to-consider-subtitle {
+    font-size: 1rem !important;
+    padding: 0.65rem 0.85rem !important;
+  }
 }
-.wellness-plan .to-consider-blurb a:hover {
-  color: #1b33b6;
+
+
+
+
+
+
+
+
+/* ============================================================
+   ✅ EDIT: Remove dashed <li> borders leaking into To Consider
+   ============================================================ */
+
+#toConsider li {
+  border-bottom: none !important;
 }
+
+
+
+/* ============================================================
+   ✅ FINAL FIX: Remove dashed dividers from To Consider cards
+   ============================================================ */
+
+#toConsider > li {
+  border-bottom: none !important;
+}
+
+
+
+
+
+
+
+
 
 /* ------------------------------
    CATEGORY COLORS + BACKGROUND TINTS (1–20)
@@ -1476,7 +1521,7 @@ html, body {
   border-left: none;
   background: linear-gradient(to right, rgba(205, 215, 255, 0.15), rgba(255, 255, 255, 0));
   border-radius: 10px;
-  padding: 14px 18px;
+  padding: 14px 20px;
   margin-bottom: 14px;
   color: #222;
   box-shadow: 0 2px 4px rgba(0,0,0,0.03);
@@ -1517,6 +1562,26 @@ html, body {
 .wellness-plan .goal-block {
   margin-top: 3rem; /* Adjust for more/less space between goals */
 }
+
+
+/* ============================================================
+   ✅ ADDITION — GOALS SECTION FINAL BLOCK BOTTOM FIX
+   Keeps spacing between goal blocks,
+   but removes extra space at the very bottom of the bubble
+   ============================================================ */
+
+/* Keep your existing spacing model (do NOT override margin-top) */
+.wellness-plan .goal-block {
+  margin-top: 3rem; /* unchanged */
+}
+
+/* ✅ Only remove trailing space inside the LAST goal-block */
+.wellness-plan .goal-block:last-child > *:last-child {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+
 
 
 
@@ -1609,7 +1674,11 @@ html, body {
 #visitTimeline li {
   color: #4b6fff;
   background: linear-gradient(to right, rgba(75,111,255,0.12), rgba(255,255,255,0));
+
+  /* ✅ EDIT: Force consistent card padding */
+  padding: 14px 20px;
 }
+
 #visitTimeline li:hover {
   background: linear-gradient(to right, rgba(75,111,255,0.2), rgba(255,255,255,0));
 }
@@ -1731,7 +1800,11 @@ html, body {
 #targetGoals li {
   color: #9a46ff;
   background: linear-gradient(to right, rgba(154,70,255,0.12), rgba(255,255,255,0));
+
+  /* ✅ EDIT: Force consistent card padding */
+  padding: 14px 20px;
 }
+
 #targetGoals li:hover {
   background: linear-gradient(to right, rgba(154,70,255,0.2), rgba(255,255,255,0));
 }
@@ -1746,7 +1819,11 @@ html, body {
 #otherItems li {
   color: #1d914e;
   background: linear-gradient(to right, rgba(29,145,78,0.12), rgba(255,255,255,0));
+
+  /* ✅ EDIT: Force consistent card padding */
+  padding: 14px 20px;
 }
+
 #otherItems li:hover {
   background: linear-gradient(to right, rgba(29,145,78,0.2), rgba(255,255,255,0));
 }
@@ -2032,24 +2109,53 @@ html, body {
 
 
 /* ============================
-   LISTS & TEXT UTILITIES
+   LISTS & TEXT UTILITIES (FIXED)
    ============================ */
-.wellness-plan ul { padding-left: 20px; margin: 0; }
 
-/* BULLETS IN GOALS SECTION */
-.wellness-plan ul li {
+/* Default UL indentation (safe baseline) */
+.wellness-plan ul {
+  padding-left: 20px;
+  margin: 0;
+}
+
+/* ============================================================
+   ✅ EDIT: REMOVE GLOBAL <li> SPACING
+   This was causing extra blank space under Lifestyle + To Consider
+   ============================================================ */
+
+/* Only Goals lists should have large vertical spacing */
+.wellness-plan .goals-list li {
   list-style-position: outside;
   margin-left: 0;
-  padding-left: 1px;    /* room for bullet */
+  padding-left: 1px;
   margin-bottom: 25px;
   font-size: 16px;
   text-indent: 0;
 }
 
-@media (max-width: 600px) {
-  .wellness-plan ul { padding-left: 16px; }
-  .wellness-plan ul li { margin-left: 0; }
+
+/* ============================================================
+   ✅ ADDITION — TRUE FINAL GOALS ITEM SPACING FIX (Squarespace-safe)
+   ============================================================ */
+
+.wellness-plan .goals-list > li:last-of-type {
+  margin-bottom: 0 !important;
 }
+
+
+
+
+/* Mobile adjustment */
+@media (max-width: 600px) {
+  .wellness-plan ul {
+    padding-left: 16px;
+  }
+
+  .wellness-plan .goals-list li {
+    margin-left: 0;
+  }
+}
+
 
 /* ============================================================
    Global links inside wellness plan
@@ -2146,6 +2252,14 @@ html, body {
   max-width: 650px;
   text-align: center;
 }
+
+
+/* Remove bottom padding from last button/resource link */
+
+.wellness-plan .resource-link:last-child {
+  padding-bottom: 0;
+}
+
 
 
 
@@ -2557,13 +2671,6 @@ ul li,
 }
 
 
-/* Remove dashed medication borders from To Consider category rows */
-.wellness-plan #toConsider .to-consider-li {
-  border-bottom: none !important;
-  padding-bottom: 0;
-  margin-bottom: 0;
-}
-
 
 
 
@@ -2634,6 +2741,33 @@ body {
 .lifestyle-tips-list + .resource-link {
   margin-top: 50px !important;
 }
+
+
+
+
+
+
+
+/* ============================================================
+   ✅ FINAL GLOBAL FIX — UNIVERSAL BUBBLE BOTTOM RHYTHM
+   Applies to ALL bubbles
+   ============================================================ */
+
+.wellness-plan .wellness-bubble::after {
+  content: "";
+  display: block;
+  height: 28px;
+}
+
+
+/* ============================================================
+   ✅ FINAL PATCH — TO CONSIDER BOTTOM GAP FIX
+   ============================================================ */
+
+.wellness-plan .med-time-block.to-consider-block {
+  margin-bottom: 0 !important;
+}
+
 
 
 
