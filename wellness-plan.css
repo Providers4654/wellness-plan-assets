@@ -2786,6 +2786,31 @@ body {
 
 
 
+/* ============================================================
+   ✅ FIX — REMOVE GIANT SPACE ABOVE LOGO
+   The blue gap is coming from padding inside .wellness-plan
+   ============================================================ */
+
+.wellness-plan {
+  padding-top: 0px !important;
+  margin-top: 0px !important;
+}
+
+/* ============================================================
+   ✅ FIX — CONTROL HEADER CLEARANCE IN ONE PLACE ONLY
+   Adjust this number if you want more/less space above logo
+   ============================================================ */
+
+.printable-content {
+  padding-top: 10px !important;
+}
+
+
+
+
+
+
+
 
 
 
