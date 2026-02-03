@@ -121,8 +121,6 @@ function injectResourceLinksAndTitles() {
   [
     ["dynamicInjectablesLink", "--injectables-url", "injectablesText", "--injectables-text", "injectablesNote", "--injectables-note"],
     ["dynamicFullscriptLink", "--fullscript-url", "fullscriptText", "--fullscript-text", "fullscriptNote", "--fullscript-note"],
-    ["dynamicAddOnsLink", "--treatment-addons-url", "addonsText", "--addons-text", "addonsNote", "--addons-note"],
-    ["dynamicStandardsLink", "--basic-standards-url", "standardsText", "--standards-text", "standardsNote", "--standards-note"],
     ["dynamicCoachingLink", "--health-coaching-url", "coachingText", "--coaching-text", "coachingNote", "--coaching-note"],
     ["dynamicFollowUpLink", "--followup-url", "followupText", "--followup-text", null, null],
   ]
