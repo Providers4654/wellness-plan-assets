@@ -304,8 +304,10 @@ html, body {
 .portal-access-mini {
   max-width: 760px;
 
-  /* ✅ Move it UP closer to blue header */
-  margin: -12px auto 22px auto;
+  /* ✅ FIXED SPACING:
+     - More breathing room ABOVE (no negative pull)
+     - Much more space BELOW before Treatment Summary */
+  margin: 8px auto 60px auto;
 
   display: flex;
   align-items: center;
@@ -320,8 +322,6 @@ html, body {
 
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
-
-
 
 
 /* Portal strip text */
@@ -372,25 +372,15 @@ html, body {
 
 @media (max-width: 600px) {
 
-  .plan-header .intro-text {
-    padding: 20px 12px 10px;
-  }
-
-  .plan-header .intro-text::before {
-    font-size: 22px;
-  }
-
-  .plan-header .intro-text::after {
-    font-size: 15px;
-  }
-
-  /* Strip becomes stacked and full-width */
   .portal-access-mini {
     flex-direction: column;
     align-items: flex-start;
 
     padding: 10px 14px;
     gap: 10px;
+
+    /* ✅ Double spacing BELOW strip */
+    margin: 10px auto 68px auto;
   }
 
   .portal-access-text {
@@ -403,6 +393,7 @@ html, body {
     justify-content: center;
   }
 }
+
 
 
 
