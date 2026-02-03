@@ -219,8 +219,66 @@ html, body {
    ============================ */
 .wellness-plan .section-wrapper {
   position: relative;
-  margin-bottom: 70px; /* spacing between full sections */
+  margin-bottom: 55px; /* spacing between full sections */
 }
+
+
+
+
+
+/* ============================
+   SECTION DIVIDER LINE (Stronger + Spacious)
+   ============================ */
+
+.wellness-plan .section-wrapper:not(.plan-header)::after {
+  content: "";
+  display: block;
+
+  /* Divider stays within content width */
+  width: 84%;
+  max-width: 760px;
+
+  /* Slightly thicker + clearer */
+  height: 2px;
+
+  /* ✅ More breathing room above + below */
+  margin: 70px auto 70px auto;
+
+  /* Premium fade line (more visible than flat gray) */
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(0, 0, 0, 0.18),
+    transparent
+  );
+
+  opacity: 0.9;
+}
+
+/* Remove divider after last section */
+.wellness-plan .section-wrapper:last-of-type::after {
+  display: none;
+}
+
+
+/* ============================
+   MOBILE DIVIDER (Still Bold + Balanced)
+   ============================ */
+@media (max-width: 600px) {
+
+  .wellness-plan .section-wrapper:not(.plan-header)::after {
+    width: 92%;
+
+    /* Keep it obvious on mobile */
+    height: 2px;
+
+    /* Equal spacing, slightly tighter than desktop */
+    margin: 52px auto 68px auto;
+
+    opacity: 0.75;
+  }
+}
+
 
 
 
@@ -367,7 +425,7 @@ html, body {
 
 
 /* ============================
-   MOBILE OPTIMIZATION
+   MOBILE OPTIMIZATION (Portal Strip)
    ============================ */
 
 @media (max-width: 600px) {
@@ -379,8 +437,8 @@ html, body {
     padding: 10px 14px;
     gap: 10px;
 
-    /* ✅ Double spacing BELOW strip */
-    margin: 10px auto 68px auto;
+    /* ✅ More space BELOW before Treatment Summary */
+    margin: 12px auto 95px auto;
   }
 
   .portal-access-text {
@@ -393,6 +451,7 @@ html, body {
     justify-content: center;
   }
 }
+
 
 
 
@@ -995,26 +1054,51 @@ html, body {
 
 
 /* ============================
-   RESPONSIVE: MOBILE FONT TWEAKS
+   RESPONSIVE: MOBILE PILL + WRAP SAFETY
    ============================ */
 @media (max-width: 600px) {
+
+  /* ✅ Section title pills */
   .wellness-plan .section-title {
-    font-size: 16px !important;      /* 🔹 Slightly larger text */
-    padding: 6px 18px !important;    /* 🔹 Adds height and width to the pill */
-    border-radius: 999px !important; /* keeps smooth rounded ends */
+    font-size: 18px !important;
+    font-weight: 900 !important;
+
+    padding: 10px 22px !important;
+    border-radius: 999px !important;
+
+    border: 2px solid #bfc5cc !important;
+    box-shadow: 0 5px 14px rgba(0,0,0,0.12) !important;
+
+    /* ✅ Allows long titles to wrap cleanly */
+    white-space: normal !important;
+    max-width: 88% !important;
+    line-height: 1.25 !important;
+
+    /* Position */
+    top: -28px !important;
+    left: 18px !important;
   }
 
-  /* Treatment Summary blocks (Daily, Evening, Weekly, PRN) */
+  /* ✅ WRAP SAFETY:
+     If pill becomes 2 lines, bubble needs extra clearance */
+  .wellness-plan .wellness-bubble {
+    padding-top: 70px !important;
+  }
+
+  /* ✅ Treatment Summary block labels */
   .wellness-plan .med-time-label {
-    font-size: 16px !important;   /* smaller block headings */
-    padding: 8px 12px !important; /* reduced padding */
+    font-size: 16px !important;
+    padding: 10px 14px !important;
   }
 
-  /* Optional: shrink med rows too for tighter fit */
+  /* ✅ Medication rows */
   .wellness-plan .medication-list li {
     font-size: 14px !important;
+    line-height: 1.4 !important;
   }
 }
+
+
 
 
 
@@ -1982,10 +2066,6 @@ html, body {
 }
 
 
-/* Spacing between consecutive sections */
-.wellness-plan .section-wrapper + .section-wrapper { margin-top: 80px; }
-
-
 /* Generic “dose” utility (outside medication-list too) */
 .wellness-plan .dose {
   background: #f9f9fa;
@@ -2298,33 +2378,43 @@ html, body {
 
 
 /* ============================
-   MOBILE GLOBAL SCALE-DOWN
+   MOBILE GLOBAL SCALE-DOWN (SAFE)
    ============================ */
 @media (max-width: 600px) {
-  /* Shrink base text */
+
+  /* Base text shrink */
   .wellness-plan {
-    font-size: 14px !important;   /* down from 16px */
+    font-size: 14px !important;
     line-height: 1.4 !important;
   }
 
   /* Header banner */
-  .plan-header .intro-text::before { font-size: 20px !important; }
-  .plan-header .intro-text::after  { font-size: 14px !important; }
-
-  /* Section titles */
-  .wellness-plan .section-title { font-size: 14px !important; }
-
-  /* Med block labels */
-  .wellness-plan .med-time-label {
-    font-size: 15px !important;
-    padding: 6px 10px !important;
+  .plan-header .intro-text::before {
+    font-size: 20px !important;
   }
 
+  .plan-header .intro-text::after {
+    font-size: 14px !important;
+  }
+
+  /* ❌ Removed section-title override (handled by pill boost block) */
+  /* ❌ Removed med-time-label override (handled by pill boost block) */
+
   /* Med list */
-  .wellness-plan .medication-list li { font-size: 13.5px !important; }
-  .wellness-plan .medication-list li strong { font-size: 14px !important; }
-  .wellness-plan .dose { font-size: 13px !important; padding: 5px 8px !important; }
+  .wellness-plan .medication-list li {
+    font-size: 13.5px !important;
+  }
+
+  .wellness-plan .medication-list li strong {
+    font-size: 14px !important;
+  }
+
+  .wellness-plan .dose {
+    font-size: 13px !important;
+    padding: 5px 8px !important;
+  }
 }
+
 
 
 
