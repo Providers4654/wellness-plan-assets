@@ -501,14 +501,67 @@ toConsiderBlock.style.display = "block";
 // --- Lifestyle Tips ---
 const lifestyleBlock = document.getElementById("lifestyleTips");
 if (lifestyleBlock) {
-  const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
-  const tips = parseHybridValues(rows, ["Lifestyle Tips", "Lifestyle/Type"], lifestyleTipsKnown);
-  tips.sort((a, b) => a.localeCompare(b, undefined, { sensitivity: "base" })); // ✅ alphabetical, case-insensitive
+const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
 
-  console.log("Lifestyle tips (all rows):", tips);
-  if (tips.length > 0) {
+const tips = parseHybridValues(
+  rows,
+  ["Lifestyle Tips", "Lifestyle/Type"],
+  lifestyleTipsKnown
+);
+
+// =======================================================
+// ✅ ORDERING RULES:
+// 1. Custom tips first
+// 2. Tip with ID LT-VPWGNK always next
+// 3. Remaining library tips alphabetically
+// =======================================================
+
+const customTips = [];
+let priorityTip = null;
+const libraryTips = [];
+
+// Separate tips into custom vs library
+tips.forEach(tipName => {
+  const match = lifestyleData.find(
+    r => (r["Tip"] || "").trim() === tipName.trim()
+  );
+
+  if (!match) {
+    // ✅ Custom free-text tip
+    customTips.push(tipName);
+    return;
+  }
+
+  // ✅ Library tip — check for priority ID
+  if ((match["ID"] || "").trim() === "LT-VPWGNK") {
+    priorityTip = tipName;
+  } else {
+    libraryTips.push(tipName);
+  }
+});
+
+// Sort custom tips alphabetically
+customTips.sort((a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: "base" })
+);
+
+// Sort remaining library tips alphabetically
+libraryTips.sort((a, b) =>
+  a.localeCompare(b, undefined, { sensitivity: "base" })
+);
+
+// Final ordered list
+const orderedTips = [
+  ...customTips,
+  ...(priorityTip ? [priorityTip] : []),
+  ...libraryTips
+];
+
+
+  console.log("Lifestyle tips (final ordered):", orderedTips);
+  if (orderedTips.length > 0) {
     let html = "";
-    tips.forEach(tipName => {
+    orderedTips.forEach(tipName => {
       const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
       if (tipInfo) {
