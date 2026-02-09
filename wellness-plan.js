@@ -567,7 +567,6 @@ const orderedTips = [
       if (tipInfo) {
         // ✅ Known tip from library
         const blurb = tipInfo["Blurb"] || "";
-        const updated = (tipInfo["Updated"] || "").trim();
 
         html += `
           <li class="lifestyle-row">
@@ -575,7 +574,6 @@ const orderedTips = [
               <strong>${tipInfo["Tip"]}</strong>
               ${blurb ? `<span class="info-icon">i</span>` : ""}
             </div>
-            ${updated ? `<div class="tip-updated">Updated: ${normalizeCellText(updated)}</div>` : ""}
             ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
           </li>`;
       } else {
