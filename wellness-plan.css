@@ -740,16 +740,6 @@ html, body {
    LIFESTYLE TIP UPDATED LABEL
    (compact stacked version)
    ============================ */
-.tip-updated {
-  font-size: 11px;
-  color: #666;
-  margin-top: 1px;
-  margin-left: 2px;
-  font-style: italic;
-  opacity: 0.9;
-  line-height: 1.2;
-  transition: opacity 0.2s ease;
-}
 
 .tip-name {
   margin-bottom: 2px; /* smaller gap before updated line */
@@ -758,10 +748,6 @@ html, body {
 .lifestyle-row {
   margin-bottom: 6px;  /* tighter spacing between rows */
   padding: 10px 12px;
-}
-
-.tip-name.expanded + .tip-updated {
-  opacity: 0.6;
 }
 
 
