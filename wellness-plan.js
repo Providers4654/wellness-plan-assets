@@ -500,110 +500,159 @@ toConsiderBlock.style.display = "block";
 
 // --- Lifestyle Tips ---
 const lifestyleBlock = document.getElementById("lifestyleTips");
+
 if (lifestyleBlock) {
-const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
 
-const tips = parseHybridValues(
-  rows,
-  ["Lifestyle Tips", "Lifestyle/Type"],
-  lifestyleTipsKnown
-);
+  const lifestyleTipsKnown = lifestyleData.map(r => (r["Tip"] || "").trim());
 
-// =======================================================
-// ✅ ORDERING RULES:
-// 1. Custom tips first
-// 2. Tip with ID LT-VPWGNK always next
-// 3. Remaining library tips alphabetically
-// =======================================================
-
-const customTips = [];
-let priorityTip = null;
-const libraryTips = [];
-
-// Separate tips into custom vs library
-tips.forEach(tipName => {
-  const match = lifestyleData.find(
-    r => (r["Tip"] || "").trim() === tipName.trim()
+  const tips = parseHybridValues(
+    rows,
+    ["Lifestyle Tips", "Lifestyle/Type"],
+    lifestyleTipsKnown
   );
 
-  if (!match) {
-    // ✅ Custom free-text tip
-    customTips.push(tipName);
-    return;
-  }
+  // ============================
+  // ORDERING RULES
+  // ============================
 
-  // ✅ Library tip — check for priority ID
-  if ((match["ID"] || "").trim() === "LT-VPWGNK") {
-    priorityTip = tipName;
-  } else {
-    libraryTips.push(tipName);
-  }
-});
+  const customTips = [];
+  let priorityTip = null;
+  const libraryTips = [];
 
-// Sort custom tips alphabetically
-customTips.sort((a, b) =>
-  a.localeCompare(b, undefined, { sensitivity: "base" })
-);
+  tips.forEach(tipName => {
+    const match = lifestyleData.find(
+      r => (r["Tip"] || "").trim() === tipName.trim()
+    );
 
-// Sort remaining library tips alphabetically
-libraryTips.sort((a, b) =>
-  a.localeCompare(b, undefined, { sensitivity: "base" })
-);
+    // Custom free-text tip
+    if (!match) {
+      customTips.push(tipName);
+      return;
+    }
 
-// Final ordered list
-const orderedTips = [
-  ...customTips,
-  ...(priorityTip ? [priorityTip] : []),
-  ...libraryTips
-];
+    // Priority tip
+    if ((match["ID"] || "").trim() === "LT-VPWGNK") {
+      priorityTip = tipName;
+    } else {
+      libraryTips.push(tipName);
+    }
+  });
 
+  customTips.sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" })
+  );
 
-  console.log("Lifestyle tips (final ordered):", orderedTips);
-  if (orderedTips.length > 0) {
+  libraryTips.sort((a, b) =>
+    a.localeCompare(b, undefined, { sensitivity: "base" })
+  );
+
+  const generalTips = [
+    ...(priorityTip ? [priorityTip] : []),
+    ...libraryTips
+  ];
+
+  // ============================
+  // Render HTML
+  // ============================
+
+  if (tips.length > 0) {
+
     let html = "";
-    orderedTips.forEach(tipName => {
-      const tipInfo = lifestyleData.find(r => (r["Tip"] || "").trim() === tipName.trim());
 
-      if (tipInfo) {
-        // ✅ Known tip from library
-        const blurb = tipInfo["Blurb"] || "";
+    const hasCustomTips = customTips.length > 0;
+    const hasGeneralTips = generalTips.length > 0;
 
-        html += `
-          <li class="lifestyle-row">
-            <div class="tip-name">
-              <strong>${tipInfo["Tip"]}</strong>
-              ${blurb ? `<span class="info-icon">i</span>` : ""}
-            </div>
-            ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
-          </li>`;
-      } else {
-        // ✅ Custom free-text tip (split on colon)
+    // ----------------------------
+    // CASE 1: Custom tips exist
+    // ----------------------------
+    if (hasCustomTips) {
+
+      html += `
+        <div class="lifestyle-divider-label">
+          Personalized for You
+        </div>
+
+        <ul class="lifestyle-tips-list">
+      `;
+
+      customTips.forEach(tipName => {
+
         let raw = String(tipName);
         let title = raw;
         let blurb = "";
 
         const colonIndex = raw.indexOf(":");
         if (colonIndex !== -1) {
-title = raw.slice(0, colonIndex).trim();   // keep this trim (titles should be clean)
-blurb = raw.slice(colonIndex + 1);         // REMOVE trim here
-
-
+          title = raw.slice(0, colonIndex).trim();
+          blurb = raw.slice(colonIndex + 1).trim();
         }
 
         html += `
           <li class="lifestyle-row">
             <div class="tip-name">
               <strong>${normalizeCellText(title)}</strong>
-              ${blurb ? `<span class="info-icon">i</span>` : ""}
             </div>
-            ${blurb ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>` : ""}
-          </li>`;
+            ${
+              blurb
+                ? `<div class="lifestyle-learn-more">${normalizeCellText(blurb)}</div>`
+                : ""
+            }
+          </li>
+        `;
+      });
+
+      html += `</ul>`;
+    }
+
+    // ----------------------------
+    // CASE 2: General tips
+    // ----------------------------
+    if (hasGeneralTips) {
+
+      // Only show header if custom tips exist
+      if (hasCustomTips) {
+        html += `
+          <div class="lifestyle-divider-spacer"></div>
+
+          <div class="lifestyle-divider-label general">
+            Core Lifestyle Guidelines
+          </div>
+        `;
       }
-    }); // ✅ end forEach
+
+      html += `<ul class="lifestyle-tips-list">`;
+
+      generalTips.forEach(tipName => {
+
+        const tipInfo = lifestyleData.find(
+          r => (r["Tip"] || "").trim() === tipName.trim()
+        );
+
+        if (!tipInfo) return;
+
+        html += `
+          <li class="lifestyle-row">
+            <div class="tip-name">
+              <strong>${normalizeCellText(tipInfo["Tip"])}</strong>
+            </div>
+            ${
+              tipInfo["Blurb"]
+                ? `<div class="lifestyle-learn-more">${normalizeCellText(tipInfo["Blurb"])}</div>`
+                : ""
+            }
+          </li>
+        `;
+      });
+
+      html += `</ul>`;
+    }
 
     lifestyleBlock.innerHTML = html;
   }
-} // ✅ end if(lifestyleBlock)
+}
+
+
+
 
 
 
