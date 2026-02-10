@@ -1972,6 +1972,14 @@ html, body {
   background: linear-gradient(to right, rgba(154,70,255,0.2), rgba(255,255,255,0));
 }
 
+
+/* ✅ FIX: Force bold label before colon inside Target Goals */
+#targetGoals .editable strong {
+  font-weight: 800 !important;
+}
+
+
+
 /* --- 4. Other Goals / Follow-Up --- */
 #otherTitle {
   color: #1d914e;
