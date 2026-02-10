@@ -777,26 +777,46 @@ if (compRow && compRow["Blurb"]) {
     }
   }
 
-  // --- Target Goals ---
-  const targetGoalsList = document.getElementById("targetGoals");
-  const targetTitle = document.getElementById("targetTitle");
-  if (targetGoalsList && targetTitle) {
-    targetTitle.textContent = cssVar("--target-title") || "Target Goals";
+// --- Target Goals ---
+const targetGoalsList = document.getElementById("targetGoals");
+const targetTitle = document.getElementById("targetTitle");
 
-    const goalKnown = []; // no fixed library? leave empty
-const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
+if (targetGoalsList && targetTitle) {
+  targetTitle.textContent = cssVar("--target-title") || "Target Goals";
 
-    if (allGoals.length > 0) {
-      let html = "";
-      allGoals.forEach(g => {
-        html += `<li><span class="editable">${normalizeCellText(g)}</span></li>`;
-      });
-      targetGoalsList.innerHTML = html;
-    } else {
-      targetTitle.remove();
-      targetGoalsList.remove();
-    }
+  const goalKnown = []; // no fixed library
+  const allGoals = parseHybridValues(rows, ["Target Goals","Goals"], goalKnown);
+
+  if (allGoals.length > 0) {
+    let html = "";
+
+    allGoals.forEach(item => {
+      let name = item.trim();
+      let blurb = "";
+
+      // Split on first colon only
+      if (name.includes(":")) {
+        const parts = name.split(":");
+        name = parts.shift().trim();
+        blurb = parts.join(":").trim();
+      }
+
+      html += `
+        <li>
+          <span class="editable">
+            <strong>${normalizeCellText(name)}</strong>${blurb ? ": " + normalizeCellText(blurb) : ""}
+          </span>
+        </li>
+      `;
+    });
+
+    targetGoalsList.innerHTML = html;
+  } else {
+    targetTitle.remove();
+    targetGoalsList.remove();
   }
+}
+
 
 
 
