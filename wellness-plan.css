@@ -2144,14 +2144,15 @@ html, body {
   margin: 0 0 8px 0;
 }
 
-/* Each medication row */
+/* Each medication row — improved breathing room */
 .wellness-plan .medication-list li {
-  padding: 8px 0 12px;
+  padding: 14px 0 18px;   /* was 8px 0 12px */
   font-size: 15px;
-  line-height: 1.45;
+  line-height: 1.5;       /* slightly more readable */
   border-bottom: 1px dashed #ccc;
   color: #444;
 }
+
 
 /* Remove border from last item */
 .wellness-plan .medication-list li:last-child {
